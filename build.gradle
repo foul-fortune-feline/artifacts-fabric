@@ -1,13 +1,13 @@
 plugins {
-    id 'fabric-loom' version '0.6-SNAPSHOT'
+    id 'fabric-loom' version '0.7-SNAPSHOT'
     id "com.github.fudge.forgedflowerloom" version "2.0.0"
 }
 
 repositories {
     maven { url = "https://maven.terraformersmc.com" }
     maven { url = "https://maven.shedaniel.me/" }
-    maven { url = "https://www.cursemaven.com" }
     maven { url = "https://maven.florens.be" }
+    maven { url = "https://www.cursemaven.com" }
     maven { url = "https://jitpack.io" } // Leave this as lowest priority
 }
 
