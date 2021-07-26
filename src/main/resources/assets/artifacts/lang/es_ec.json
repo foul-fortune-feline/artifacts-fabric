@@ -40,9 +40,12 @@
   "item.artifacts.whoopee_cushion": "Cojín Pedorro",
   "item.artifacts.vampiric_glove": "Guante Vampírico",
   "item.artifacts.golden_hook": "Garfio Dorado",
+  "item.artifacts.helium_flamingo": "Flamenco de Helio",
+  "item.artifacts.aqua_dashers": "Impulsadores Acuáticos",
+  "item.artifacts.charm_of_sinking": "Amuleto de Hundimiento",
   "item.artifacts.snorkel.tooltip": "Permite al portador respirar bajo el agua",
   "item.artifacts.plastic_drinking_hat.tooltip": "Disminuye el tiempo necesario para beber items",
-  "item.artifacts.novelty_drinking_hat.tooltip": "'Hey! Soy el #1 y dejo que la gravedad me haga beber!'",
+  "item.artifacts.novelty_drinking_hat.tooltip": "'Hey! Soy el #1 y dejo que la gravedad me haga beber!'\nDisminuye el tiempo necesario para beber items",
   "item.artifacts.night_vision_goggles.tooltip": "Permite al ususario ver en la oscuridad",
   "item.artifacts.panic_necklace.tooltip": "Aumenta la velocidad del portador al recibir daño",
   "item.artifacts.shock_pendant.tooltip": "Probabilidad de hacer que un rayo le caiga a los atacantes",
@@ -69,9 +72,11 @@
   "item.artifacts.running_shoes.tooltip": "Aumenta el movimiento y altura de pisadas en el portador",
   "item.artifacts.bunny_hoppers.tooltip": "Aumenta el nivel de salto y otorga inmunidad al daño por caida en el portador",
   "item.artifacts.crystal_heart.tooltip": "Aumenta la vida máxima del portador",
-  "item.artifacts.villager_hat.tooltip": "Disminuye los precios de los aldeanos y ocasionalmente le otorgan regalos al portador",
   "item.artifacts.cloud_in_a_bottle.tooltip": "Permite al portador dar doble saltos",
   "item.artifacts.whoopee_cushion.tooltip": "Aumenta las flatulencias del portador, wacala",
   "item.artifacts.vampiric_glove.tooltip": "Los ataques del portador absorben vida",
-  "item.artifacts.golden_hook.tooltip": "Aumenta la experiencia obtenida al asesinar criaturas. Otorga más experiencia al asesinar criaturas no asesinadas recientemente"
+  "item.artifacts.golden_hook.tooltip": "Aumenta la experiencia obtenida al asesinar criaturas. Otorga más experiencia al asesinar criaturas no asesinadas recientemente.",
+  "item.artifacts.helium_flamingo.tooltip": "Permite al usuario nadar en el aire por un periodo limitado de tiempo.\nPresiona %s en el aire para nadar.",
+  "item.artifacts.aqua_dashers.tooltip": "Permite al portador correr sobre fluidos",
+  "item.artifacts.charm_of_sinking.tooltip": "El portador puede moverse libremente en el agua"
 }

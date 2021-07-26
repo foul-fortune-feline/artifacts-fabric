@@ -146,8 +146,18 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "artifacts:helium_flamingo"
+          "weight": 8,
+          "name": "artifacts:charm_of_sinking"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 8,
+          "name": "artifacts:aqua_dashers"
+        },
+        {
+          "type": "minecraft:loot_table",
+          "weight": 8,
+          "name": "artifacts:items/drinking_hat"
         },
         {
           "type": "minecraft:item",
@@ -161,13 +171,8 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 5,
-          "name": "artifacts:plastic_drinking_hat"
-        },
-        {
-          "type": "minecraft:item",
-          "weight": 3,
-          "name": "artifacts:novelty_drinking_hat"
+          "weight": 4,
+          "name": "artifacts:helium_flamingo"
         },
         {
           "type": "minecraft:item",

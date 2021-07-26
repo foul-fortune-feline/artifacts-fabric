@@ -44,12 +44,16 @@
         {
           "type": "minecraft:item",
           "name": "artifacts:running_shoes"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "artifacts:charm_of_sinking"
         }
       ],
       "conditions": [
         {
           "condition": "minecraft:random_chance",
-          "chance": 0.25
+          "chance": 0.15
         }
       ]
     }

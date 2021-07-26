@@ -38,7 +38,10 @@
   "item.artifacts.cloud_in_a_bottle": "Nuvem na Garrafa",
   "item.artifacts.whoopee_cushion": "Almofada Engraçadinha",
   "item.artifacts.vampiric_glove": "Luva Vampírica",
-  "item.artifacts.golden_hook": "Gancho Fourado",
+  "item.artifacts.golden_hook": "Gancho Dourado",
+  "item.artifacts.helium_flamingo": "Flamingo de Hélio",
+  "item.artifacts.aqua_dashers": "Impulsores Acuáticos",
+  "item.artifacts.charm_of_sinking": "Amuleto de Afundamento",
   "item.artifacts.snorkel.tooltip": "Permite que o usuário respire debaixo d'água",
   "item.artifacts.plastic_drinking_hat.tooltip": "Diminui o tempo necessário para beber itens potáveis",
   "item.artifacts.novelty_drinking_hat.tooltip": "'Ei! Sou o número 1# e deixo a gravidade beber!'",
@@ -68,9 +71,12 @@
   "item.artifacts.running_shoes.tooltip": "Aumenta a velocidade de movimento e a altura do passo enquanto corre",
   "item.artifacts.bunny_hoppers.tooltip": "Aumenta a altura do pulo do usuário e concede imunidade a dano por queda",
   "item.artifacts.crystal_heart.tooltip": "Aumenta a saúde máxima do usuário",
-  "item.artifacts.villager_hat.tooltip": "Diminui os preços de negociação e os aldeões ocasionalmente dão presentes ao usuárior",
+  "item.artifacts.villager_hat.tooltip": "Diminui os preços de negociação dos aldeões",
   "item.artifacts.cloud_in_a_bottle.tooltip": "Permite que o usuário dê um salto duplo",
   "item.artifacts.whoopee_cushion.tooltip": "Aumenta a flatulência do usuário",
   "item.artifacts.vampiric_glove.tooltip": "Faz com que os ataques corpo a corpo do usuário absorvam saúde",
-  "item.artifacts.golden_hook.tooltip": "Aumenta a experiência derrubada por criaturas. Rende mais experiência ao matar criaturas que não foram mortas recentemente"
+  "item.artifacts.golden_hook.tooltip": "Aumenta a experiência derrubada por criaturas. Rende mais experiência ao matar criaturas que não foram mortas recentemente",
+  "item.artifacts.helium_flamingo.tooltip.0": "Permite que o usuário nade no ar por um período limitado de tempo.\nPressione %s no ar para começar a nadar",
+  "item.artifacts.aqua_dashers.tooltip": "Permite que o usuário ande sobre fluidos enquanto corre",
+  "item.artifacts.charm_of_sinking.tooltip": "O usuário pode se mover livremente na água"
 }

@@ -8,6 +8,12 @@
           "type": "minecraft:item",
           "name": "artifacts:whoopee_cushion"
         }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 1.0
+        }
       ]
     }
   ]
