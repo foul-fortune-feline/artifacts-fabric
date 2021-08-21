@@ -1,80 +1,31 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
-
-mixin {
-    add sourceSets.main, "artifacts.refmap.json"
+plugins {
+    id 'dev.architectury.loom' version '0.7.2-SNAPSHOT'
+    id 'maven-publish'
 }
 
-version = '1.16.5-2.10.0'
-group = 'artifacts'
-archivesBaseName = 'Artifacts'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-minecraft {
-    mappings channel: 'snapshot', version: '20210309-1.16.5'
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-            arg "-mixin.config=artifacts.mixins.json"
-            property 'forge.logging.markers', ''
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                artifacts {
-                    source sourceSets.main
-                }
-            }
-        }
+loom {
+    silentMojangMappingsLicense()
 
-        server {
-            workingDirectory project.file('run')
-            arg "-mixin.config=artifacts.mixins.json"
-            property 'forge.logging.markers', ''
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                artifacts {
-                    source sourceSets.main
-                }
-            }
-        }
+    mixinConfigs = [
+            "artifacts.mixins.json"
+    ]
 
+    dataGen {
+        mod project.mod_id
+    }
+
+    launches {
         data {
-            workingDirectory project.file('run')
-            arg "-mixin.config=artifacts.mixins.json"
-            property 'forge.logging.markers', ''
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args '--mod', 'artifacts', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            environment 'target', 'fmluserdevdata'
-            mods {
-                artifacts {
-                    source sourceSets.main
-                }
-            }
+            arg "--existing", file("src/main/resources").absolutePath
         }
     }
-}
-
-sourceSets {
-    main.resources.srcDirs += 'src/generated/resources'
 }
 
 repositories {
@@ -84,7 +35,7 @@ repositories {
     }
     maven {
         name "blamejared"
-        url "http://maven.blamejared.com/"
+        url "https://maven.blamejared.com/"
     }
     maven {
         url "https://www.cursemaven.com"
@@ -100,46 +51,91 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.24'
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-    runtimeOnly fg.deobf("curse.maven:curious-armor-stands-398784:3288589")
-    runtimeOnly fg.deobf("curse.maven:configured-457570:3266880")
+    //mappings minecraft.officialMojangMappings()
+    mappings "de.oceanlabs.mcp:mcp_${project.mcp_channel}:${project.mcp_mappings}"
+    forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1")
+    modCompileOnly "mezz.jei:jei-1.16.4:${jei_version}:api"
+    modRuntime "mezz.jei:jei-1.16.4:${jei_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.62:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.62")
+    modCompileOnly "top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1:api"
+    modRuntime "top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1"
 
-    implementation fg.deobf("be.florens:expandability-forge:2.0.1")
+    modImplementation "be.florens:expandability-forge:2.0.1"
+
+    modRuntime "curse.maven:curious-armor-stands-398784:3288589"
+    modRuntime "curse.maven:configured-457570:3266880"
+}
+
+processResources {
+    // define properties that can be used during resource processing
+    inputs.property "version", project.version
+
+    // this will replace the property "${version}" in your mods.toml
+    // with the version you've defined in your gradle.properties
+    filesMatching("META-INF/mods.toml") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // ensure that the encoding is set to UTF-8, no matter what the system default is
+    // this fixes some edge cases with special characters not displaying correctly
+    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+    // If Javadoc is generated, this must be specified in that task too.
+    it.options.encoding = "UTF-8"
+
+    // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
+    // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
+    // We'll use that if it's available, but otherwise we'll use the older option.
+    def targetVersion = 8
+    if (JavaVersion.current().isJava9Compatible()) {
+        it.options.release = targetVersion
+    }
+}
+
+java {
+    withSourcesJar()
 }
 
 jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}" }
+    }
+
     manifest {
         attributes([
-            "Specification-Title": "artifacts",
-            "Specification-Vendor": "ochotonida",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor": "ochotonida",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "artifacts.mixins.json"
+                "Specification-Title"     : project.mod_id,
+                "Specification-Vendor"    : project.mod_author,
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : version,
+                "Implementation-Vendor"   : project.mod_author,
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }
 
-jar.finalizedBy('reobfJar')
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact jar
+            // add all the jars that should be included when publishing to maven
+            artifact(remapJar) {
+                builtBy remapJar
+            }
+            artifact(sourcesJar) {
+                builtBy remapSourcesJar
+            }
         }
     }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
-        maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
     }
 }
