@@ -20,13 +20,13 @@ public class AquaDashersItem extends CurioItem {
     }
 
     private void onFluidCollision(LivingFluidCollisionEvent event, LivingEntity wearer) {
-        if (wearer.isSprinting() && wearer.fallDistance < 6 && !wearer.isUsingItem() && !wearer.isCrouching()) {
+        if (wearer.isSprinting() && wearer.fallDistance < 6 && !wearer.isHandActive() && !wearer.isCrouching()) {
             wearer.getCapability(SwimHandlerCapability.INSTANCE).ifPresent(handler -> {
                 if (!handler.isWet() && !handler.isSwimming()) {
                     event.setResult(Event.Result.ALLOW);
-                    if (event.getFluidState().is(FluidTags.LAVA)) {
-                        if (!wearer.fireImmune() && !EnchantmentHelper.hasFrostWalker(wearer)) {
-                            wearer.hurt(DamageSource.HOT_FLOOR, 1);
+                    if (event.getFluidState().isTagged(FluidTags.LAVA)) {
+                        if (!wearer.isImmuneToFire() && !EnchantmentHelper.hasFrostWalker(wearer)) {
+                            wearer.attackEntityFrom(DamageSource.HOT_FLOOR, 1);
                         }
                     }
                 }
@@ -36,7 +36,7 @@ public class AquaDashersItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
-        if (entity.tickCount % 20 == 0 && isSprintingOnFluid(entity)) {
+        if (entity.ticksExisted % 20 == 0 && isSprintingOnFluid(entity)) {
             damageStack(identifier, index, entity, stack);
         }
     }
@@ -50,8 +50,8 @@ public class AquaDashersItem extends CurioItem {
 
     private boolean isSprintingOnFluid(LivingEntity entity) {
         if (isSprinting(entity)) {
-            BlockPos pos = new BlockPos(MathHelper.floor(entity.getX()), MathHelper.floor(entity.getY() - 0.2), MathHelper.floor(entity.getZ()));
-            return !entity.level.getBlockState(pos).getFluidState().isEmpty();
+            BlockPos pos = new BlockPos(MathHelper.floor(entity.getPosX()), MathHelper.floor(entity.getPosY() - 0.2), MathHelper.floor(entity.getPosZ()));
+            return !entity.world.getBlockState(pos).getFluidState().isEmpty();
         }
         return false;
     }

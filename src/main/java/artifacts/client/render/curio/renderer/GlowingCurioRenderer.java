@@ -30,7 +30,7 @@ public class GlowingCurioRenderer extends SimpleCurioRenderer {
     protected void render(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, boolean hasFoil) {
         super.render(matrixStack, buffer, light, hasFoil);
         RenderType renderType = ForgeRenderTypes.getUnlitTranslucent(getGlowTexture());
-        IVertexBuilder builder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
-        getModel().renderToBuffer(matrixStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        IVertexBuilder builder = ItemRenderer.getBuffer(buffer, renderType, false, hasFoil);
+        getModel().render(matrixStack, builder, LightTexture.packLight(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 }

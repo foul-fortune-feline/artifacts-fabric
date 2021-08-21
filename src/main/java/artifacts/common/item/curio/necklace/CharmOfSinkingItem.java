@@ -20,13 +20,13 @@ public class CharmOfSinkingItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
-        if (livingEntity.tickCount % 20 == 0 && livingEntity.isEyeInFluid(FluidTags.WATER)) {
+        if (livingEntity.ticksExisted % 20 == 0 && livingEntity.areEyesInFluid(FluidTags.WATER)) {
             damageStack(identifier, index, livingEntity, stack);
         }
     }
 
     public void onBreakSpeed(PlayerEvent.BreakSpeed event, LivingEntity wearer) {
-        if (wearer.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(wearer)) {
+        if (wearer.areEyesInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(wearer)) {
             event.setNewSpeed(event.getNewSpeed() * 5);
         }
     }

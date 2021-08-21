@@ -33,18 +33,18 @@ public class CrystalHeartItem extends CurioItem {
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack originalStack, ItemStack newStack) {
-        if (!ModConfig.server.isCosmetic(this) && !slotContext.getWearer().level.isClientSide()) {
+        if (!ModConfig.server.isCosmetic(this) && !slotContext.getWearer().world.isRemote()) {
             ModifiableAttributeInstance health = slotContext.getWearer().getAttribute(Attributes.MAX_HEALTH);
             AttributeModifier healthBonus = getHealthBonus();
             if (health != null && !health.hasModifier(healthBonus)) {
-                health.addPermanentModifier(healthBonus);
+                health.applyPersistentModifier(healthBonus);
             }
         }
     }
 
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack originalStack, ItemStack newStack) {
-        if (!ModConfig.server.isCosmetic(this) && !slotContext.getWearer().level.isClientSide()) {
+        if (!ModConfig.server.isCosmetic(this) && !slotContext.getWearer().world.isRemote()) {
             ModifiableAttributeInstance health = slotContext.getWearer().getAttribute(Attributes.MAX_HEALTH);
             AttributeModifier healthBonus = getHealthBonus();
             if (health != null && health.hasModifier(healthBonus)) {
@@ -58,6 +58,6 @@ public class CrystalHeartItem extends CurioItem {
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.ARMOR_EQUIP_DIAMOND, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
     }
 }

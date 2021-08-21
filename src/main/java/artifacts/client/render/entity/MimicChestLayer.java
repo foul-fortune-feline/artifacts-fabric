@@ -39,11 +39,11 @@ public class MimicChestLayer extends LayerRenderer<MimicEntity, MimicModel> {
 
         chestModel = new MimicChestLayerModel();
         chestMaterials = new ArrayList<>();
-        vanillaChestMaterial = Atlases.chooseMaterial(null, ChestType.SINGLE, isChristmas);
+        vanillaChestMaterial = Atlases.getChestMaterial(null, ChestType.SINGLE, isChristmas);
 
         if (ModList.get().isLoaded("lootr")) {
             ResourceLocation chestLocation = new ResourceLocation("lootr", "chest");
-            chestMaterials.add(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, chestLocation));
+            chestMaterials.add(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, chestLocation));
         } else {
             if (!isChristmas && ModList.get().isLoaded("quark")) {
                 List<String> chestTypes = Arrays.asList(
@@ -71,18 +71,18 @@ public class MimicChestLayer extends LayerRenderer<MimicEntity, MimicModel> {
     @Override
     public void render(MatrixStack matrixStack, IRenderTypeBuffer buffer, int packedLight, MimicEntity mimic, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         if (!mimic.isInvisible()) {
-            matrixStack.pushPose();
+            matrixStack.push();
 
-            matrixStack.mulPose(Vector3f.XP.rotationDegrees(180));
+            matrixStack.rotate(Vector3f.XP.rotationDegrees(180));
             matrixStack.translate(-0.5, -1.5, -0.5);
 
-            getParentModel().copyPropertiesTo(chestModel);
-            chestModel.prepareMobModel(mimic, limbSwing, limbSwingAmount, partialTicks);
-            chestModel.setupAnim(mimic, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-            IVertexBuilder builder = getChestMaterial(mimic).buffer(buffer, RenderType::entityCutout);
-            chestModel.renderToBuffer(matrixStack, builder, packedLight, LivingRenderer.getOverlayCoords(mimic, 0), 1, 1, 1, 1);
+            getEntityModel().copyModelAttributesTo(chestModel);
+            chestModel.setLivingAnimations(mimic, limbSwing, limbSwingAmount, partialTicks);
+            chestModel.setRotationAngles(mimic, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+            IVertexBuilder builder = getChestMaterial(mimic).getBuffer(buffer, RenderType::getEntityCutout);
+            chestModel.render(matrixStack, builder, packedLight, LivingRenderer.getPackedOverlay(mimic, 0), 1, 1, 1, 1);
 
-            matrixStack.popPose();
+            matrixStack.pop();
         }
     }
 
@@ -93,6 +93,6 @@ public class MimicChestLayer extends LayerRenderer<MimicEntity, MimicModel> {
         if (chestMaterials.size() == 1) {
             return chestMaterials.get(0);
         }
-        return chestMaterials.get((int) (Math.abs(mimic.getUUID().getMostSignificantBits()) % chestMaterials.size()));
+        return chestMaterials.get((int) (Math.abs(mimic.getUniqueID().getMostSignificantBits()) % chestMaterials.size()));
     }
 }

@@ -38,8 +38,8 @@ public class CurioRenderers {
         renderers.put(ModItems.VILLAGER_HAT.get(), new SimpleCurioRenderer("villager_hat", HeadModel.villagerHat()));
 
         // necklace
-        renderers.put(ModItems.LUCKY_SCARF.get(), new SimpleCurioRenderer("scarf/lucky_scarf", ScarfModel.scarf(RenderType::entityCutoutNoCull)));
-        renderers.put(ModItems.SCARF_OF_INVISIBILITY.get(), new SimpleCurioRenderer("scarf/scarf_of_invisibility", ScarfModel.scarf(RenderType::entityTranslucent)));
+        renderers.put(ModItems.LUCKY_SCARF.get(), new SimpleCurioRenderer("scarf/lucky_scarf", ScarfModel.scarf(RenderType::getEntityCutoutNoCull)));
+        renderers.put(ModItems.SCARF_OF_INVISIBILITY.get(), new SimpleCurioRenderer("scarf/scarf_of_invisibility", ScarfModel.scarf(RenderType::getEntityTranslucent)));
         renderers.put(ModItems.CROSS_NECKLACE.get(), new SimpleCurioRenderer("cross_necklace", NecklaceModel.crossNecklace()));
         renderers.put(ModItems.PANIC_NECKLACE.get(), new SimpleCurioRenderer("panic_necklace", NecklaceModel.panicNecklace()));
         renderers.put(ModItems.SHOCK_PENDANT.get(), new SimpleCurioRenderer("pendant/shock_pendant", NecklaceModel.pendant()));

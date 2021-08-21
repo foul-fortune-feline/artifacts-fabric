@@ -33,14 +33,14 @@ public class GlowingGloveCurioRenderer extends GloveCurioRenderer {
     protected void renderArm(HandsModel model, MatrixStack matrixStack, IRenderTypeBuffer buffer, HandSide handSide, int light, boolean hasSlimArms, boolean hasFoil) {
         super.renderArm(model, matrixStack, buffer, handSide, light, hasSlimArms, hasFoil);
         RenderType renderType = ForgeRenderTypes.getUnlitTranslucent(getGlowTexture(hasSlimArms));
-        IVertexBuilder builder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
-        model.renderHand(handSide, matrixStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        IVertexBuilder builder = ItemRenderer.getBuffer(buffer, renderType, false, hasFoil);
+        model.renderHand(handSide, matrixStack, builder, LightTexture.packLight(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 
     @Override
     protected void renderFirstPersonArm(HandsModel model, ModelRenderer arm, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, boolean hasSlimArms, boolean hasFoil) {
         super.renderFirstPersonArm(model, arm, matrixStack, buffer, light, hasSlimArms, hasFoil);
-        IVertexBuilder builder = ItemRenderer.getFoilBuffer(buffer, ForgeRenderTypes.getUnlitTranslucent(getGlowTexture(hasSlimArms)), false, hasFoil);
-        arm.render(matrixStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY);
+        IVertexBuilder builder = ItemRenderer.getBuffer(buffer, ForgeRenderTypes.getUnlitTranslucent(getGlowTexture(hasSlimArms)), false, hasFoil);
+        arm.render(matrixStack, builder, LightTexture.packLight(15, 15), OverlayTexture.NO_OVERLAY);
     }
 }

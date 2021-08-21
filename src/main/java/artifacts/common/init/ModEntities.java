@@ -13,8 +13,8 @@ import net.minecraftforge.registries.ObjectHolder;
 public class ModEntities {
 
     @SuppressWarnings("unchecked")
-    public static final EntityType<MimicEntity> MIMIC = (EntityType<MimicEntity>) EntityType.Builder.of(MimicEntity::new, EntityClassification.MISC)
-            .sized(14 / 16F, 14 / 16F)
+    public static final EntityType<MimicEntity> MIMIC = (EntityType<MimicEntity>) EntityType.Builder.create(MimicEntity::new, EntityClassification.MISC)
+            .size(14 / 16F, 14 / 16F)
             .setTrackingRange(64)
             .build(new ResourceLocation(Artifacts.MODID, "mimic").toString())
             .setRegistryName(new ResourceLocation(Artifacts.MODID, "mimic"));
@@ -24,6 +24,6 @@ public class ModEntities {
     }
 
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(MIMIC, MimicEntity.createMobAttributes().build());
+        event.put(MIMIC, MimicEntity.createMobAttributes().create());
     }
 }

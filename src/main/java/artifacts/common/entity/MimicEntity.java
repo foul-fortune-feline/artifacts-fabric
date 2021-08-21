@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
+import net.minecraft.entity.ai.controller.MovementController.Action;
+
 public class MimicEntity extends MobEntity implements IMob {
 
     public int ticksInAir;
@@ -32,35 +34,35 @@ public class MimicEntity extends MobEntity implements IMob {
 
     public MimicEntity(EntityType<? extends MimicEntity> type, World world) {
         super(type, world);
-        moveControl = new MimicMovementController(this);
-        xpReward = 10;
+        moveController = new MimicMovementController(this);
+        experienceValue = 10;
     }
 
     @Nullable
     @Override
-    public ILivingEntityData finalizeSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
-        if (getMoveControl() instanceof MimicMovementController) {
-            ((MimicMovementController) moveControl).setDirection(random.nextInt(4) * 90, false);
+    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData spawnData, @Nullable CompoundNBT dataTag) {
+        if (getMoveHelper() instanceof MimicMovementController) {
+            ((MimicMovementController) moveController).setDirection(rand.nextInt(4) * 90, false);
         }
-        return super.finalizeSpawn(world, difficulty, reason, spawnData, dataTag);
+        return super.onInitialSpawn(world, difficulty, reason, spawnData, dataTag);
     }
 
-    public SoundCategory getSoundSource() {
+    public SoundCategory getSoundCategory() {
         return SoundCategory.HOSTILE;
     }
 
     @Override
-    public boolean removeWhenFarAway(double distance) {
+    public boolean canDespawn(double distance) {
         return false;
     }
 
     public static AttributeModifierMap.MutableAttribute createMobAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 60)
-                .add(Attributes.FOLLOW_RANGE, 16)
-                .add(Attributes.KNOCKBACK_RESISTANCE, 0.8)
-                .add(Attributes.MOVEMENT_SPEED, 0.8)
-                .add(Attributes.ATTACK_DAMAGE, 5);
+        return MobEntity.func_233666_p_()
+                .createMutableAttribute(Attributes.MAX_HEALTH, 60)
+                .createMutableAttribute(Attributes.FOLLOW_RANGE, 16)
+                .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.8)
+                .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.8)
+                .createMutableAttribute(Attributes.ATTACK_DAMAGE, 5);
     }
 
     @Override
@@ -71,19 +73,19 @@ public class MimicEntity extends MobEntity implements IMob {
         goalSelector.addGoal(3, new FaceRandomGoal(this));
         goalSelector.addGoal(5, new HopGoal(this));
         // noinspection ConstantConditions
-        targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 1, true, false, (entity) -> !isDormant || distanceTo(entity) < getAttribute(Attributes.FOLLOW_RANGE).getValue() / 2.5));
+        targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 1, true, false, (entity) -> !isDormant || getDistance(entity) < getAttribute(Attributes.FOLLOW_RANGE).getValue() / 2.5));
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundNBT compound) {
-        super.addAdditionalSaveData(compound);
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
         compound.putInt("ticksInAir", ticksInAir);
         compound.putBoolean("isDormant", isDormant);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundNBT compound) {
-        super.readAdditionalSaveData(compound);
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
         ticksInAir = compound.getInt("ticksInAir");
         isDormant = compound.getBoolean("isDormant");
     }
@@ -101,7 +103,7 @@ public class MimicEntity extends MobEntity implements IMob {
             ticksInAir++;
         } else {
             if (ticksInAir > 0) {
-                playSound(getLandingSound(), getSoundVolume(), getVoicePitch());
+                playSound(getLandingSound(), getSoundVolume(), getSoundPitch());
                 ticksInAir = 0;
             }
         }
@@ -112,35 +114,35 @@ public class MimicEntity extends MobEntity implements IMob {
     }
 
     @Override
-    public void playerTouch(PlayerEntity player) {
-        super.playerTouch(player);
+    public void onCollideWithPlayer(PlayerEntity player) {
+        super.onCollideWithPlayer(player);
         // noinspection ConstantConditions
-        if (attackCooldown <= 0 && player.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL && canSee(player) && distanceToSqr(player.getBoundingBox().getCenter().subtract(0, getBoundingBox().getYsize() / 2, 0)) < 1 && player.hurt(DamageSource.mobAttack(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue())) {
+        if (attackCooldown <= 0 && player.getEntityWorld().getDifficulty() != Difficulty.PEACEFUL && canEntityBeSeen(player) && getDistanceSq(player.getBoundingBox().getCenter().subtract(0, getBoundingBox().getYSize() / 2, 0)) < 1 && player.attackEntityFrom(DamageSource.causeMobDamage(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue())) {
             attackCooldown = 20;
-            doEnchantDamageEffects(this, player);
+            applyEnchantments(this, player);
         }
     }
 
     @Override
-    public void setTarget(LivingEntity entity) {
+    public void setAttackTarget(LivingEntity entity) {
         isDormant = false;
-        super.setTarget(entity);
+        super.setAttackTarget(entity);
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (source.getEntity() instanceof PlayerEntity) {
-            setTarget((LivingEntity) source.getEntity());
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (source.getTrueSource() instanceof PlayerEntity) {
+            setAttackTarget((LivingEntity) source.getTrueSource());
         }
-        if (ticksInAir <= 0 && source.isProjectile() && !source.isBypassArmor()) {
-            playSound(ModSoundEvents.MIMIC_HURT.get(), getSoundVolume(), getVoicePitch());
+        if (ticksInAir <= 0 && source.isProjectile() && !source.isUnblockable()) {
+            playSound(ModSoundEvents.MIMIC_HURT.get(), getSoundVolume(), getSoundPitch());
             return false;
         }
 
-        if (isOnGround() && getRandom().nextBoolean() && getMoveControl() instanceof MimicMovementController) {
-            ((MimicMovementController) getMoveControl()).setDirection(getRandom().nextInt(4) * 90, true);
+        if (isOnGround() && getRNG().nextBoolean() && getMoveHelper() instanceof MimicMovementController) {
+            ((MimicMovementController) getMoveHelper()).setDirection(getRNG().nextInt(4) * 90, true);
         }
-        return super.hurt(source, amount);
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override
@@ -162,7 +164,7 @@ public class MimicEntity extends MobEntity implements IMob {
     }
 
     @Override
-    protected ResourceLocation getDefaultLootTable() {
+    protected ResourceLocation getLootTable() {
         return ModLootTables.MIMIC;
     }
 
@@ -177,42 +179,42 @@ public class MimicEntity extends MobEntity implements IMob {
 
         public AttackGoal(MimicEntity mimic) {
             this.mimic = mimic;
-            setFlags(EnumSet.of(Goal.Flag.LOOK));
+            setMutexFlags(EnumSet.of(Goal.Flag.LOOK));
         }
 
         @Override
-        public boolean canUse() {
-            LivingEntity target = mimic.getTarget();
+        public boolean shouldExecute() {
+            LivingEntity target = mimic.getAttackTarget();
 
             return target instanceof PlayerEntity
                     && target.isAlive()
-                    && target.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL
-                    && !((PlayerEntity) target).abilities.invulnerable;
+                    && target.getEntityWorld().getDifficulty() != Difficulty.PEACEFUL
+                    && !((PlayerEntity) target).abilities.disableDamage;
         }
 
         @Override
-        public void start() {
+        public void startExecuting() {
             timeRemaining = 300;
-            super.start();
+            super.startExecuting();
         }
 
         @Override
-        public boolean canContinueToUse() {
-            LivingEntity target = mimic.getTarget();
+        public boolean shouldContinueExecuting() {
+            LivingEntity target = mimic.getAttackTarget();
 
             return target instanceof PlayerEntity
                     && target.isAlive()
-                    && target.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL
-                    && !((PlayerEntity) target).abilities.invulnerable
+                    && target.getEntityWorld().getDifficulty() != Difficulty.PEACEFUL
+                    && !((PlayerEntity) target).abilities.disableDamage
                     && --timeRemaining > 0;
         }
 
         @Override
         public void tick() {
             super.tick();
-            if (mimic.getTarget() != null && mimic.getMoveControl() instanceof MimicMovementController) {
-                mimic.lookAt(mimic.getTarget(), 10, 10);
-                ((MimicMovementController) mimic.getMoveControl()).setDirection(mimic.yRot, true);
+            if (mimic.getAttackTarget() != null && mimic.getMoveHelper() instanceof MimicMovementController) {
+                mimic.faceEntity(mimic.getAttackTarget(), 10, 10);
+                ((MimicMovementController) mimic.getMoveHelper()).setDirection(mimic.rotationYaw, true);
             }
         }
     }
@@ -225,26 +227,26 @@ public class MimicEntity extends MobEntity implements IMob {
 
         public FaceRandomGoal(MimicEntity mimic) {
             this.mimic = mimic;
-            setFlags(EnumSet.of(Goal.Flag.LOOK));
+            setMutexFlags(EnumSet.of(Goal.Flag.LOOK));
         }
 
         @Override
-        public boolean canUse() {
-            return mimic.getTarget() == null && (mimic.onGround || mimic.isInWater() || mimic.isInLava() || mimic.hasEffect(Effects.LEVITATION));
+        public boolean shouldExecute() {
+            return mimic.getAttackTarget() == null && (mimic.onGround || mimic.isInWater() || mimic.isInLava() || mimic.isPotionActive(Effects.LEVITATION));
         }
 
         @Override
         public void tick() {
             if (--nextRandomizeTime <= 0) {
-                nextRandomizeTime = 480 + mimic.getRandom().nextInt(320);
+                nextRandomizeTime = 480 + mimic.getRNG().nextInt(320);
                 if (mimic.isDormant) {
-                    chosenDegrees = Math.round(mimic.yRot / 90) * 90;
+                    chosenDegrees = Math.round(mimic.rotationYaw / 90) * 90;
                 } else {
-                    chosenDegrees = mimic.getRandom().nextInt(4) * 90;
+                    chosenDegrees = mimic.getRNG().nextInt(4) * 90;
                 }
             }
-            if (mimic.getMoveControl() instanceof MimicMovementController) {
-                ((MimicMovementController) mimic.getMoveControl()).setDirection(chosenDegrees, false);
+            if (mimic.getMoveHelper() instanceof MimicMovementController) {
+                ((MimicMovementController) mimic.getMoveHelper()).setDirection(chosenDegrees, false);
             }
         }
     }
@@ -255,22 +257,22 @@ public class MimicEntity extends MobEntity implements IMob {
 
         public FloatGoal(MimicEntity mimic) {
             this.mimic = mimic;
-            setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
-            mimic.getNavigation().setCanFloat(true);
+            setMutexFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
+            mimic.getNavigator().setCanSwim(true);
         }
 
         @Override
-        public boolean canUse() {
+        public boolean shouldExecute() {
             return mimic.isInWater() || mimic.isInLava();
         }
 
         @Override
         public void tick() {
-            if (mimic.getRandom().nextFloat() < 0.8F) {
-                mimic.jumpControl.jump();
+            if (mimic.getRNG().nextFloat() < 0.8F) {
+                mimic.jumpController.setJumping();
             }
-            if (mimic.getMoveControl() instanceof MimicMovementController) {
-                ((MimicMovementController) mimic.getMoveControl()).setSpeed(1.2);
+            if (mimic.getMoveHelper() instanceof MimicMovementController) {
+                ((MimicMovementController) mimic.getMoveHelper()).setSpeed(1.2);
             }
         }
     }
@@ -281,18 +283,18 @@ public class MimicEntity extends MobEntity implements IMob {
 
         public HopGoal(MimicEntity mimic) {
             this.mimic = mimic;
-            setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
+            setMutexFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
         }
 
         @Override
-        public boolean canUse() {
+        public boolean shouldExecute() {
             return !mimic.isDormant && !mimic.isPassenger();
         }
 
         @Override
         public void tick() {
-            if (mimic.getMoveControl() instanceof MimicMovementController) {
-                ((MimicMovementController) mimic.getMoveControl()).setSpeed(1);
+            if (mimic.getMoveHelper() instanceof MimicMovementController) {
+                ((MimicMovementController) mimic.getMoveHelper()).setSpeed(1);
             }
         }
     }
@@ -306,8 +308,8 @@ public class MimicEntity extends MobEntity implements IMob {
         public MimicMovementController(MimicEntity mimic) {
             super(mimic);
             this.mimic = mimic;
-            rotationDegrees = 180 * mimic.yRot / (float) Math.PI;
-            jumpDelay = mimic.random.nextInt(320) + 640;
+            rotationDegrees = 180 * mimic.rotationYaw / (float) Math.PI;
+            jumpDelay = mimic.rand.nextInt(320) + 640;
         }
 
         public void setDirection(float rotation, boolean shouldJump) {
@@ -318,33 +320,33 @@ public class MimicEntity extends MobEntity implements IMob {
         }
 
         public void setSpeed(double speed) {
-            this.speedModifier = speed;
-            operation = Action.MOVE_TO;
+            this.speed = speed;
+            action = Action.MOVE_TO;
         }
 
         @Override
         public void tick() {
-            mimic.yHeadRot = mimic.yBodyRot = mimic.yRot = rotlerp(mimic.yRot, rotationDegrees, 90);
+            mimic.rotationYawHead = mimic.renderYawOffset = mimic.rotationYaw = limitAngle(mimic.rotationYaw, rotationDegrees, 90);
 
-            if (operation != Action.MOVE_TO) {
-                mimic.setZza(0);
+            if (action != Action.MOVE_TO) {
+                mimic.setMoveForward(0);
             } else {
-                operation = Action.WAIT;
+                action = Action.WAIT;
                 if (mimic.onGround) {
                     // noinspection ConstantConditions
-                    mimic.setSpeed((float) (speedModifier * mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
+                    mimic.setAIMoveSpeed((float) (speed * mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                     if (jumpDelay-- > 0) {
-                        mimic.xxa = mimic.zza = 0;
-                        mimic.setSpeed(0);
+                        mimic.moveStrafing = mimic.moveForward = 0;
+                        mimic.setAIMoveSpeed(0);
                     } else {
-                        jumpDelay = mimic.random.nextInt(320) + 640;
+                        jumpDelay = mimic.rand.nextInt(320) + 640;
 
-                        mimic.jumpControl.jump();
-                        mimic.playSound(mimic.getJumpingSound(), mimic.getSoundVolume(), mimic.getVoicePitch());
+                        mimic.jumpController.setJumping();
+                        mimic.playSound(mimic.getJumpingSound(), mimic.getSoundVolume(), mimic.getSoundPitch());
                     }
                 } else {
                     // noinspection ConstantConditions
-                    mimic.setSpeed((float) (speedModifier * mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
+                    mimic.setAIMoveSpeed((float) (speed * mimic.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
                 }
             }
         }

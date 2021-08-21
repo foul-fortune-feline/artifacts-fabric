@@ -24,10 +24,10 @@ public class InCaveWithChance extends Placement<ChanceConfig> {
             pos = new BlockPos(pos.getX() + x, ModConfig.common.campsiteMinY.get(), pos.getZ() + z);
             while (pos.getY() <= ModConfig.common.campsiteMaxY.get()) {
                 // noinspection deprecation
-                if (helper.getBlockState(pos).isAir() && helper.getBlockState(pos.below()).getMaterial().blocksMotion()) {
+                if (helper.func_242894_a(pos).isAir() && helper.func_242894_a(pos.down()).getMaterial().blocksMovement()) {
                     return Stream.of(pos);
                 }
-                pos = pos.above();
+                pos = pos.up();
             }
         }
         return Stream.empty();

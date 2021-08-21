@@ -29,13 +29,13 @@ public class DrinkingHatItem extends CurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flags) {
+    public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flags) {
         if (ModConfig.client.showTooltips.get() && ModConfig.server != null && !ModConfig.server.isCosmetic(this)) {
             if (this != ModItems.PLASTIC_DRINKING_HAT.get()) {
-                tooltip.add(new TranslationTextComponent(ModItems.PLASTIC_DRINKING_HAT.get().getDescriptionId() + ".tooltip").withStyle(TextFormatting.GRAY));
+                tooltip.add(new TranslationTextComponent(ModItems.PLASTIC_DRINKING_HAT.get().getTranslationKey() + ".tooltip").mergeStyle(TextFormatting.GRAY));
             }
         }
-        super.appendHoverText(stack, world, tooltip, flags);
+        super.addInformation(stack, world, tooltip, flags);
     }
 
     private void onItemUseStart(LivingEntityUseItemEvent.Start event, LivingEntity wearer) {
@@ -52,12 +52,12 @@ public class DrinkingHatItem extends CurioItem {
     }
 
     private boolean canApplyEffect(LivingEntityUseItemEvent event) {
-        UseAction action = event.getItem().getUseAnimation();
+        UseAction action = event.getItem().getUseAction();
         return action == UseAction.DRINK || action == UseAction.EAT && ModConfig.server.plasticDrinkingHat.enableFastEating.get();
     }
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.BOTTLE_FILL, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ITEM_BOTTLE_FILL, 1, 1);
     }
 }

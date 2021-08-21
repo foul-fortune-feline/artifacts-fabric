@@ -13,15 +13,15 @@ public class WhoopeeCushionItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
-        if (!entity.level.isClientSide()) {
+        if (!entity.world.isRemote()) {
             CompoundNBT tag = stack.getOrCreateTag();
-            if (tag.getBoolean("HasFarted") && !entity.isShiftKeyDown()) {
+            if (tag.getBoolean("HasFarted") && !entity.isSneaking()) {
                 tag.putBoolean("HasFarted", false);
-            } else if (!tag.getBoolean("HasFarted") && entity.isShiftKeyDown()) {
+            } else if (!tag.getBoolean("HasFarted") && entity.isSneaking()) {
                 tag.putBoolean("HasFarted", true);
                 double fartChance = ModConfig.server.whoopeeCushion.flatulence.get();
-                if (entity.getRandom().nextFloat() < fartChance) {
-                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ModSoundEvents.FART.get(), SoundCategory.PLAYERS, 1, 0.9F + entity.getRandom().nextFloat() * 0.2F);
+                if (entity.getRNG().nextFloat() < fartChance) {
+                    entity.world.playSound(null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), ModSoundEvents.FART.get(), SoundCategory.PLAYERS, 1, 0.9F + entity.getRNG().nextFloat() * 0.2F);
                     damageStack(identifier, index, entity, stack);
                 }
             }

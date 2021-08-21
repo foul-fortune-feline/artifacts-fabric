@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 public class BunnyHoppersItem extends HurtSoundModifyingItem {
 
     public BunnyHoppersItem() {
-        super(SoundEvents.RABBIT_HURT);
+        super(SoundEvents.ENTITY_RABBIT_HURT);
         addListener(EventPriority.HIGH, LivingFallEvent.class, this::onLivingFall);
         addListener(LivingEvent.LivingJumpEvent.class, this::onLivingJump);
     }
@@ -32,8 +32,8 @@ public class BunnyHoppersItem extends HurtSoundModifyingItem {
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
         int jumpBoostLevel = ModConfig.server.bunnyHoppers.jumpBoostLevel.get() - 1;
-        if (!ModConfig.server.isCosmetic(this) && !livingEntity.level.isClientSide && livingEntity.tickCount % 15 == 0 && jumpBoostLevel >= 0) {
-            livingEntity.addEffect(new EffectInstance(Effects.JUMP, 39, jumpBoostLevel, true, false));
+        if (!ModConfig.server.isCosmetic(this) && !livingEntity.world.isRemote && livingEntity.ticksExisted % 15 == 0 && jumpBoostLevel >= 0) {
+            livingEntity.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 39, jumpBoostLevel, true, false));
         }
     }
 }

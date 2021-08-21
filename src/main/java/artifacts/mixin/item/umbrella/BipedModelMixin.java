@@ -16,24 +16,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BipedModelMixin<T extends LivingEntity> {
 
     @Shadow
-    public ModelRenderer rightArm;
+    public ModelRenderer bipedRightArm;
 
     @Shadow
-    public ModelRenderer leftArm;
+    public ModelRenderer bipedLeftArm;
 
     // see https://github.com/florensie/artifacts-fabric/blob/HEAD/src/main/java/artifacts/mixin/mixins/item/umbrella/client/BipedEntityModelMixin.java
     @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(method = "setupAnim", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getMainArm()Lnet/minecraft/util/HandSide;"))
+    @Inject(method = "setRotationAngles", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getPrimaryHand()Lnet/minecraft/util/HandSide;"))
     private void reduceHandSwing(T entity, float f, float g, float h, float i, float j, CallbackInfo info) {
         boolean isHoldingOffHand = UmbrellaItem.isHoldingUmbrellaUpright(entity, Hand.OFF_HAND);
         boolean isHoldingMainHand = UmbrellaItem.isHoldingUmbrellaUpright(entity, Hand.MAIN_HAND);
-        boolean isRightHanded = entity.getMainArm() == HandSide.RIGHT;
+        boolean isRightHanded = entity.getPrimaryHand() == HandSide.RIGHT;
 
         if ((isHoldingMainHand && isRightHanded) || (isHoldingOffHand && !isRightHanded)) {
-            this.rightArm.xRot /= 8;
+            this.bipedRightArm.rotateAngleX /= 8;
         }
         if ((isHoldingMainHand && !isRightHanded) || (isHoldingOffHand && isRightHanded)) {
-            this.leftArm.xRot /= 8;
+            this.bipedLeftArm.rotateAngleX /= 8;
         }
     }
 }

@@ -24,7 +24,7 @@ group = 'artifacts'
 archivesBaseName = 'Artifacts'
 
 minecraft {
-    mappings channel: 'official', version: '1.16.5'
+    mappings channel: 'snapshot', version: '20210309-1.16.5'
 
     runs {
         client {

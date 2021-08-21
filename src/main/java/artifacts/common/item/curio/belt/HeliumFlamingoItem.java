@@ -48,12 +48,12 @@ public class HeliumFlamingoItem extends CurioItem {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flags) {
+    public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flags) {
         if (ModConfig.server != null && ModConfig.server.isCosmetic(this)) {
-            super.appendHoverText(stack, world, tooltip, flags);
+            super.addInformation(stack, world, tooltip, flags);
         } else if (ModConfig.client.showTooltips.get()) {
-            tooltip.add(new TranslationTextComponent(getDescriptionId() + ".tooltip.0").withStyle(TextFormatting.GRAY));
-            tooltip.add(new TranslationTextComponent(getDescriptionId() + ".tooltip.1", Minecraft.getInstance().options.keySprint.getTranslatedKeyMessage()).withStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent(getTranslationKey() + ".tooltip.0").mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent(getTranslationKey() + ".tooltip.1", Minecraft.getInstance().gameSettings.keyBindSprint.func_238171_j_()).mergeStyle(TextFormatting.GRAY));
         }
     }
 
@@ -79,11 +79,11 @@ public class HeliumFlamingoItem extends CurioItem {
                             }
                         }
 
-                        if (isEquippedBy(event.player) && !event.player.isEyeInFluid(FluidTags.WATER)) {
-                            if (event.player.tickCount % 20 == 0) {
+                        if (isEquippedBy(event.player) && !event.player.areEyesInFluid(FluidTags.WATER)) {
+                            if (event.player.ticksExisted % 20 == 0) {
                                 damageEquippedStacks(event.player);
                             }
-                            if (!event.player.abilities.invulnerable && maxFlightTime > 0) {
+                            if (!event.player.abilities.disableDamage && maxFlightTime > 0) {
                                 handler.setSwimTime(handler.getSwimTime() + 1);
                             }
                         }
@@ -117,7 +117,7 @@ public class HeliumFlamingoItem extends CurioItem {
             }
 
             PlayerEntity player = event.getPlayer();
-            boolean isSprintKeyDown = Minecraft.getInstance().options.keySprint.isDown();
+            boolean isSprintKeyDown = Minecraft.getInstance().gameSettings.keyBindSprint.isKeyDown();
 
             player.getCapability(SwimHandlerCapability.INSTANCE).ifPresent(
                     handler -> {
@@ -134,14 +134,14 @@ public class HeliumFlamingoItem extends CurioItem {
                                     && hasTouchedGround
                                     && !player.isOnGround()
                                     && (!player.isInWater() || handler.isSinking())
-                                    && !player.isFallFlying()
-                                    && !player.abilities.flying
+                                    && !player.isElytraFlying()
+                                    && !player.abilities.isFlying
                                     && !player.isPassenger())) {
                                 handler.setSwimming(true);
                                 handler.syncSwimming();
                                 hasTouchedGround = false;
                             }
-                        } else if (player.abilities.flying) {
+                        } else if (player.abilities.isFlying) {
                             handler.setSwimming(false);
                             handler.syncSwimming();
                             hasTouchedGround = true;
@@ -162,11 +162,11 @@ public class HeliumFlamingoItem extends CurioItem {
         public void render(RenderGameOverlayEvent.Post event) {
             Minecraft minecraft = Minecraft.getInstance();
 
-            if (ModConfig.server.isCosmetic(HeliumFlamingoItem.this) || !(minecraft.getCameraEntity() instanceof LivingEntity)) {
+            if (ModConfig.server.isCosmetic(HeliumFlamingoItem.this) || !(minecraft.getRenderViewEntity() instanceof LivingEntity)) {
                 return;
             }
 
-            LivingEntity player = (LivingEntity) minecraft.getCameraEntity();
+            LivingEntity player = (LivingEntity) minecraft.getRenderViewEntity();
 
             if (event.getType() != RenderGameOverlayEvent.ElementType.AIR || event.isCanceled() || !isEquippedBy(player)) {
                 return;
@@ -174,8 +174,8 @@ public class HeliumFlamingoItem extends CurioItem {
 
             player.getCapability(SwimHandlerCapability.INSTANCE).ifPresent(
                     handler -> {
-                        int left = minecraft.getWindow().getGuiScaledWidth() / 2 + 91;
-                        int top = minecraft.getWindow().getGuiScaledHeight() - ForgeIngameGui.right_height;
+                        int left = minecraft.getMainWindow().getScaledWidth() / 2 + 91;
+                        int top = minecraft.getMainWindow().getScaledHeight() - ForgeIngameGui.right_height;
 
                         int swimTime = Math.abs(handler.getSwimTime());
                         int maxProgressTime;
@@ -190,7 +190,7 @@ public class HeliumFlamingoItem extends CurioItem {
 
                         float progress = 1 - swimTime / (float) maxProgressTime;
 
-                        Minecraft.getInstance().getTextureManager().bind(location);
+                        Minecraft.getInstance().getTextureManager().bindTexture(location);
                         RenderSystem.enableBlend();
 
                         int full = MathHelper.ceil((progress - 2D / maxProgressTime) * 10);

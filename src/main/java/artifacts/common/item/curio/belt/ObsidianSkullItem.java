@@ -20,17 +20,17 @@ public class ObsidianSkullItem extends CurioItem {
     }
 
     private void onLivingHurt(LivingHurtEvent event, LivingEntity wearer) {
-        if (!wearer.level.isClientSide
+        if (!wearer.world.isRemote
                 && event.getAmount() >= 1
                 && (event.getSource() == DamageSource.ON_FIRE || event.getSource() == DamageSource.IN_FIRE || event.getSource() == DamageSource.LAVA || event.getSource() == DamageSource.HOT_FLOOR)
                 && wearer instanceof PlayerEntity) {
 
-            if (!((PlayerEntity) wearer).getCooldowns().isOnCooldown(this)) {
+            if (!((PlayerEntity) wearer).getCooldownTracker().hasCooldown(this)) {
                 int cooldown = ModConfig.server.obsidianSkull.cooldown.get();
                 int fireResistanceDuration = ModConfig.server.obsidianSkull.fireResistanceDuration.get();
 
-                wearer.addEffect(new EffectInstance(Effects.FIRE_RESISTANCE, fireResistanceDuration, 0, false, true));
-                ((PlayerEntity) wearer).getCooldowns().addCooldown(this, cooldown);
+                wearer.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, fireResistanceDuration, 0, false, true));
+                ((PlayerEntity) wearer).getCooldownTracker().setCooldown(this, cooldown);
 
                 damageEquippedStacks(wearer);
             }
@@ -39,6 +39,6 @@ public class ObsidianSkullItem extends CurioItem {
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.ARMOR_EQUIP_IRON, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1, 1);
     }
 }

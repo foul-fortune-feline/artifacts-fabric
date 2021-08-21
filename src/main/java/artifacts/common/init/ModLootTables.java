@@ -67,15 +67,15 @@ public class ModLootTables {
         }
 
         public static LootPool getInjectPool(String entryName) {
-            return LootPool.lootPool()
-                    .add(getInjectEntry(entryName))
+            return LootPool.builder()
+                    .addEntry(getInjectEntry(entryName))
                     .name("artifacts_inject")
                     .build();
         }
 
         private static LootEntry.Builder<?> getInjectEntry(String name) {
             ResourceLocation table = new ResourceLocation(Artifacts.MODID, "inject/" + name);
-            return TableLootEntry.lootTableReference(table).setWeight(1);
+            return TableLootEntry.builder(table).weight(1);
         }
     }
 }

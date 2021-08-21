@@ -18,7 +18,7 @@ public class FlippersItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
-        if (livingEntity.tickCount % 20 == 0 && livingEntity.isSwimming()) {
+        if (livingEntity.ticksExisted % 20 == 0 && livingEntity.isSwimming()) {
             damageStack(identifier, index, livingEntity, stack);
         }
     }

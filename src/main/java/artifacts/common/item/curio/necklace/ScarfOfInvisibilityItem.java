@@ -11,10 +11,10 @@ public class ScarfOfInvisibilityItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
-        if (!ModConfig.server.isCosmetic(this) && !entity.level.isClientSide && entity.tickCount % 15 == 0) {
-            entity.addEffect(new EffectInstance(Effects.INVISIBILITY, 39, 0, true, false));
+        if (!ModConfig.server.isCosmetic(this) && !entity.world.isRemote && entity.ticksExisted % 15 == 0) {
+            entity.addPotionEffect(new EffectInstance(Effects.INVISIBILITY, 39, 0, true, false));
         }
-        if (entity.tickCount % 20 == 0) {
+        if (entity.ticksExisted % 20 == 0) {
             damageStack(identifier, index, entity, stack);
         }
     }

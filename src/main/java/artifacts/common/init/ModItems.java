@@ -27,16 +27,16 @@ public class ModItems {
     public static final ItemGroup CREATIVE_TAB = new ItemGroup(Artifacts.MODID) {
         @Override
         @OnlyIn(Dist.CLIENT)
-        public ItemStack makeIcon() {
+        public ItemStack createIcon() {
             return new ItemStack(BUNNY_HOPPERS.get());
         }
     };
 
     // misc items
-    public static final RegistryObject<Item> MIMIC_SPAWN_EGG = REGISTRY.register("mimic_spawn_egg", () -> new SpawnEggItem(ModEntities.MIMIC, 0x805113, 0x212121, new Item.Properties().tab(ItemGroup.TAB_MISC)));
+    public static final RegistryObject<Item> MIMIC_SPAWN_EGG = REGISTRY.register("mimic_spawn_egg", () -> new SpawnEggItem(ModEntities.MIMIC, 0x805113, 0x212121, new Item.Properties().group(ItemGroup.MISC)));
     public static final RegistryObject<Item> UMBRELLA = REGISTRY.register("umbrella", UmbrellaItem::new);
-    public static final RegistryObject<Item> EVERLASTING_BEEF = REGISTRY.register("everlasting_beef", () -> new EverlastingFoodItem(new Food.Builder().nutrition(3).saturationMod(0.3F).build()));
-    public static final RegistryObject<Item> ETERNAL_STEAK = REGISTRY.register("eternal_steak", () -> new EverlastingFoodItem(new Food.Builder().nutrition(8).saturationMod(0.8F).build()));
+    public static final RegistryObject<Item> EVERLASTING_BEEF = REGISTRY.register("everlasting_beef", () -> new EverlastingFoodItem(new Food.Builder().hunger(3).saturation(0.3F).build()));
+    public static final RegistryObject<Item> ETERNAL_STEAK = REGISTRY.register("eternal_steak", () -> new EverlastingFoodItem(new Food.Builder().hunger(8).saturation(0.8F).build()));
 
     // head
     public static final RegistryObject<CurioItem> PLASTIC_DRINKING_HAT = REGISTRY.register("plastic_drinking_hat", DrinkingHatItem::new);

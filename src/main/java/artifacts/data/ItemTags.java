@@ -31,19 +31,19 @@ public class ItemTags extends ItemTagsProvider {
     }
 
     @Override
-    protected void addTags() {
+    protected void registerTags() {
         // noinspection ConstantConditions
-        tag(ARTIFACTS).add(ForgeRegistries.ITEMS.getValues().stream()
+        getOrCreateBuilder(ARTIFACTS).add(ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item.getRegistryName().getNamespace().equals(Artifacts.MODID))
                 .filter(item -> item != ModItems.MIMIC_SPAWN_EGG.get())
                 .collect(Collectors.toList()).toArray(new Item[]{})
         );
 
-        tag(net.minecraft.tags.ItemTags.PIGLIN_LOVED).add(ModItems.GOLDEN_HOOK.get());
+        getOrCreateBuilder(net.minecraft.tags.ItemTags.PIGLIN_LOVED).addItemEntry(ModItems.GOLDEN_HOOK.get());
 
-        tag(CURIO).add(ModItems.WHOOPEE_CUSHION.get());
+        getOrCreateBuilder(CURIO).addItemEntry(ModItems.WHOOPEE_CUSHION.get());
 
-        tag(BELT).add(
+        getOrCreateBuilder(BELT).add(
                 ModItems.ANTIDOTE_VESSEL.get(),
                 ModItems.CLOUD_IN_A_BOTTLE.get(),
                 ModItems.CRYSTAL_HEART.get(),
@@ -52,7 +52,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.HELIUM_FLAMINGO.get()
         );
 
-        tag(FEET).add(
+        getOrCreateBuilder(FEET).add(
                 ModItems.BUNNY_HOPPERS.get(),
                 ModItems.FLIPPERS.get(),
                 ModItems.KITTY_SLIPPERS.get(),
@@ -61,7 +61,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.AQUA_DASHERS.get()
         );
 
-        tag(HANDS).add(
+        getOrCreateBuilder(HANDS).add(
                 ModItems.DIGGING_CLAWS.get(),
                 ModItems.FERAL_CLAWS.get(),
                 ModItems.FIRE_GAUNTLET.get(),
@@ -71,7 +71,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.GOLDEN_HOOK.get()
         );
 
-        tag(HEAD).add(
+        getOrCreateBuilder(HEAD).add(
                 ModItems.NIGHT_VISION_GOGGLES.get(),
                 ModItems.NOVELTY_DRINKING_HAT.get(),
                 ModItems.PLASTIC_DRINKING_HAT.get(),
@@ -80,7 +80,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.VILLAGER_HAT.get()
         );
 
-        tag(NECKLACE).add(
+        getOrCreateBuilder(NECKLACE).add(
                 ModItems.CROSS_NECKLACE.get(),
                 ModItems.FLAME_PENDANT.get(),
                 ModItems.LUCKY_SCARF.get(),
@@ -99,7 +99,7 @@ public class ItemTags extends ItemTagsProvider {
         }
 
         @Override
-        protected void addTags() {
+        protected void registerTags() {
 
         }
     }

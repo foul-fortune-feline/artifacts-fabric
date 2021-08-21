@@ -19,7 +19,7 @@ public class ConfigurableRandomChance implements ILootCondition {
         this.defaultProbability = defaultProbability;
     }
 
-    public LootConditionType getType() {
+    public LootConditionType getConditionType() {
         return ModLootConditions.CONFIGURABLE_ARTIFACT_CHANCE;
     }
 
@@ -43,7 +43,7 @@ public class ConfigurableRandomChance implements ILootCondition {
         }
 
         public ConfigurableRandomChance deserialize(JsonObject object, JsonDeserializationContext context) {
-            return new ConfigurableRandomChance(JSONUtils.getAsFloat(object, "default_probability"));
+            return new ConfigurableRandomChance(JSONUtils.getFloat(object, "default_probability"));
         }
     }
 }

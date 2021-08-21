@@ -37,7 +37,7 @@ public class JEIPlugin implements IModPlugin {
                     registration.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM, "artifacts.cosmetic.jei");
                 } else if (item != ModItems.NOVELTY_DRINKING_HAT.get()) {
                     List<ITextComponent> textComponents = new ArrayList<>();
-                    item.appendHoverText(new ItemStack(item), null, textComponents, ITooltipFlag.TooltipFlags.NORMAL);
+                    item.addInformation(new ItemStack(item), null, textComponents, ITooltipFlag.TooltipFlags.NORMAL);
                     registration.addIngredientInfo(new ItemStack(item), VanillaTypes.ITEM, textComponents.stream().map(ITextComponent::getString).toArray(String[]::new));
                 }
             }

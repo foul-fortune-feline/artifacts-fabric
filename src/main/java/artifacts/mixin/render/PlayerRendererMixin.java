@@ -29,19 +29,19 @@ public abstract class PlayerRendererMixin extends LivingRenderer<AbstractClientP
         super(manager, model, shadowRadius);
     }
 
-    @Inject(method = "renderLeftHand", at = @At("TAIL"))
+    @Inject(method = "renderLeftArm", at = @At("TAIL"))
     private void renderLeftGlove(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, AbstractClientPlayerEntity player, CallbackInfo callbackInfo) {
         renderArm(matrixStack, buffer, light, player, HandSide.LEFT);
     }
 
-    @Inject(method = "renderRightHand", at = @At("TAIL"))
+    @Inject(method = "renderRightArm", at = @At("TAIL"))
     private void renderRightGlove(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, AbstractClientPlayerEntity player, CallbackInfo callbackInfo) {
         renderArm(matrixStack, buffer, light, player, HandSide.RIGHT);
     }
 
     @Unique
     private static void renderArm(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, AbstractClientPlayerEntity player, HandSide handSide) {
-        Hand hand = handSide == player.getMainArm() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+        Hand hand = handSide == player.getPrimaryHand() ? Hand.MAIN_HAND : Hand.OFF_HAND;
 
         CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(handler -> {
             ICurioStacksHandler stacksHandler = handler.getCurios().get(SlotTypePreset.HANDS.getIdentifier());
@@ -59,7 +59,7 @@ public abstract class PlayerRendererMixin extends LivingRenderer<AbstractClientP
 
                     GloveCurioRenderer renderer = CurioRenderers.getGloveRenderer(stack);
                     if (renderer != null) {
-                        renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil());
+                        renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasEffect());
                     }
                 }
             }

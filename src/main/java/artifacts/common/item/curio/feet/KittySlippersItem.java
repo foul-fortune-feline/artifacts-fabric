@@ -22,10 +22,10 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
 public class KittySlippersItem extends HurtSoundModifyingItem {
 
     public KittySlippersItem() {
-        super(SoundEvents.CAT_HURT);
+        super(SoundEvents.ENTITY_CAT_HURT);
         MinecraftForge.EVENT_BUS.addListener(this::onEntityJoinWorld);
         addListener(LivingSetAttackTargetEvent.class, this::onLivingSetAttackTarget, LivingSetAttackTargetEvent::getTarget);
-        addListener(LivingEvent.LivingUpdateEvent.class, this::onLivingUpdate, event -> event.getEntityLiving().getLastHurtByMob());
+        addListener(LivingEvent.LivingUpdateEvent.class, this::onLivingUpdate, event -> event.getEntityLiving().getRevengeTarget());
         addListener(LivingAttackEvent.class, this::onLivingAttack, event -> DamageSourceHelper.getAttacker(event.getSource()));
     }
 
@@ -37,24 +37,24 @@ public class KittySlippersItem extends HurtSoundModifyingItem {
 
     private void onEntityJoinWorld(EntityJoinWorldEvent event) {
         if (!ModConfig.server.isCosmetic(this) && event.getEntity() instanceof CreeperEntity) {
-            ((CreeperEntity) event.getEntity()).goalSelector.addGoal(3, new AvoidEntityGoal<>((CreeperEntity) event.getEntity(), PlayerEntity.class, (entity) -> entity != null && isEquippedBy(entity), 6, 1, 1.3, EntityPredicates.NO_CREATIVE_OR_SPECTATOR::test));
+            ((CreeperEntity) event.getEntity()).goalSelector.addGoal(3, new AvoidEntityGoal<>((CreeperEntity) event.getEntity(), PlayerEntity.class, (entity) -> entity != null && isEquippedBy(entity), 6, 1, 1.3, EntityPredicates.CAN_AI_TARGET::test));
         }
     }
 
     private void onLivingSetAttackTarget(LivingSetAttackTargetEvent event, LivingEntity wearer) {
         if (event.getEntityLiving() instanceof CreeperEntity) {
-            ((MobEntity) event.getEntityLiving()).setTarget(null);
+            ((MobEntity) event.getEntityLiving()).setAttackTarget(null);
         }
     }
 
     private void onLivingUpdate(LivingEvent.LivingUpdateEvent event, LivingEntity wearer) {
         if (event.getEntityLiving() instanceof CreeperEntity) {
-            event.getEntityLiving().setLastHurtByMob(null);
+            event.getEntityLiving().setRevengeTarget(null);
         }
     }
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.CAT_AMBIENT, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ENTITY_CAT_AMBIENT, 1, 1);
     }
 }

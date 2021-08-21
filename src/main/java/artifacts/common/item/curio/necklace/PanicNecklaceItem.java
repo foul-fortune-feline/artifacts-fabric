@@ -18,12 +18,12 @@ public class PanicNecklaceItem extends CurioItem {
     }
 
     private void onLivingHurt(LivingHurtEvent event, LivingEntity wearer) {
-        if (!wearer.level.isClientSide && event.getAmount() >= 1) {
+        if (!wearer.world.isRemote && event.getAmount() >= 1) {
             int duration = ModConfig.server.panicNecklace.speedDuration.get();
             int level = ModConfig.server.panicNecklace.speedLevel.get() - 1;
 
             if (duration > 0 && level >= 0) {
-                wearer.addEffect(new EffectInstance(Effects.MOVEMENT_SPEED, duration, level, false, false));
+                wearer.addPotionEffect(new EffectInstance(Effects.SPEED, duration, level, false, false));
                 damageEquippedStacks(wearer);
             }
         }
@@ -31,6 +31,6 @@ public class PanicNecklaceItem extends CurioItem {
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.ARMOR_EQUIP_DIAMOND, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
     }
 }

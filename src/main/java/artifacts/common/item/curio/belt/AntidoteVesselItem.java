@@ -18,7 +18,7 @@ public class AntidoteVesselItem extends CurioItem {
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.BOTTLE_FILL, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ITEM_BOTTLE_FILL, 1, 1);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AntidoteVesselItem extends CurioItem {
 
             int maxEffectDuration = ModConfig.server.antidoteVessel.maxEffectDuration.get();
 
-            entity.getActiveEffectsMap().forEach((effect, instance) -> {
+            entity.getActivePotionMap().forEach((effect, instance) -> {
                 Set<Effect> negativeEffects = ModConfig.server.antidoteVessel.negativeEffects;
                 if (negativeEffects.contains(effect) && instance.getDuration() > maxEffectDuration) {
                     effects.put(effect, instance);
@@ -37,9 +37,9 @@ public class AntidoteVesselItem extends CurioItem {
 
             effects.forEach((effect, instance) -> {
                 damageStack(identifier, index, entity, stack);
-                entity.removeEffectNoUpdate(effect);
+                entity.removeActivePotionEffect(effect);
                 if (maxEffectDuration > 0) {
-                    entity.addEffect(new EffectInstance(effect, maxEffectDuration, instance.getAmplifier(), instance.isAmbient(), instance.isVisible(), instance.showIcon()));
+                    entity.addPotionEffect(new EffectInstance(effect, maxEffectDuration, instance.getAmplifier(), instance.isAmbient(), instance.doesShowParticles(), instance.isShowIcon()));
                 }
             });
         }

@@ -27,19 +27,19 @@ import java.util.Random;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-    @Shadow public World level;
+    @Shadow public World world;
 
-    @Shadow @Final protected Random random;
+    @Shadow @Final protected Random rand;
 
-    @Shadow private EntitySize dimensions;
+    @Shadow private EntitySize size;
 
-    @Shadow public abstract double getX();
+    @Shadow public abstract double getPosX();
 
-    @Shadow public abstract double getY();
+    @Shadow public abstract double getPosY();
 
-    @Shadow public abstract double getZ();
+    @Shadow public abstract double getPosZ();
 
-    @Shadow public abstract Vector3d getDeltaMovement();
+    @Shadow public abstract Vector3d getMotion();
 
     @Inject(method = "playStepSound", at = @At("HEAD"))
     private void playWaterStepSound(BlockPos pos, BlockState blockState, CallbackInfo callbackInfo) {
@@ -48,24 +48,24 @@ public abstract class EntityMixin {
         }
     }
 
-    @Inject(method = "spawnSprintParticle", at = @At("HEAD"))
+    @Inject(method = "handleRunningEffect", at = @At("HEAD"))
     private void spawnWaterSprintParticle(CallbackInfo callbackInfo) {
         if (isRunningWithAquaDashers()) {
-            BlockPos pos = new BlockPos(MathHelper.floor(getX()), MathHelper.floor(getY() - 0.2), MathHelper.floor(getZ()));
-            BlockState blockstate = level.getBlockState(pos);
-            if (blockstate.getRenderShape() == BlockRenderType.INVISIBLE) {
+            BlockPos pos = new BlockPos(MathHelper.floor(getPosX()), MathHelper.floor(getPosY() - 0.2), MathHelper.floor(getPosZ()));
+            BlockState blockstate = world.getBlockState(pos);
+            if (blockstate.getRenderType() == BlockRenderType.INVISIBLE) {
                 IParticleData particle;
-                Vector3d motion = getDeltaMovement().multiply(-4, 0, -4);
-                if (blockstate.getFluidState().is(FluidTags.LAVA)) {
+                Vector3d motion = getMotion().mul(-4, 0, -4);
+                if (blockstate.getFluidState().isTagged(FluidTags.LAVA)) {
                     motion = motion.add(0, 1, 0);
-                    if (random.nextInt(3) == 0) {
+                    if (rand.nextInt(3) == 0) {
                         particle = ParticleTypes.LAVA;
                     } else {
                         particle = ParticleTypes.FLAME;
-                        motion = motion.multiply(0.2, 0.03, 0.2);
+                        motion = motion.mul(0.2, 0.03, 0.2);
                     }
                 } else if (!blockstate.getFluidState().isEmpty()) {
-                    if (random.nextInt(3) == 0) {
+                    if (rand.nextInt(3) == 0) {
                         particle = ParticleTypes.BUBBLE;
                     } else {
                         particle = ParticleTypes.SPLASH;
@@ -74,7 +74,7 @@ public abstract class EntityMixin {
                 } else {
                     return;
                 }
-                level.addParticle(particle, getX() + (random.nextDouble() - 0.5) * dimensions.width, getY(), getZ() + (random.nextDouble() - 0.5) * dimensions.width, motion.x, motion.y, motion.z);
+                world.addParticle(particle, getPosX() + (rand.nextDouble() - 0.5) * size.width, getPosY(), getPosZ() + (rand.nextDouble() - 0.5) * size.width, motion.x, motion.y, motion.z);
             }
         }
     }

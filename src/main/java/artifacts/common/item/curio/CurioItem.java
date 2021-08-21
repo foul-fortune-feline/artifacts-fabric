@@ -73,7 +73,7 @@ public class CurioItem extends ArtifactItem implements ICurioItem {
     }
 
     protected void damageStack(String identifier, int index, LivingEntity entity, ItemStack stack, int damage) {
-        stack.hurtAndBreak(damage, entity, damager ->
+        stack.damageItem(damage, entity, damager ->
                 CuriosApi.getCuriosHelper().onBrokenCurio(identifier, index, damager)
         );
     }

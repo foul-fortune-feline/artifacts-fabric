@@ -39,16 +39,16 @@ public class BeltCurioRenderer implements CurioRenderer {
     public final void render(String identifier, int index, MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch, ItemStack stack) {
         BeltModel model = getModel();
 
-        model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
-        model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+        model.setRotationAngles(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
+        model.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
         model.setCharmPosition(index);
         ICurio.RenderHelper.followBodyRotations(entity, model);
-        render(matrixStack, buffer, light, stack.hasFoil());
+        render(matrixStack, buffer, light, stack.hasEffect());
     }
 
     protected void render(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, boolean hasFoil) {
-        RenderType renderType = model.renderType(getTexture());
-        IVertexBuilder vertexBuilder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
-        model.renderToBuffer(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        RenderType renderType = model.getRenderType(getTexture());
+        IVertexBuilder vertexBuilder = ItemRenderer.getBuffer(buffer, renderType, false, hasFoil);
+        model.render(matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 }

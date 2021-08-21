@@ -16,12 +16,12 @@ public abstract class AbstractVillagerEntityMixin {
 
     @Shadow
     @Nullable
-    private PlayerEntity tradingPlayer;
+    private PlayerEntity customer;
 
-    @Inject(method = "notifyTrade", at = @At("HEAD"))
+    @Inject(method = "onTrade", at = @At("HEAD"))
     private void damageVillagerHat(CallbackInfo callbackInfo) {
-        if (ModItems.VILLAGER_HAT.get().isEquippedBy(tradingPlayer)) {
-            ModItems.VILLAGER_HAT.get().damageEquippedStacks(tradingPlayer);
+        if (ModItems.VILLAGER_HAT.get().isEquippedBy(customer)) {
+            ModItems.VILLAGER_HAT.get().damageEquippedStacks(customer);
         }
     }
 }

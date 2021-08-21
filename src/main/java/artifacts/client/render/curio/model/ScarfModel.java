@@ -16,31 +16,31 @@ public class ScarfModel extends BipedModel<LivingEntity> {
 
     protected ScarfModel(Function<ResourceLocation, RenderType> renderType) {
         super(renderType, 0.5F, 0, 64, 32);
-        setAllVisible(false);
+        setVisible(false);
 
-        head.visible = true;
-        body = new ModelRenderer(this);
+        bipedHead.showModel = true;
+        bipedBody = new ModelRenderer(this);
         cloak = new ModelRenderer(this);
-        cloak.setPos(0, 0, 1.99F);
-        body.addChild(cloak);
+        cloak.setRotationPoint(0, 0, 1.99F);
+        bipedBody.addChild(cloak);
 
         // scarf
-        body.texOffs(0, 16);
-        body.addBox(-6.01F, -2, -4, 12, 6, 8);
+        bipedBody.setTextureOffset(0, 16);
+        bipedBody.addBox(-6.01F, -2, -4, 12, 6, 8);
 
         // dangly bit
-        cloak.texOffs(32, 0);
+        cloak.setTextureOffset(32, 0);
         cloak.addBox(-5, 0, 0, 5, 12, 2);
     }
 
     @Override
-    public void prepareMobModel(LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks) {
+    public void setLivingAnimations(LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks) {
         if (entity instanceof AbstractClientPlayerEntity) {
             AbstractClientPlayerEntity player = (AbstractClientPlayerEntity) entity;
-            double x = MathHelper.lerp(partialTicks, player.xCloakO, player.xCloak) - MathHelper.lerp(partialTicks, player.xo, player.getX());
-            double y = MathHelper.lerp(partialTicks, player.yCloakO, player.yCloak) - MathHelper.lerp(partialTicks, player.yo, player.getY());
-            double z = MathHelper.lerp(partialTicks, player.zCloakO, player.zCloak) - MathHelper.lerp(partialTicks, player.zo, player.getZ());
-            float f = player.yBodyRotO + (player.yBodyRot - player.yBodyRotO);
+            double x = MathHelper.lerp(partialTicks, player.prevChasingPosX, player.chasingPosX) - MathHelper.lerp(partialTicks, player.prevPosX, player.getPosX());
+            double y = MathHelper.lerp(partialTicks, player.prevChasingPosY, player.chasingPosY) - MathHelper.lerp(partialTicks, player.prevPosY, player.getPosY());
+            double z = MathHelper.lerp(partialTicks, player.prevChasingPosZ, player.chasingPosZ) - MathHelper.lerp(partialTicks, player.prevPosZ, player.getPosZ());
+            float f = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset);
             double d3 = MathHelper.sin(f * ((float) Math.PI / 180));
             double d4 = -MathHelper.cos(f * ((float) Math.PI / 180));
             float f1 = (float) y * 10;
@@ -51,10 +51,10 @@ public class ScarfModel extends BipedModel<LivingEntity> {
                 f2 = 0;
             }
 
-            float f4 = MathHelper.lerp(partialTicks, player.oBob, player.bob);
-            f1 = f1 + MathHelper.sin(MathHelper.lerp(partialTicks, player.walkDistO, player.walkDist) * 6) * 32 * f4;
+            float f4 = MathHelper.lerp(partialTicks, player.prevCameraYaw, player.cameraYaw);
+            f1 = f1 + MathHelper.sin(MathHelper.lerp(partialTicks, player.prevDistanceWalkedModified, player.distanceWalkedModified) * 6) * 32 * f4;
 
-            cloak.xRot = body.xRot + (6 + f2 / 2 + f1) / 180 * (float) Math.PI;
+            cloak.rotateAngleX = bipedBody.rotateAngleX + (6 + f2 / 2 + f1) / 180 * (float) Math.PI;
         }
     }
 

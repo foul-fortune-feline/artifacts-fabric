@@ -11,7 +11,7 @@ public class ThornPendantItem extends PendantItem {
         if (attacker.attackable()) {
             int minDamage = ModConfig.server.thornPendant.minDamage.get();
             int maxDamage = ModConfig.server.thornPendant.maxDamage.get();
-            attacker.hurt(DamageSource.thorns(target), minDamage + target.getRandom().nextInt(maxDamage - minDamage + 1));
+            attacker.attackEntityFrom(DamageSource.causeThornsDamage(target), minDamage + target.getRNG().nextInt(maxDamage - minDamage + 1));
         }
     }
 }

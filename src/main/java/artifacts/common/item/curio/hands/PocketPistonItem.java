@@ -19,12 +19,12 @@ public class PocketPistonItem extends CurioItem {
 
     private void onLivingAttack(LivingAttackEvent event, LivingEntity wearer) {
         float knockbackBonus = (float) (double) ModConfig.server.pocketPiston.knockbackBonus.get();
-        event.getEntityLiving().knockback(knockbackBonus, MathHelper.sin((float) (wearer.yRot * (Math.PI / 180))), -MathHelper.cos((float) (wearer.yRot * (Math.PI / 180))));
+        event.getEntityLiving().applyKnockback(knockbackBonus, MathHelper.sin((float) (wearer.rotationYaw * (Math.PI / 180))), -MathHelper.cos((float) (wearer.rotationYaw * (Math.PI / 180))));
         damageEquippedStacks(wearer);
     }
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.PISTON_EXTEND, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.BLOCK_PISTON_EXTEND, 1, 1);
     }
 }

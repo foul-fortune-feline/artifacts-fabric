@@ -12,10 +12,10 @@ public class SnorkelItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
-        if (!ModConfig.server.isCosmetic(this) && !entity.level.isClientSide && entity.tickCount % 15 == 0) {
-            entity.addEffect(new EffectInstance(Effects.WATER_BREATHING, 39, 0, true, false));
+        if (!ModConfig.server.isCosmetic(this) && !entity.world.isRemote && entity.ticksExisted % 15 == 0) {
+            entity.addPotionEffect(new EffectInstance(Effects.WATER_BREATHING, 39, 0, true, false));
         }
-        if (entity.tickCount % 20 == 0 && entity.isEyeInFluid(FluidTags.WATER)) {
+        if (entity.ticksExisted % 20 == 0 && entity.areEyesInFluid(FluidTags.WATER)) {
             damageStack(identifier, index, entity, stack);
         }
     }
