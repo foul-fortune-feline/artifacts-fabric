@@ -59,13 +59,13 @@ dependencies {
     modCompileOnly "mezz.jei:jei-1.16.4:${jei_version}:api"
     modRuntime "mezz.jei:jei-1.16.4:${jei_version}"
 
-    modCompileOnly "top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1:api"
-    modRuntime "top.theillusivec4.curios:curios-forge:1.16.5-4.0.5.1"
+    modCompileOnly "top.theillusivec4.curios:curios-forge:${curios_version}:api"
+    modRuntime "top.theillusivec4.curios:curios-forge:${curios_version}"
 
-    modImplementation "be.florens:expandability-forge:2.0.1"
+    modImplementation "be.florens:expandability-forge:${expandability_version}"
 
-    modRuntime "curse.maven:curious-armor-stands-398784:3288589"
-    modRuntime "curse.maven:configured-457570:3266880"
+    modRuntime "curse.maven:curious-armor-stands-398784:${curious_armor_stands_version}"
+    modRuntime "curse.maven:configured-457570:${configured_version}"
 }
 
 processResources {
