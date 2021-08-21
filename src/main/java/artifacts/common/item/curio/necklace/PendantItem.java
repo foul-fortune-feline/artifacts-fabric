@@ -3,9 +3,9 @@ package artifacts.common.item.curio.necklace;
 import artifacts.common.config.ModConfig;
 import artifacts.common.item.curio.CurioItem;
 import artifacts.common.util.DamageSourceHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
@@ -18,7 +18,7 @@ public abstract class PendantItem extends CurioItem {
 
     private void onLivingAttack(LivingAttackEvent event, LivingEntity wearer) {
         LivingEntity attacker = DamageSourceHelper.getAttacker(event.getSource());
-        if (!wearer.world.isRemote()
+        if (!wearer.level.isClientSide()
                 && event.getAmount() >= 1
                 && attacker != null
                 && random.nextDouble() < ModConfig.server.pendants.get(this).strikeChance.get()) {
@@ -31,6 +31,6 @@ public abstract class PendantItem extends CurioItem {
 
     @Override
     public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-        return new ICurio.SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1, 1);
+        return new ICurio.SoundInfo(SoundEvents.ARMOR_EQUIP_DIAMOND, 1, 1);
     }
 }

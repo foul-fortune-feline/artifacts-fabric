@@ -2,25 +2,23 @@ package artifacts.common.item;
 
 import artifacts.common.config.ModConfig;
 import artifacts.common.init.ModItems;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public abstract class ArtifactItem extends Item {
 
     public ArtifactItem(Properties properties) {
-        super(properties.maxStackSize(1).group(ModItems.CREATIVE_TAB).rarity(Rarity.RARE).isImmuneToFire());
+        super(properties.stacksTo(1).tab(ModItems.CREATIVE_TAB).rarity(Rarity.RARE).fireResistant());
     }
 
     public ArtifactItem() {
@@ -36,17 +34,17 @@ public abstract class ArtifactItem extends Item {
     }
 
     @Override
-    public boolean isDamageable() {
+    public boolean canBeDepleted() {
         return getMaxDamage(ItemStack.EMPTY) > 0;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
         if (ModConfig.server != null && ModConfig.server.isCosmetic(this)) {
-            tooltip.add(new TranslationTextComponent("artifacts.cosmetic.tooltip").mergeStyle(TextFormatting.GRAY).mergeStyle(TextFormatting.ITALIC));
+            tooltip.add(new TranslatableComponent("artifacts.cosmetic.tooltip").withStyle(ChatFormatting.GRAY).withStyle(ChatFormatting.ITALIC));
         } else if (ModConfig.client.showTooltips.get()) {
-            tooltip.add(new TranslationTextComponent(getTranslationKey() + ".tooltip").mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslatableComponent(getDescriptionId() + ".tooltip").withStyle(ChatFormatting.GRAY));
         }
     }
 }

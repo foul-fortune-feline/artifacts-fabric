@@ -2,12 +2,12 @@ package artifacts.data;
 
 import artifacts.Artifacts;
 import artifacts.common.init.ModItems;
-import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.ItemTagsProvider;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -17,33 +17,33 @@ import java.util.stream.Collectors;
 
 public class ItemTags extends ItemTagsProvider {
 
-    private static final ITag.INamedTag<Item> ARTIFACTS = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(Artifacts.MODID, "artifacts"));
+    private static final Tag.Named<Item> ARTIFACTS = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(Artifacts.MODID, "artifacts"));
 
-    private static final ITag.INamedTag<Item> BELT = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "belt"));
-    private static final ITag.INamedTag<Item> CURIO = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "curio"));
-    private static final ITag.INamedTag<Item> FEET = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "feet"));
-    private static final ITag.INamedTag<Item> HANDS = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "hands"));
-    private static final ITag.INamedTag<Item> HEAD = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "head"));
-    private static final ITag.INamedTag<Item> NECKLACE = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "necklace"));
+    private static final Tag.Named<Item> BELT = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "belt"));
+    private static final Tag.Named<Item> CURIO = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "curio"));
+    private static final Tag.Named<Item> FEET = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "feet"));
+    private static final Tag.Named<Item> HANDS = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "hands"));
+    private static final Tag.Named<Item> HEAD = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "head"));
+    private static final Tag.Named<Item> NECKLACE = net.minecraft.tags.ItemTags.createOptional(new ResourceLocation(CuriosApi.MODID, "necklace"));
 
     public ItemTags(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper) {
         super(generator, new BlockTags(generator, existingFileHelper), Artifacts.MODID, existingFileHelper);
     }
 
     @Override
-    protected void registerTags() {
+    protected void addTags() {
         // noinspection ConstantConditions
-        getOrCreateBuilder(ARTIFACTS).add(ForgeRegistries.ITEMS.getValues().stream()
+        tag(ARTIFACTS).add(ForgeRegistries.ITEMS.getValues().stream()
                 .filter(item -> item.getRegistryName().getNamespace().equals(Artifacts.MODID))
                 .filter(item -> item != ModItems.MIMIC_SPAWN_EGG.get())
                 .collect(Collectors.toList()).toArray(new Item[]{})
         );
 
-        getOrCreateBuilder(net.minecraft.tags.ItemTags.PIGLIN_LOVED).addItemEntry(ModItems.GOLDEN_HOOK.get());
+        tag(net.minecraft.tags.ItemTags.PIGLIN_LOVED).add(ModItems.GOLDEN_HOOK.get());
 
-        getOrCreateBuilder(CURIO).addItemEntry(ModItems.WHOOPEE_CUSHION.get());
+        tag(CURIO).add(ModItems.WHOOPEE_CUSHION.get());
 
-        getOrCreateBuilder(BELT).add(
+        tag(BELT).add(
                 ModItems.ANTIDOTE_VESSEL.get(),
                 ModItems.CLOUD_IN_A_BOTTLE.get(),
                 ModItems.CRYSTAL_HEART.get(),
@@ -52,7 +52,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.HELIUM_FLAMINGO.get()
         );
 
-        getOrCreateBuilder(FEET).add(
+        tag(FEET).add(
                 ModItems.BUNNY_HOPPERS.get(),
                 ModItems.FLIPPERS.get(),
                 ModItems.KITTY_SLIPPERS.get(),
@@ -61,7 +61,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.AQUA_DASHERS.get()
         );
 
-        getOrCreateBuilder(HANDS).add(
+        tag(HANDS).add(
                 ModItems.DIGGING_CLAWS.get(),
                 ModItems.FERAL_CLAWS.get(),
                 ModItems.FIRE_GAUNTLET.get(),
@@ -71,7 +71,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.GOLDEN_HOOK.get()
         );
 
-        getOrCreateBuilder(HEAD).add(
+        tag(HEAD).add(
                 ModItems.NIGHT_VISION_GOGGLES.get(),
                 ModItems.NOVELTY_DRINKING_HAT.get(),
                 ModItems.PLASTIC_DRINKING_HAT.get(),
@@ -80,7 +80,7 @@ public class ItemTags extends ItemTagsProvider {
                 ModItems.VILLAGER_HAT.get()
         );
 
-        getOrCreateBuilder(NECKLACE).add(
+        tag(NECKLACE).add(
                 ModItems.CROSS_NECKLACE.get(),
                 ModItems.FLAME_PENDANT.get(),
                 ModItems.LUCKY_SCARF.get(),
@@ -99,7 +99,7 @@ public class ItemTags extends ItemTagsProvider {
         }
 
         @Override
-        protected void registerTags() {
+        protected void addTags() {
 
         }
     }

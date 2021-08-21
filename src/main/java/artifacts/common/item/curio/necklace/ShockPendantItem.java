@@ -1,12 +1,12 @@
 package artifacts.common.item.curio.necklace;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ShockPendantItem extends PendantItem {
@@ -16,7 +16,7 @@ public class ShockPendantItem extends PendantItem {
     }
 
     private void onLivingHurt(LivingHurtEvent event, LivingEntity wearer) {
-        if (!event.getEntity().world.isRemote
+        if (!event.getEntity().level.isClientSide
                 && event.getAmount() >= 1
                 && event.getSource() == DamageSource.LIGHTNING_BOLT) {
             event.setCanceled(true);
@@ -25,12 +25,12 @@ public class ShockPendantItem extends PendantItem {
 
     @Override
     protected void applyEffect(LivingEntity target, LivingEntity attacker) {
-        if (attacker.world.canSeeSky(new BlockPos(attacker.getPositionVec()))) {
-            LightningBoltEntity lightningBolt = EntityType.LIGHTNING_BOLT.create(attacker.world);
+        if (attacker.level.canSeeSky(new BlockPos(attacker.position()))) {
+            LightningBolt lightningBolt = EntityType.LIGHTNING_BOLT.create(attacker.level);
             if (lightningBolt != null) {
-                lightningBolt.moveForced(Vector3d.copyCenteredHorizontally(attacker.getPosition()));
-                lightningBolt.setCaster(attacker instanceof ServerPlayerEntity ? (ServerPlayerEntity) attacker : null);
-                attacker.world.addEntity(lightningBolt);
+                lightningBolt.moveTo(Vec3.atBottomCenterOf(attacker.blockPosition()));
+                lightningBolt.setCause(attacker instanceof ServerPlayer ? (ServerPlayer) attacker : null);
+                attacker.level.addFreshEntity(lightningBolt);
             }
         }
     }

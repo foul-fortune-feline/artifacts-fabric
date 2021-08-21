@@ -1,11 +1,22 @@
 package artifacts.client.render.curio;
 
-import artifacts.client.render.curio.model.*;
-import artifacts.client.render.curio.renderer.*;
+import artifacts.client.render.curio.model.BeltModel;
+import artifacts.client.render.curio.model.CloudInABottleModel;
+import artifacts.client.render.curio.model.HandsModel;
+import artifacts.client.render.curio.model.HeadModel;
+import artifacts.client.render.curio.model.LegsModel;
+import artifacts.client.render.curio.model.NecklaceModel;
+import artifacts.client.render.curio.model.ScarfModel;
+import artifacts.client.render.curio.renderer.BeltCurioRenderer;
+import artifacts.client.render.curio.renderer.CurioRenderer;
+import artifacts.client.render.curio.renderer.GloveCurioRenderer;
+import artifacts.client.render.curio.renderer.GlowingCurioRenderer;
+import artifacts.client.render.curio.renderer.GlowingGloveCurioRenderer;
+import artifacts.client.render.curio.renderer.SimpleCurioRenderer;
 import artifacts.common.init.ModItems;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +49,8 @@ public class CurioRenderers {
         renderers.put(ModItems.VILLAGER_HAT.get(), new SimpleCurioRenderer("villager_hat", HeadModel.villagerHat()));
 
         // necklace
-        renderers.put(ModItems.LUCKY_SCARF.get(), new SimpleCurioRenderer("scarf/lucky_scarf", ScarfModel.scarf(RenderType::getEntityCutoutNoCull)));
-        renderers.put(ModItems.SCARF_OF_INVISIBILITY.get(), new SimpleCurioRenderer("scarf/scarf_of_invisibility", ScarfModel.scarf(RenderType::getEntityTranslucent)));
+        renderers.put(ModItems.LUCKY_SCARF.get(), new SimpleCurioRenderer("scarf/lucky_scarf", ScarfModel.scarf(RenderType::entityCutoutNoCull)));
+        renderers.put(ModItems.SCARF_OF_INVISIBILITY.get(), new SimpleCurioRenderer("scarf/scarf_of_invisibility", ScarfModel.scarf(RenderType::entityTranslucent)));
         renderers.put(ModItems.CROSS_NECKLACE.get(), new SimpleCurioRenderer("cross_necklace", NecklaceModel.crossNecklace()));
         renderers.put(ModItems.PANIC_NECKLACE.get(), new SimpleCurioRenderer("panic_necklace", NecklaceModel.panicNecklace()));
         renderers.put(ModItems.SHOCK_PENDANT.get(), new SimpleCurioRenderer("pendant/shock_pendant", NecklaceModel.pendant()));

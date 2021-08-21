@@ -2,11 +2,11 @@ package artifacts.common.item.curio.feet;
 
 import artifacts.common.config.ModConfig;
 import artifacts.common.item.curio.HurtSoundModifyingItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -14,7 +14,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 public class BunnyHoppersItem extends HurtSoundModifyingItem {
 
     public BunnyHoppersItem() {
-        super(SoundEvents.ENTITY_RABBIT_HURT);
+        super(SoundEvents.RABBIT_HURT);
         addListener(EventPriority.HIGH, LivingFallEvent.class, this::onLivingFall);
         addListener(LivingEvent.LivingJumpEvent.class, this::onLivingJump);
     }
@@ -32,8 +32,8 @@ public class BunnyHoppersItem extends HurtSoundModifyingItem {
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
         int jumpBoostLevel = ModConfig.server.bunnyHoppers.jumpBoostLevel.get() - 1;
-        if (!ModConfig.server.isCosmetic(this) && !livingEntity.world.isRemote && livingEntity.ticksExisted % 15 == 0 && jumpBoostLevel >= 0) {
-            livingEntity.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 39, jumpBoostLevel, true, false));
+        if (!ModConfig.server.isCosmetic(this) && !livingEntity.level.isClientSide && livingEntity.tickCount % 15 == 0 && jumpBoostLevel >= 0) {
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.JUMP, 39, jumpBoostLevel, true, false));
         }
     }
 }

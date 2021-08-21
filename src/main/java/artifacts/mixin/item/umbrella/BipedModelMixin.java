@@ -1,39 +1,39 @@
 package artifacts.mixin.item.umbrella;
 
 import artifacts.common.item.UmbrellaItem;
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(BipedModel.class)
+@Mixin(HumanoidModel.class)
 public abstract class BipedModelMixin<T extends LivingEntity> {
 
     @Shadow
-    public ModelRenderer bipedRightArm;
+    public ModelPart rightArm;
 
     @Shadow
-    public ModelRenderer bipedLeftArm;
+    public ModelPart leftArm;
 
     // see https://github.com/florensie/artifacts-fabric/blob/HEAD/src/main/java/artifacts/mixin/mixins/item/umbrella/client/BipedEntityModelMixin.java
     @SuppressWarnings("UnresolvedMixinReference")
-    @Inject(method = "setRotationAngles", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getPrimaryHand()Lnet/minecraft/util/HandSide;"))
+    @Inject(method = "setupAnim", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getMainArm()Lnet/minecraft/world/entity/HumanoidArm;"))
     private void reduceHandSwing(T entity, float f, float g, float h, float i, float j, CallbackInfo info) {
-        boolean isHoldingOffHand = UmbrellaItem.isHoldingUmbrellaUpright(entity, Hand.OFF_HAND);
-        boolean isHoldingMainHand = UmbrellaItem.isHoldingUmbrellaUpright(entity, Hand.MAIN_HAND);
-        boolean isRightHanded = entity.getPrimaryHand() == HandSide.RIGHT;
+        boolean isHoldingOffHand = UmbrellaItem.isHoldingUmbrellaUpright(entity, InteractionHand.OFF_HAND);
+        boolean isHoldingMainHand = UmbrellaItem.isHoldingUmbrellaUpright(entity, InteractionHand.MAIN_HAND);
+        boolean isRightHanded = entity.getMainArm() == HumanoidArm.RIGHT;
 
         if ((isHoldingMainHand && isRightHanded) || (isHoldingOffHand && !isRightHanded)) {
-            this.bipedRightArm.rotateAngleX /= 8;
+            this.rightArm.xRot /= 8;
         }
         if ((isHoldingMainHand && !isRightHanded) || (isHoldingOffHand && isRightHanded)) {
-            this.bipedLeftArm.rotateAngleX /= 8;
+            this.leftArm.xRot /= 8;
         }
     }
 }

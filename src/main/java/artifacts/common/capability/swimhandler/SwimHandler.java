@@ -4,7 +4,7 @@ import artifacts.common.config.ModConfig;
 import artifacts.common.network.NetworkHandler;
 import artifacts.common.network.SinkPacket;
 import artifacts.common.network.SwimPacket;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 public class SwimHandler implements ISwimHandler {
@@ -67,7 +67,7 @@ public class SwimHandler implements ISwimHandler {
     }
 
     @Override
-    public void syncSinking(ServerPlayerEntity player) {
+    public void syncSinking(ServerPlayer player) {
         NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new SinkPacket(shouldSink));
     }
 }

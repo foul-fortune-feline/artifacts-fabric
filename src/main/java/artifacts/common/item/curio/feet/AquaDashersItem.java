@@ -4,13 +4,13 @@ import artifacts.common.capability.swimhandler.ISwimHandler;
 import artifacts.common.capability.swimhandler.SwimHandlerCapability;
 import artifacts.common.item.curio.CurioItem;
 import be.florens.expandability.api.forge.LivingFluidCollisionEvent;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.eventbus.api.Event;
 
 public class AquaDashersItem extends CurioItem {
@@ -20,13 +20,13 @@ public class AquaDashersItem extends CurioItem {
     }
 
     private void onFluidCollision(LivingFluidCollisionEvent event, LivingEntity wearer) {
-        if (wearer.isSprinting() && wearer.fallDistance < 6 && !wearer.isHandActive() && !wearer.isCrouching()) {
+        if (wearer.isSprinting() && wearer.fallDistance < 6 && !wearer.isUsingItem() && !wearer.isCrouching()) {
             wearer.getCapability(SwimHandlerCapability.INSTANCE).ifPresent(handler -> {
                 if (!handler.isWet() && !handler.isSwimming()) {
                     event.setResult(Event.Result.ALLOW);
-                    if (event.getFluidState().isTagged(FluidTags.LAVA)) {
-                        if (!wearer.isImmuneToFire() && !EnchantmentHelper.hasFrostWalker(wearer)) {
-                            wearer.attackEntityFrom(DamageSource.HOT_FLOOR, 1);
+                    if (event.getFluidState().is(FluidTags.LAVA)) {
+                        if (!wearer.fireImmune() && !EnchantmentHelper.hasFrostWalker(wearer)) {
+                            wearer.hurt(DamageSource.HOT_FLOOR, 1);
                         }
                     }
                 }
@@ -36,7 +36,7 @@ public class AquaDashersItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
-        if (entity.ticksExisted % 20 == 0 && isSprintingOnFluid(entity)) {
+        if (entity.tickCount % 20 == 0 && isSprintingOnFluid(entity)) {
             damageStack(identifier, index, entity, stack);
         }
     }
@@ -50,8 +50,8 @@ public class AquaDashersItem extends CurioItem {
 
     private boolean isSprintingOnFluid(LivingEntity entity) {
         if (isSprinting(entity)) {
-            BlockPos pos = new BlockPos(MathHelper.floor(entity.getPosX()), MathHelper.floor(entity.getPosY() - 0.2), MathHelper.floor(entity.getPosZ()));
-            return !entity.world.getBlockState(pos).getFluidState().isEmpty();
+            BlockPos pos = new BlockPos(Mth.floor(entity.getX()), Mth.floor(entity.getY() - 0.2), Mth.floor(entity.getZ()));
+            return !entity.level.getBlockState(pos).getFluidState().isEmpty();
         }
         return false;
     }

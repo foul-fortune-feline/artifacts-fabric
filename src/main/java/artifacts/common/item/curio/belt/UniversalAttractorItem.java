@@ -2,12 +2,12 @@ package artifacts.common.item.curio.belt;
 
 import artifacts.common.config.ModConfig;
 import artifacts.common.item.curio.CurioItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -44,28 +44,28 @@ public class UniversalAttractorItem extends CurioItem {
     // magnet logic from Botania, see https://github.com/Vazkii/Botania
     @Override
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
-        if (ModConfig.server.isCosmetic(this) || entity.isSpectator() || !(entity instanceof PlayerEntity)) {
+        if (ModConfig.server.isCosmetic(this) || entity.isSpectator() || !(entity instanceof Player)) {
             return;
         }
 
         int cooldown = getCooldown(stack);
         if (cooldown <= 0) {
-            Vector3d playerPos = entity.getPositionVec().add(0, 0.75, 0);
+            Vec3 playerPos = entity.position().add(0, 0.75, 0);
 
             int range = ModConfig.server.universalAttractor.range.get();
-            List<ItemEntity> items = entity.world.getEntitiesWithinAABB(ItemEntity.class, new AxisAlignedBB(playerPos.x - range, playerPos.y - range, playerPos.z - range, playerPos.x + range, playerPos.y + range, playerPos.z + range));
+            List<ItemEntity> items = entity.level.getEntitiesOfClass(ItemEntity.class, new AABB(playerPos.x - range, playerPos.y - range, playerPos.z - range, playerPos.x + range, playerPos.y + range, playerPos.z + range));
             int pulled = 0;
             for (ItemEntity item : items) {
-                if (item.isAlive() && !item.cannotPickup() && !item.getPersistentData().getBoolean("PreventRemoteMovement")) {
+                if (item.isAlive() && !item.hasPickUpDelay() && !item.getPersistentData().getBoolean("PreventRemoteMovement")) {
                     if (pulled++ > 200) {
                         break;
                     }
 
-                    Vector3d motion = playerPos.subtract(item.getPositionVec().add(0, item.getHeight() / 2, 0));
+                    Vec3 motion = playerPos.subtract(item.position().add(0, item.getBbHeight() / 2, 0));
                     if (Math.sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z) > 1) {
                         motion = motion.normalize();
                     }
-                    item.setMotion(motion.scale(ModConfig.server.universalAttractor.motionMultiplier.get()));
+                    item.setDeltaMovement(motion.scale(ModConfig.server.universalAttractor.motionMultiplier.get()));
                 }
             }
         } else {

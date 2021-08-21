@@ -3,8 +3,8 @@ package artifacts.common.config.item.curio.belt;
 import artifacts.common.config.item.ItemConfig;
 import artifacts.common.init.ModItems;
 import com.google.common.collect.Lists;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class AntidoteVesselConfig extends ItemConfig {
 
-    public Set<Effect> negativeEffects = Collections.emptySet();
+    public Set<MobEffect> negativeEffects = Collections.emptySet();
 
     private ForgeConfigSpec.ConfigValue<List<String>> negativeEffectsValue;
     public ForgeConfigSpec.IntValue maxEffectDuration;

@@ -5,15 +5,42 @@ import artifacts.common.item.EverlastingFoodItem;
 import artifacts.common.item.UmbrellaItem;
 import artifacts.common.item.curio.CurioItem;
 import artifacts.common.item.curio.WhoopeeCushionItem;
-import artifacts.common.item.curio.belt.*;
-import artifacts.common.item.curio.feet.*;
-import artifacts.common.item.curio.hands.*;
+import artifacts.common.item.curio.belt.AntidoteVesselItem;
+import artifacts.common.item.curio.belt.CloudInABottleItem;
+import artifacts.common.item.curio.belt.CrystalHeartItem;
+import artifacts.common.item.curio.belt.HeliumFlamingoItem;
+import artifacts.common.item.curio.belt.ObsidianSkullItem;
+import artifacts.common.item.curio.belt.UniversalAttractorItem;
+import artifacts.common.item.curio.feet.AquaDashersItem;
+import artifacts.common.item.curio.feet.BunnyHoppersItem;
+import artifacts.common.item.curio.feet.FlippersItem;
+import artifacts.common.item.curio.feet.KittySlippersItem;
+import artifacts.common.item.curio.feet.RunningShoesItem;
+import artifacts.common.item.curio.feet.SteadfastSpikesItem;
+import artifacts.common.item.curio.hands.DiggingClawsItem;
+import artifacts.common.item.curio.hands.FeralClawsItem;
+import artifacts.common.item.curio.hands.FireGauntletItem;
+import artifacts.common.item.curio.hands.GoldenHookItem;
+import artifacts.common.item.curio.hands.PocketPistonItem;
+import artifacts.common.item.curio.hands.PowerGloveItem;
+import artifacts.common.item.curio.hands.VampiricGloveItem;
 import artifacts.common.item.curio.head.DrinkingHatItem;
 import artifacts.common.item.curio.head.NightVisionGogglesItem;
 import artifacts.common.item.curio.head.SnorkelItem;
 import artifacts.common.item.curio.head.SuperstitiousHatItem;
-import artifacts.common.item.curio.necklace.*;
-import net.minecraft.item.*;
+import artifacts.common.item.curio.necklace.CharmOfSinkingItem;
+import artifacts.common.item.curio.necklace.CrossNecklaceItem;
+import artifacts.common.item.curio.necklace.FlamePendantItem;
+import artifacts.common.item.curio.necklace.LuckyScarfItem;
+import artifacts.common.item.curio.necklace.PanicNecklaceItem;
+import artifacts.common.item.curio.necklace.ScarfOfInvisibilityItem;
+import artifacts.common.item.curio.necklace.ShockPendantItem;
+import artifacts.common.item.curio.necklace.ThornPendantItem;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.RegistryObject;
@@ -24,19 +51,19 @@ public class ModItems {
 
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, Artifacts.MODID);
 
-    public static final ItemGroup CREATIVE_TAB = new ItemGroup(Artifacts.MODID) {
+    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(Artifacts.MODID) {
         @Override
         @OnlyIn(Dist.CLIENT)
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(BUNNY_HOPPERS.get());
         }
     };
 
     // misc items
-    public static final RegistryObject<Item> MIMIC_SPAWN_EGG = REGISTRY.register("mimic_spawn_egg", () -> new SpawnEggItem(ModEntities.MIMIC, 0x805113, 0x212121, new Item.Properties().group(ItemGroup.MISC)));
+    public static final RegistryObject<Item> MIMIC_SPAWN_EGG = REGISTRY.register("mimic_spawn_egg", () -> new SpawnEggItem(ModEntities.MIMIC, 0x805113, 0x212121, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static final RegistryObject<Item> UMBRELLA = REGISTRY.register("umbrella", UmbrellaItem::new);
-    public static final RegistryObject<Item> EVERLASTING_BEEF = REGISTRY.register("everlasting_beef", () -> new EverlastingFoodItem(new Food.Builder().hunger(3).saturation(0.3F).build()));
-    public static final RegistryObject<Item> ETERNAL_STEAK = REGISTRY.register("eternal_steak", () -> new EverlastingFoodItem(new Food.Builder().hunger(8).saturation(0.8F).build()));
+    public static final RegistryObject<Item> EVERLASTING_BEEF = REGISTRY.register("everlasting_beef", () -> new EverlastingFoodItem(new FoodProperties.Builder().nutrition(3).saturationMod(0.3F).build()));
+    public static final RegistryObject<Item> ETERNAL_STEAK = REGISTRY.register("eternal_steak", () -> new EverlastingFoodItem(new FoodProperties.Builder().nutrition(8).saturationMod(0.8F).build()));
 
     // head
     public static final RegistryObject<CurioItem> PLASTIC_DRINKING_HAT = REGISTRY.register("plastic_drinking_hat", DrinkingHatItem::new);

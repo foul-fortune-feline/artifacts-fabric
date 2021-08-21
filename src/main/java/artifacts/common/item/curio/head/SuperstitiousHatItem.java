@@ -3,8 +3,8 @@ package artifacts.common.item.curio.head;
 import artifacts.common.config.ModConfig;
 import artifacts.common.item.curio.CurioItem;
 import artifacts.common.util.DamageSourceHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
 public class SuperstitiousHatItem extends CurioItem {

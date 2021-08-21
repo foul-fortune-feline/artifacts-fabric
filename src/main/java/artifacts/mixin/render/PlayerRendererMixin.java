@@ -2,16 +2,16 @@ package artifacts.mixin.render;
 
 import artifacts.client.render.curio.CurioRenderers;
 import artifacts.client.render.curio.renderer.GloveCurioRenderer;
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.client.renderer.entity.LivingRenderer;
-import net.minecraft.client.renderer.entity.PlayerRenderer;
-import net.minecraft.client.renderer.entity.model.PlayerModel;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.HandSide;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,25 +23,25 @@ import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 @Mixin(PlayerRenderer.class)
-public abstract class PlayerRendererMixin extends LivingRenderer<AbstractClientPlayerEntity, PlayerModel<AbstractClientPlayerEntity>> {
+public abstract class PlayerRendererMixin extends LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
 
-    public PlayerRendererMixin(EntityRendererManager manager, PlayerModel<AbstractClientPlayerEntity> model, float shadowRadius) {
+    public PlayerRendererMixin(EntityRenderDispatcher manager, PlayerModel<AbstractClientPlayer> model, float shadowRadius) {
         super(manager, model, shadowRadius);
     }
 
-    @Inject(method = "renderLeftArm", at = @At("TAIL"))
-    private void renderLeftGlove(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, AbstractClientPlayerEntity player, CallbackInfo callbackInfo) {
-        renderArm(matrixStack, buffer, light, player, HandSide.LEFT);
+    @Inject(method = "renderLeftHand", at = @At("TAIL"))
+    private void renderLeftGlove(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, CallbackInfo callbackInfo) {
+        renderArm(matrixStack, buffer, light, player, HumanoidArm.LEFT);
     }
 
-    @Inject(method = "renderRightArm", at = @At("TAIL"))
-    private void renderRightGlove(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, AbstractClientPlayerEntity player, CallbackInfo callbackInfo) {
-        renderArm(matrixStack, buffer, light, player, HandSide.RIGHT);
+    @Inject(method = "renderRightHand", at = @At("TAIL"))
+    private void renderRightGlove(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, CallbackInfo callbackInfo) {
+        renderArm(matrixStack, buffer, light, player, HumanoidArm.RIGHT);
     }
 
     @Unique
-    private static void renderArm(MatrixStack matrixStack, IRenderTypeBuffer buffer, int light, AbstractClientPlayerEntity player, HandSide handSide) {
-        Hand hand = handSide == player.getPrimaryHand() ? Hand.MAIN_HAND : Hand.OFF_HAND;
+    private static void renderArm(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, HumanoidArm handSide) {
+        InteractionHand hand = handSide == player.getMainArm() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 
         CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(handler -> {
             ICurioStacksHandler stacksHandler = handler.getCurios().get(SlotTypePreset.HANDS.getIdentifier());
@@ -49,7 +49,7 @@ public abstract class PlayerRendererMixin extends LivingRenderer<AbstractClientP
                 IDynamicStackHandler stacks = stacksHandler.getStacks();
                 IDynamicStackHandler cosmeticStacks = stacksHandler.getCosmeticStacks();
 
-                for (int slot = hand == Hand.MAIN_HAND ? 0 : 1; slot < stacks.getSlots(); slot += 2) {
+                for (int slot = hand == InteractionHand.MAIN_HAND ? 0 : 1; slot < stacks.getSlots(); slot += 2) {
                     ItemStack stack = cosmeticStacks.getStackInSlot(slot);
                     if (stack.isEmpty()) {
                         if (stacksHandler.getRenders().get(slot)) {
@@ -59,7 +59,7 @@ public abstract class PlayerRendererMixin extends LivingRenderer<AbstractClientP
 
                     GloveCurioRenderer renderer = CurioRenderers.getGloveRenderer(stack);
                     if (renderer != null) {
-                        renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasEffect());
+                        renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil());
                     }
                 }
             }

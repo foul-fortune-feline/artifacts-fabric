@@ -2,18 +2,18 @@ package artifacts.mixin.item.aquadashers;
 
 import artifacts.common.init.ModItems;
 import artifacts.common.init.ModSoundEvents;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntitySize;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,19 +27,19 @@ import java.util.Random;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-    @Shadow public World world;
+    @Shadow public Level level;
 
-    @Shadow @Final protected Random rand;
+    @Shadow @Final protected Random random;
 
-    @Shadow private EntitySize size;
+    @Shadow private EntityDimensions dimensions;
 
-    @Shadow public abstract double getPosX();
+    @Shadow public abstract double getX();
 
-    @Shadow public abstract double getPosY();
+    @Shadow public abstract double getY();
 
-    @Shadow public abstract double getPosZ();
+    @Shadow public abstract double getZ();
 
-    @Shadow public abstract Vector3d getMotion();
+    @Shadow public abstract Vec3 getDeltaMovement();
 
     @Inject(method = "playStepSound", at = @At("HEAD"))
     private void playWaterStepSound(BlockPos pos, BlockState blockState, CallbackInfo callbackInfo) {
@@ -48,24 +48,24 @@ public abstract class EntityMixin {
         }
     }
 
-    @Inject(method = "handleRunningEffect", at = @At("HEAD"))
+    @Inject(method = "spawnSprintParticle", at = @At("HEAD"))
     private void spawnWaterSprintParticle(CallbackInfo callbackInfo) {
         if (isRunningWithAquaDashers()) {
-            BlockPos pos = new BlockPos(MathHelper.floor(getPosX()), MathHelper.floor(getPosY() - 0.2), MathHelper.floor(getPosZ()));
-            BlockState blockstate = world.getBlockState(pos);
-            if (blockstate.getRenderType() == BlockRenderType.INVISIBLE) {
-                IParticleData particle;
-                Vector3d motion = getMotion().mul(-4, 0, -4);
-                if (blockstate.getFluidState().isTagged(FluidTags.LAVA)) {
+            BlockPos pos = new BlockPos(Mth.floor(getX()), Mth.floor(getY() - 0.2), Mth.floor(getZ()));
+            BlockState blockstate = level.getBlockState(pos);
+            if (blockstate.getRenderShape() == RenderShape.INVISIBLE) {
+                ParticleOptions particle;
+                Vec3 motion = getDeltaMovement().multiply(-4, 0, -4);
+                if (blockstate.getFluidState().is(FluidTags.LAVA)) {
                     motion = motion.add(0, 1, 0);
-                    if (rand.nextInt(3) == 0) {
+                    if (random.nextInt(3) == 0) {
                         particle = ParticleTypes.LAVA;
                     } else {
                         particle = ParticleTypes.FLAME;
-                        motion = motion.mul(0.2, 0.03, 0.2);
+                        motion = motion.multiply(0.2, 0.03, 0.2);
                     }
                 } else if (!blockstate.getFluidState().isEmpty()) {
-                    if (rand.nextInt(3) == 0) {
+                    if (random.nextInt(3) == 0) {
                         particle = ParticleTypes.BUBBLE;
                     } else {
                         particle = ParticleTypes.SPLASH;
@@ -74,7 +74,7 @@ public abstract class EntityMixin {
                 } else {
                     return;
                 }
-                world.addParticle(particle, getPosX() + (rand.nextDouble() - 0.5) * size.width, getPosY(), getPosZ() + (rand.nextDouble() - 0.5) * size.width, motion.x, motion.y, motion.z);
+                level.addParticle(particle, getX() + (random.nextDouble() - 0.5) * dimensions.width, getY(), getZ() + (random.nextDouble() - 0.5) * dimensions.width, motion.x, motion.y, motion.z);
             }
         }
     }

@@ -53,8 +53,7 @@ repositories {
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
 
-    //mappings minecraft.officialMojangMappings()
-    mappings "de.oceanlabs.mcp:mcp_${project.mcp_channel}:${project.mcp_mappings}"
+    mappings minecraft.officialMojangMappings()
     forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 
     modCompileOnly "mezz.jei:jei-1.16.4:${jei_version}:api"

@@ -2,12 +2,12 @@ package artifacts.common.item.curio.feet;
 
 import artifacts.common.config.ModConfig;
 import artifacts.common.item.curio.CurioItem;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.Attributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 
@@ -31,11 +31,11 @@ public class RunningShoesItem extends CurioItem {
 
         // onUnequip does not get called on the client
         if (!isEquippedBy(event.player)) {
-            ModifiableAttributeInstance movementSpeed = event.player.getAttribute(Attributes.MOVEMENT_SPEED);
+            AttributeInstance movementSpeed = event.player.getAttribute(Attributes.MOVEMENT_SPEED);
             AttributeModifier speedBonus = getSpeedBonus();
             if (movementSpeed != null && movementSpeed.hasModifier(speedBonus)) {
                 movementSpeed.removeModifier(speedBonus);
-                event.player.stepHeight = 0.6F;
+                event.player.maxUpStep = 0.6F;
             }
         }
     }
@@ -44,23 +44,23 @@ public class RunningShoesItem extends CurioItem {
     @SuppressWarnings("ConstantConditions")
     public void curioTick(String identifier, int index, LivingEntity entity, ItemStack stack) {
         if (!ModConfig.server.isCosmetic(this)) {
-            ModifiableAttributeInstance movementSpeed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+            AttributeInstance movementSpeed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
             AttributeModifier speedBonus = getSpeedBonus();
             if (entity.isSprinting()) {
                 if (!movementSpeed.hasModifier(speedBonus)) {
-                    movementSpeed.applyNonPersistentModifier(speedBonus);
+                    movementSpeed.addTransientModifier(speedBonus);
                 }
-                if (entity instanceof PlayerEntity) {
-                    entity.stepHeight = Math.max(entity.stepHeight, 1.1F);
+                if (entity instanceof Player) {
+                    entity.maxUpStep = Math.max(entity.maxUpStep, 1.1F);
                 }
 
-                if (entity.ticksExisted % 20 == 0) {
+                if (entity.tickCount % 20 == 0) {
                     damageStack(identifier, index, entity, stack);
                 }
             } else {
                 if (movementSpeed.hasModifier(speedBonus)) {
                     movementSpeed.removeModifier(speedBonus);
-                    entity.stepHeight = 0.6F;
+                    entity.maxUpStep = 0.6F;
                 }
             }
         }

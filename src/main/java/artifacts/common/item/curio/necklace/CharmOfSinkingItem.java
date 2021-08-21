@@ -3,11 +3,11 @@ package artifacts.common.item.curio.necklace;
 import artifacts.common.capability.swimhandler.SwimHandlerCapability;
 import artifacts.common.config.ModConfig;
 import artifacts.common.item.curio.CurioItem;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import top.theillusivec4.curios.api.SlotContext;
@@ -20,24 +20,24 @@ public class CharmOfSinkingItem extends CurioItem {
 
     @Override
     public void curioTick(String identifier, int index, LivingEntity livingEntity, ItemStack stack) {
-        if (livingEntity.ticksExisted % 20 == 0 && livingEntity.areEyesInFluid(FluidTags.WATER)) {
+        if (livingEntity.tickCount % 20 == 0 && livingEntity.isEyeInFluid(FluidTags.WATER)) {
             damageStack(identifier, index, livingEntity, stack);
         }
     }
 
     public void onBreakSpeed(PlayerEvent.BreakSpeed event, LivingEntity wearer) {
-        if (wearer.areEyesInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(wearer)) {
+        if (wearer.isEyeInFluid(FluidTags.WATER) && !EnchantmentHelper.hasAquaAffinity(wearer)) {
             event.setNewSpeed(event.getNewSpeed() * 5);
         }
     }
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack originalStack, ItemStack newStack) {
-        if (!ModConfig.server.isCosmetic(this) && slotContext.getWearer() instanceof ServerPlayerEntity) {
+        if (!ModConfig.server.isCosmetic(this) && slotContext.getWearer() instanceof ServerPlayer) {
             slotContext.getWearer().getCapability(SwimHandlerCapability.INSTANCE).ifPresent(
                     handler -> {
                         handler.setSinking(true);
-                        handler.syncSinking((ServerPlayerEntity) slotContext.getWearer());
+                        handler.syncSinking((ServerPlayer) slotContext.getWearer());
                     }
             );
         }
@@ -45,11 +45,11 @@ public class CharmOfSinkingItem extends CurioItem {
 
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack originalStack, ItemStack newStack) {
-        if (!ModConfig.server.isCosmetic(this) && slotContext.getWearer() instanceof ServerPlayerEntity) {
+        if (!ModConfig.server.isCosmetic(this) && slotContext.getWearer() instanceof ServerPlayer) {
             slotContext.getWearer().getCapability(SwimHandlerCapability.INSTANCE).ifPresent(
                     handler -> {
                         handler.setSinking(false);
-                        handler.syncSinking((ServerPlayerEntity) slotContext.getWearer());
+                        handler.syncSinking((ServerPlayer) slotContext.getWearer());
                     }
             );
         }
