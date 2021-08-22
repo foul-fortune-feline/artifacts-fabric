@@ -5,9 +5,9 @@ import artifacts.item.trinket.RunningShoesItem;
 import artifacts.item.trinket.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,8 +24,8 @@ public abstract class LivingEntityMixin {
 			return;
 		}
 
-		EntityAttributeInstance movementSpeed = self.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-		EntityAttributeInstance stepHeight = self.getAttributeInstance(StepHeightEntityAttributeMain.STEP_HEIGHT);
+		AttributeInstance movementSpeed = self.getAttribute(Attributes.MOVEMENT_SPEED);
+		AttributeInstance stepHeight = self.getAttribute(StepHeightEntityAttributeMain.STEP_HEIGHT);
 
 		if (sprinting) {
 			TrinketArtifactItem.addModifier(movementSpeed, RunningShoesItem.SPEED_BOOST_MODIFIER);

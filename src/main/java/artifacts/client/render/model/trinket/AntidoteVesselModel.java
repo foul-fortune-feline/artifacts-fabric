@@ -1,10 +1,10 @@
 package artifacts.client.render.model.trinket;
 
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.LivingEntity;
 
-public class AntidoteVesselModel extends BipedEntityModel<LivingEntity> {
+public class AntidoteVesselModel extends HumanoidModel<LivingEntity> {
 
 	public AntidoteVesselModel() {
 		super(0.5F, 0, 32, 32);
@@ -13,17 +13,17 @@ public class AntidoteVesselModel extends BipedEntityModel<LivingEntity> {
 		ModelPart jar = new ModelPart(this, 0, 16);
 		ModelPart lid = new ModelPart(this, 0, 26);
 
-		body.addCuboid(-4, 0, -2, 8, 12, 4, 0.5F);
+		body.addBox(-4, 0, -2, 8, 12, 4, 0.5F);
 
-		jar.addCuboid(-2, 0, -2, 4, 6, 4);
-		lid.addCuboid(-1, -1, -1, 2, 1, 2);
-		jar.setPivot(4, 9, -3);
-		jar.yaw = -0.5F;
+		jar.addBox(-2, 0, -2, 4, 6, 4);
+		lid.addBox(-1, -1, -1, 2, 1, 2);
+		jar.setPos(4, 9, -3);
+		jar.yRot = -0.5F;
 
 		jar.addChild(lid);
 		body.addChild(jar);
 
-		setVisible(false);
+		setAllVisible(false);
 		body.visible = true;
 	}
 }

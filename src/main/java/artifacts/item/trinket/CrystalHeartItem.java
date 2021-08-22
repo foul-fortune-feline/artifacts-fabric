@@ -6,31 +6,30 @@ import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import java.util.UUID;
 
 public class CrystalHeartItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/crystal_heart.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/crystal_heart.png");
 
-	private static final EntityAttributeModifier HEALTH_BONUS = new EntityAttributeModifier(UUID.fromString("99fa0537-90b9-481a-bc76-4650987faba3"),
-			"artifacts:crystal_heart_health_bonus", 10, EntityAttributeModifier.Operation.ADDITION);
+	private static final AttributeModifier HEALTH_BONUS = new AttributeModifier(UUID.fromString("99fa0537-90b9-481a-bc76-4650987faba3"),
+			"artifacts:crystal_heart_health_bonus", 10, AttributeModifier.Operation.ADDITION);
 
 	@Override
-	public void onEquip(PlayerEntity player, ItemStack stack) {
-		if (!player.world.isClient()) {
-			EntityAttributeInstance health = player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+	public void onEquip(Player player, ItemStack stack) {
+		if (!player.level.isClientSide()) {
+			AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
 			if (health != null && !health.hasModifier(HEALTH_BONUS)) {
-				health.addPersistentModifier(HEALTH_BONUS);
+				health.addPermanentModifier(HEALTH_BONUS);
 			}
 		}
 
@@ -38,9 +37,9 @@ public class CrystalHeartItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	public void onUnequip(PlayerEntity player, ItemStack stack) {
-		if (!player.world.isClient()) {
-			EntityAttributeInstance health = player.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+	public void onUnequip(Player player, ItemStack stack) {
+		if (!player.level.isClientSide()) {
+			AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
 			if (health != null && health.hasModifier(HEALTH_BONUS)) {
 				health.removeModifier(HEALTH_BONUS);
 				if (player.getHealth() > player.getMaxHealth()) {
@@ -52,13 +51,13 @@ public class CrystalHeartItem extends TrinketArtifactItem {
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new CrystalHeartModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 
@@ -69,6 +68,6 @@ public class CrystalHeartItem extends TrinketArtifactItem {
 
 	@Override
 	public SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		return new SoundInfo(SoundEvents.ARMOR_EQUIP_DIAMOND);
 	}
 }

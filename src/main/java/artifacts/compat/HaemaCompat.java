@@ -3,8 +3,8 @@ package artifacts.compat;
 import artifacts.item.UmbrellaItem;
 import com.williambl.haema.api.VampireBurningEvents;
 import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class HaemaCompat implements Runnable {
@@ -14,7 +14,7 @@ public class HaemaCompat implements Runnable {
 		VampireBurningEvents.INSTANCE.getVETO().register(new VampireBurningEvents.Veto() {
 			@NotNull
 			@Override
-			public TriState willVampireBurn(@NotNull PlayerEntity player, @NotNull World world) {
+			public TriState willVampireBurn(@NotNull Player player, @NotNull Level world) {
 				return UmbrellaItem.isHeldUpInEitherHand(player) ? TriState.FALSE : TriState.DEFAULT;
 			}
 

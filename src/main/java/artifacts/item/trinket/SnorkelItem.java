@@ -6,30 +6,30 @@ import artifacts.trinkets.Slots;
 import dev.emi.trinkets.api.SlotGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 
 public class SnorkelItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/snorkel.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/snorkel.png");
 
 	@Override
-	public StatusEffectInstance getPermanentEffect() {
-		return new StatusEffectInstance(StatusEffects.WATER_BREATHING, 20, 0, true, false);
+	public MobEffectInstance getPermanentEffect() {
+		return new MobEffectInstance(MobEffects.WATER_BREATHING, 20, 0, true, false);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new SnorkelModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 

@@ -15,9 +15,9 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +30,7 @@ public class Artifacts implements ModInitializer {
 
 	public static final String MODID = "artifacts";
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
-	public static final ItemGroup ITEM_GROUP = FabricItemGroupBuilder.build(
+	public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.build(
 			id("item_group"),
 			() -> new ItemStack(Items.BUNNY_HOPPERS)
 	);
@@ -49,17 +49,17 @@ public class Artifacts implements ModInitializer {
 
 		// Trinkets setup
 		TrinketSlots.addSlot(SlotGroups.LEGS, Slots.BELT,
-				new Identifier("trinkets", "textures/item/empty_trinket_slot_belt.png"));
+				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_belt.png"));
 		TrinketSlots.addSlot(SlotGroups.CHEST, Slots.NECKLACE,
-				new Identifier("trinkets", "textures/item/empty_trinket_slot_necklace.png"));
+				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_necklace.png"));
 		TrinketSlots.addSlot(SlotGroups.HEAD, artifacts.trinkets.Slots.HAT,
 				id("textures/item/empty_trinket_slot_hat.png"));
 		TrinketSlots.addSlot(SlotGroups.FEET, artifacts.trinkets.Slots.SHOES,
 				id("textures/item/empty_trinket_slot_shoes.png"));
 		TrinketSlots.addSlot(SlotGroups.HAND, Slots.GLOVES,
-				new Identifier("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
+				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
 		TrinketSlots.addSlot(SlotGroups.OFFHAND, Slots.GLOVES,
-				new Identifier("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
+				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
 
 		// Loot table setup
 		LootTableLoadingCallback.EVENT.register((resourceManager, manager, id, supplier, setter) -> LootTables.onLootTableLoad(id, supplier));
@@ -86,7 +86,7 @@ public class Artifacts implements ModInitializer {
 		LOGGER.info("[Artifacts] Finished initialization");
 	}
 
-	public static Identifier id(String path) {
-		return new Identifier(MODID, path);
+	public static ResourceLocation id(String path) {
+		return new ResourceLocation(MODID, path);
 	}
 }

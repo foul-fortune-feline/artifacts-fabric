@@ -3,46 +3,45 @@ package artifacts.item;
 import artifacts.Artifacts;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Language;
-import net.minecraft.util.Rarity;
-import net.minecraft.world.World;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import java.util.List;
 
 public abstract class ArtifactItem extends Item {
 
-	public ArtifactItem(Settings settings) {
-		super(settings.maxCount(1).group(Artifacts.ITEM_GROUP).rarity(Rarity.RARE).fireproof());
+	public ArtifactItem(Properties settings) {
+		super(settings.stacksTo(1).tab(Artifacts.ITEM_GROUP).rarity(Rarity.RARE).fireResistant());
 	}
 
 	public ArtifactItem() {
-		this(new Settings());
+		this(new Properties());
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext flags) {
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
 		if (Artifacts.CONFIG.general.showTooltips) {
-			appendTooltipDescription(tooltip, this.getTranslationKey() + ".tooltip");
+			appendTooltipDescription(tooltip, this.getDescriptionId() + ".tooltip");
 		}
 	}
 
-	public Text getREITooltip() {
-		return new LiteralText(Language.getInstance().get(this.getTranslationKey() + ".tooltip").replace("\n", " "));
+	public Component getREITooltip() {
+		return new TextComponent(Language.getInstance().getOrDefault(this.getDescriptionId() + ".tooltip").replace("\n", " "));
 	}
 
-	protected void appendTooltipDescription(List<Text> tooltip, String translKey) {
+	protected void appendTooltipDescription(List<Component> tooltip, String translKey) {
 		// FIXME: this will break with missing arguments
-		String[] lines = String.format(Language.getInstance().get(translKey), getTooltipDescriptionArguments()).split("\n");
+		String[] lines = String.format(Language.getInstance().getOrDefault(translKey), getTooltipDescriptionArguments()).split("\n");
 
 		for (String line : lines) {
-			tooltip.add(new LiteralText(line).formatted(Formatting.GRAY));
+			tooltip.add(new TextComponent(line).withStyle(ChatFormatting.GRAY));
 		}
 	}
 

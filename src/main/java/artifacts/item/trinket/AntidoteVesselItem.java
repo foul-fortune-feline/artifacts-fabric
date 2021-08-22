@@ -2,49 +2,49 @@ package artifacts.item.trinket;
 
 import artifacts.Artifacts;
 import artifacts.client.render.model.trinket.AntidoteVesselModel;
-import artifacts.mixin.extensions.StatusEffectInstanceExtensions;
-import artifacts.mixin.mixins.accessors.StatusEffectAccessor;
+import artifacts.mixin.extensions.MobEffectInstanceExtensions;
+import artifacts.mixin.mixins.accessors.MobEffectAccessor;
 import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 public class AntidoteVesselItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/antidote_vessel.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/antidote_vessel.png");
 
 	@Override
-	protected void effectTick(PlayerEntity player, ItemStack stack) {
+	protected void effectTick(Player player, ItemStack stack) {
 		// Reduce duration of all negative status effects to 80
-		player.getActiveStatusEffects().forEach((effect, instance) -> {
-			if (!effect.isInstant() && ((StatusEffectAccessor) effect).getType() != StatusEffectType.BENEFICIAL && instance.getDuration() > 80) {
-				((StatusEffectInstanceExtensions) instance).artifacts$setDuration(80);
+		player.getActiveEffectsMap().forEach((effect, instance) -> {
+			if (!effect.isInstantenous() && ((MobEffectAccessor) effect).getCategory() != MobEffectCategory.BENEFICIAL && instance.getDuration() > 80) {
+				((MobEffectInstanceExtensions) instance).artifacts$setDuration(80);
 			}
 		});
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new AntidoteVesselModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 
 	@Override
 	public SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ITEM_BOTTLE_FILL);
+		return new SoundInfo(SoundEvents.BOTTLE_FILL);
 	}
 
 	@Override

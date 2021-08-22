@@ -7,8 +7,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 @SuppressWarnings("UnstableApiUsage")
 public class SwimAbilityComponent implements PlayerComponent<Component> {
@@ -42,20 +42,20 @@ public class SwimAbilityComponent implements PlayerComponent<Component> {
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound tag) {
+	public void readFromNbt(CompoundTag tag) {
 		this.setSwimming(tag.getBoolean("ShouldSwim"));
 		this.setSinking(tag.getBoolean("ShouldSink"));
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound tag) {
+	public void writeToNbt(CompoundTag tag) {
 		tag.putBoolean("ShouldSwim", this.isSwimming());
 		tag.putBoolean("ShouldSink", this.isSinking());
 	}
 
 	@Environment(EnvType.CLIENT)
 	public void syncSwimming() {
-		PacketByteBuf byteBuf = PacketByteBufs.create();
+		FriendlyByteBuf byteBuf = PacketByteBufs.create();
 		byteBuf.writeBoolean(this.isSwimming());
 		ClientPlayNetworking.send(HeliumFlamingoItem.C2S_AIR_SWIMMING_ID, byteBuf);
 	}

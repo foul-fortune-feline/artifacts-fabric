@@ -9,17 +9,17 @@ import be.florens.expandability.api.fabric.LivingFluidCollisionCallback;
 import dev.emi.trinkets.api.SlotGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.material.FluidState;
 
 public class AquaDashersItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/aqua_dashers.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/aqua_dashers.png");
 
 	public AquaDashersItem() {
 		//noinspection UnstableApiUsage
@@ -27,13 +27,13 @@ public class AquaDashersItem extends TrinketArtifactItem {
 	}
 
 	private static boolean onFluidCollision(LivingEntity entity, FluidState fluidState) {
-		if (entity.isSprinting() && entity.fallDistance < 6 && !entity.isUsingItem() && !entity.isInSneakingPose()) {
+		if (entity.isSprinting() && entity.fallDistance < 6 && !entity.isUsingItem() && !entity.isCrouching()) {
 			SwimAbilityComponent swimAbilities = Components.SWIM_ABILITIES.get(entity);
 
 			if (!swimAbilities.isWet() && !swimAbilities.isSwimming()) {
-				if (fluidState.isIn((FluidTags.LAVA))) {
-					if (!entity.isFireImmune() && !EnchantmentHelper.hasFrostWalker(entity)) {
-						entity.damage(DamageSource.HOT_FLOOR, 1);
+				if (fluidState.is((FluidTags.LAVA))) {
+					if (!entity.fireImmune() && !EnchantmentHelper.hasFrostWalker(entity)) {
+						entity.hurt(DamageSource.HOT_FLOOR, 1);
 					}
 				}
 				return true;
@@ -45,13 +45,13 @@ public class AquaDashersItem extends TrinketArtifactItem {
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new AquaDashersModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 

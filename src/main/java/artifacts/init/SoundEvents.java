@@ -1,9 +1,9 @@
 package artifacts.init;
 
 import artifacts.Artifacts;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 
 public class SoundEvents {
 
@@ -16,7 +16,7 @@ public class SoundEvents {
 	public static final SoundEvent WATER_STEP = register("block.water.step");
 
 	private static SoundEvent register(String name) {
-		Identifier id = Artifacts.id(name);
+		ResourceLocation id = Artifacts.id(name);
 		return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
 	}
 

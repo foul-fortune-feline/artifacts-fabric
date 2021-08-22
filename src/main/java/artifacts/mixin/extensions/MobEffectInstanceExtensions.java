@@ -1,6 +1,6 @@
 package artifacts.mixin.extensions;
 
-public interface StatusEffectInstanceExtensions {
+public interface MobEffectInstanceExtensions {
 
 	/**
 	 * Sets the duration of the status effect instance and

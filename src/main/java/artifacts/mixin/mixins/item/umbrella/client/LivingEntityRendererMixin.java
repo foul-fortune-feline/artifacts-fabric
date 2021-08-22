@@ -1,17 +1,17 @@
 package artifacts.mixin.mixins.item.umbrella.client;
 
 import artifacts.item.UmbrellaItem;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,21 +29,21 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Inject(method = "render", at = @At("HEAD"))
-	private void renderUmbrella(T entity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, CallbackInfo info) {
-		if (this.model instanceof BipedEntityModel) {
+	private void renderUmbrella(T entity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo info) {
+		if (this.model instanceof HumanoidModel) {
 			//noinspection rawtypes
-			BipedEntityModel model = (BipedEntityModel) this.model;
+			HumanoidModel model = (HumanoidModel) this.model;
 
-			boolean heldMainHand = UmbrellaItem.getHeldStatusForHand(entity, Hand.MAIN_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
-			boolean heldOffHand = UmbrellaItem.getHeldStatusForHand(entity, Hand.OFF_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
-			boolean rightHanded = MinecraftClient.getInstance().options.mainArm == Arm.RIGHT;
+			boolean heldMainHand = UmbrellaItem.getHeldStatusForHand(entity, InteractionHand.MAIN_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
+			boolean heldOffHand = UmbrellaItem.getHeldStatusForHand(entity, InteractionHand.OFF_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
+			boolean rightHanded = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT;
 
 			if ((heldMainHand && rightHanded) || (heldOffHand && !rightHanded)) {
-				model.rightArmPose = BipedEntityModel.ArmPose.THROW_SPEAR;
+				model.rightArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
 			}
 
 			if ((heldMainHand && !rightHanded) || (heldOffHand && rightHanded)) {
-				model.leftArmPose = BipedEntityModel.ArmPose.THROW_SPEAR;
+				model.leftArmPose = HumanoidModel.ArmPose.THROW_SPEAR;
 			}
 		}
 	}

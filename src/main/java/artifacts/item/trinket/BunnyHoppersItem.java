@@ -6,37 +6,37 @@ import artifacts.trinkets.Slots;
 import dev.emi.trinkets.api.SlotGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 
 public class BunnyHoppersItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/bunny_hoppers.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/bunny_hoppers.png");
 
 	@Override
-	public StatusEffectInstance getPermanentEffect() {
-		return new StatusEffectInstance(StatusEffects.JUMP_BOOST, 20, 1, true, false);
+	public MobEffectInstance getPermanentEffect() {
+		return new MobEffectInstance(MobEffects.JUMP, 20, 1, true, false);
 	}
 
 	@Override
 	protected SoundEvent getExtraHurtSound() {
-		return SoundEvents.ENTITY_RABBIT_HURT;
+		return SoundEvents.RABBIT_HURT;
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new BunnyHoppersModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 

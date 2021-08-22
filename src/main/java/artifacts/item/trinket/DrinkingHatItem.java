@@ -7,50 +7,49 @@ import artifacts.trinkets.Slots;
 import dev.emi.trinkets.api.SlotGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class DrinkingHatItem extends TrinketArtifactItem {
 
-	private final Identifier texture;
+	private final ResourceLocation texture;
 
-	public DrinkingHatItem(Identifier texture) {
+	public DrinkingHatItem(ResourceLocation texture) {
 		this.texture = texture;
 	}
 
 	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext flags) {
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
 		if (Artifacts.CONFIG.general.showTooltips) {
 			if (this == Items.NOVELTY_DRINKING_HAT) {
 				// Novelty drinking hat description is the same as plastic, but with an extra line appended
-				appendTooltipDescription(tooltip, Items.PLASTIC_DRINKING_HAT.getTranslationKey() + ".tooltip");
+				appendTooltipDescription(tooltip, Items.PLASTIC_DRINKING_HAT.getDescriptionId() + ".tooltip");
 			}
 		}
-		super.appendTooltip(stack, world, tooltip, flags);
+		super.appendHoverText(stack, world, tooltip, flags);
 	}
 
 	@Override
 	protected SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ITEM_BOTTLE_FILL);
+		return new SoundInfo(SoundEvents.BOTTLE_FILL);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new DrinkingHatModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return texture;
 	}
 

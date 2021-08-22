@@ -2,26 +2,26 @@ package artifacts.mixin.mixins.item.kittyslippers;
 
 import artifacts.init.Items;
 import artifacts.trinkets.TrinketsHelper;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.ai.goal.TrackTargetGoal;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(RevengeGoal.class)
-public abstract class RevengeGoalMixin extends TrackTargetGoal {
+@Mixin(HurtByTargetGoal.class)
+public abstract class HurtByTargetGoalMixin extends TargetGoal {
 
-	public RevengeGoalMixin(MobEntity mob, boolean checkVisibility) {
+	public HurtByTargetGoalMixin(Mob mob, boolean checkVisibility) {
 		super(mob, checkVisibility);
 	}
 
-	@Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
 	private void cancelRevenge(CallbackInfoReturnable<Boolean> info) {
-		LivingEntity attacker = this.mob.getAttacker();
+		LivingEntity attacker = this.mob.getLastHurtByMob();
 		if (this.mob.getType() == EntityType.CREEPER && TrinketsHelper.isEquipped(Items.KITTY_SLIPPERS, attacker)) {
 			info.setReturnValue(false);
 		}

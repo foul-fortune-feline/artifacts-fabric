@@ -1,10 +1,9 @@
 package artifacts.mixin.extensions;
 
-import net.minecraft.util.Identifier;
-
 import java.util.Optional;
+import net.minecraft.resources.ResourceLocation;
 
 public interface DefaultedRegistryExtensions<T> {
 
-	Optional<Identifier> artifacts$getIdOrEmpty(T entry);
+	Optional<ResourceLocation> artifacts$getIdOrEmpty(T entry);
 }

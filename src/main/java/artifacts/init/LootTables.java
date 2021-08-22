@@ -2,58 +2,57 @@ package artifacts.init;
 
 import artifacts.Artifacts;
 import net.fabricmc.fabric.api.loot.v1.FabricLootSupplierBuilder;
-import net.minecraft.loot.LootPool;
-import net.minecraft.loot.entry.LootPoolEntry;
-import net.minecraft.loot.entry.LootTableEntry;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.entries.LootTableReference;
 import java.util.Arrays;
 import java.util.List;
 
 public class LootTables {
 
-	public static final Identifier MIMIC = Artifacts.id("entities/mimic");
-	public static final Identifier CAMPSITE_CHEST = Artifacts.id("chests/campsite_chest");
+	public static final ResourceLocation MIMIC = Artifacts.id("entities/mimic");
+	public static final ResourceLocation CAMPSITE_CHEST = Artifacts.id("chests/campsite_chest");
 
-	public static final List<Identifier> INJECT_TABLE_IDS = Arrays.asList(
-			new Identifier("minecraft", "chests/village/village_armorer"),
-			new Identifier("minecraft", "chests/village/village_butcher"),
-			new Identifier("minecraft", "chests/village/village_tannery"),
-			new Identifier("minecraft", "chests/village/village_temple"),
-			new Identifier("minecraft", "chests/village/village_toolsmith"),
-			new Identifier("minecraft", "chests/village/village_weaponsmith"),
-			new Identifier("minecraft", "chests/village/village_desert_house"),
-			new Identifier("minecraft", "chests/village/village_plains_house"),
-			new Identifier("minecraft", "chests/village/village_savanna_house"),
-			new Identifier("minecraft", "chests/village/village_snowy_house"),
-			new Identifier("minecraft", "chests/village/village_taiga_house"),
-			new Identifier("minecraft", "chests/abandoned_mineshaft"),
-			new Identifier("minecraft", "chests/bastion_hoglin_stable"),
-			new Identifier("minecraft", "chests/bastion_treasure"),
-			new Identifier("minecraft", "chests/buried_treasure"),
-			new Identifier("minecraft", "chests/desert_pyramid"),
-			new Identifier("minecraft", "chests/end_city_treasure"),
-			new Identifier("minecraft", "chests/jungle_temple"),
-			new Identifier("minecraft", "chests/nether_bridge"),
-			new Identifier("minecraft", "chests/pillager_outpost"),
-			new Identifier("minecraft", "chests/ruined_portal"),
-			new Identifier("minecraft", "chests/shipwreck_treasure"),
-			new Identifier("minecraft", "chests/spawn_bonus_chest"),
-			new Identifier("minecraft", "chests/stronghold_corridor"),
-			new Identifier("minecraft", "chests/underwater_ruin_big"),
-			new Identifier("minecraft", "chests/woodland_mansion"),
-			new Identifier("minecraft", "entities/cow")
+	public static final List<ResourceLocation> INJECT_TABLE_IDS = Arrays.asList(
+			new ResourceLocation("minecraft", "chests/village/village_armorer"),
+			new ResourceLocation("minecraft", "chests/village/village_butcher"),
+			new ResourceLocation("minecraft", "chests/village/village_tannery"),
+			new ResourceLocation("minecraft", "chests/village/village_temple"),
+			new ResourceLocation("minecraft", "chests/village/village_toolsmith"),
+			new ResourceLocation("minecraft", "chests/village/village_weaponsmith"),
+			new ResourceLocation("minecraft", "chests/village/village_desert_house"),
+			new ResourceLocation("minecraft", "chests/village/village_plains_house"),
+			new ResourceLocation("minecraft", "chests/village/village_savanna_house"),
+			new ResourceLocation("minecraft", "chests/village/village_snowy_house"),
+			new ResourceLocation("minecraft", "chests/village/village_taiga_house"),
+			new ResourceLocation("minecraft", "chests/abandoned_mineshaft"),
+			new ResourceLocation("minecraft", "chests/bastion_hoglin_stable"),
+			new ResourceLocation("minecraft", "chests/bastion_treasure"),
+			new ResourceLocation("minecraft", "chests/buried_treasure"),
+			new ResourceLocation("minecraft", "chests/desert_pyramid"),
+			new ResourceLocation("minecraft", "chests/end_city_treasure"),
+			new ResourceLocation("minecraft", "chests/jungle_temple"),
+			new ResourceLocation("minecraft", "chests/nether_bridge"),
+			new ResourceLocation("minecraft", "chests/pillager_outpost"),
+			new ResourceLocation("minecraft", "chests/ruined_portal"),
+			new ResourceLocation("minecraft", "chests/shipwreck_treasure"),
+			new ResourceLocation("minecraft", "chests/spawn_bonus_chest"),
+			new ResourceLocation("minecraft", "chests/stronghold_corridor"),
+			new ResourceLocation("minecraft", "chests/underwater_ruin_big"),
+			new ResourceLocation("minecraft", "chests/woodland_mansion"),
+			new ResourceLocation("minecraft", "entities/cow")
 	);
 
-	public static void onLootTableLoad(Identifier id, FabricLootSupplierBuilder supplier) {
+	public static void onLootTableLoad(ResourceLocation id, FabricLootSupplierBuilder supplier) {
 		if (INJECT_TABLE_IDS.contains(id)) {
-			supplier.pool(LootPool.builder().with(getInjectEntry(id.getPath())));
+			supplier.withPool(LootPool.lootPool().add(getInjectEntry(id.getPath())));
 		}
 	}
 
-	private static LootPoolEntry.Builder<?> getInjectEntry(String name) {
-		Identifier table = Artifacts.id("inject/" + name);
-		return LootTableEntry.builder(table).weight(1);
+	private static LootPoolEntryContainer.Builder<?> getInjectEntry(String name) {
+		ResourceLocation table = Artifacts.id("inject/" + name);
+		return LootTableReference.lootTableReference(table).setWeight(1);
 	}
 
 	private LootTables() {

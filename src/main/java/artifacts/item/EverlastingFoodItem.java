@@ -1,30 +1,30 @@
 package artifacts.item;
 
 import artifacts.Artifacts;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 
 public class EverlastingFoodItem extends ArtifactItem {
 
-	public EverlastingFoodItem(FoodComponent foodComponent) {
-		super(new Settings().food(foodComponent));
+	public EverlastingFoodItem(FoodProperties foodComponent) {
+		super(new Properties().food(foodComponent));
 	}
 
 	@Override
-	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity entity) {
-		if (!world.isClient && entity instanceof PlayerEntity) {
-			((PlayerEntity) entity).getItemCooldownManager().set(this, Artifacts.CONFIG.general.everlastingFoodCooldown);
+	public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
+		if (!world.isClientSide && entity instanceof Player) {
+			((Player) entity).getCooldowns().addCooldown(this, Artifacts.CONFIG.general.everlastingFoodCooldown);
 		}
 
 		// Stack decrement is cancelled in LivingEntity.eatFood() mixin
-		return super.finishUsing(stack, world, entity);
+		return super.finishUsingItem(stack, world, entity);
 	}
 
 	@Override
-	public int getMaxUseTime(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 24;
 	}
 }

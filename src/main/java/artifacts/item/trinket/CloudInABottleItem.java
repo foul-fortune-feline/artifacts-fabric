@@ -9,26 +9,26 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ParticleTypes;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
 
 public class CloudInABottleItem extends TrinketArtifactItem {
 
-	public static final Identifier C2S_DOUBLE_JUMPED_ID = Artifacts.id("c2s_double_jumped");
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/cloud_in_a_bottle.png");
+	public static final ResourceLocation C2S_DOUBLE_JUMPED_ID = Artifacts.id("c2s_double_jumped");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/cloud_in_a_bottle.png");
 
 	public CloudInABottleItem() {
 		ServerPlayNetworking.registerGlobalReceiver(C2S_DOUBLE_JUMPED_ID, CloudInABottleItem::handleDoubleJumpPacket);
 	}
 
-	private static void handleDoubleJumpPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+	private static void handleDoubleJumpPacket(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
 		server.execute(() -> {
 			((LivingEntityExtensions) player).artifacts$doubleJump();
 
@@ -37,25 +37,25 @@ public class CloudInABottleItem extends TrinketArtifactItem {
 				double motionX = player.getRandom().nextGaussian() * 0.02;
 				double motionY = player.getRandom().nextGaussian() * 0.02 + 0.20;
 				double motionZ = player.getRandom().nextGaussian() * 0.02;
-				player.getServerWorld().spawnParticles(ParticleTypes.POOF, player.getX(), player.getY(), player.getZ(), 1, motionX, motionY, motionZ, 0.15);
+				player.getLevel().sendParticles(ParticleTypes.POOF, player.getX(), player.getY(), player.getZ(), 1, motionX, motionY, motionZ, 0.15);
 			}
 		});
 	}
 
 	@Override
 	protected SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH);
+		return new SoundInfo(SoundEvents.BOTTLE_FILL_DRAGONBREATH);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new CloudInABottleModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 

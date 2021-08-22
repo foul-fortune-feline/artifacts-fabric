@@ -1,8 +1,8 @@
 package artifacts.components;
 
 import artifacts.trinkets.TrinketsHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
 
 public class ArtifactEnabledComponent extends SyncedBooleanComponent {
 
@@ -15,7 +15,7 @@ public class ArtifactEnabledComponent extends SyncedBooleanComponent {
 	}
 
 	@Override
-	public boolean shouldSyncWith(ServerPlayerEntity player) {
+	public boolean shouldSyncWith(ServerPlayer player) {
 		// Only sync if stack is in inventory or trinkets inventory
 		return player.inventory.contains(stack)
 				|| TrinketsHelper.isEquipped((ItemStack equippedStack) -> equippedStack.equals(stack), player);

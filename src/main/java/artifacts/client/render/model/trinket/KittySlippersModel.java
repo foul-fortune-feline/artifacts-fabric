@@ -1,10 +1,10 @@
 package artifacts.client.render.model.trinket;
 
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.entity.LivingEntity;
 
-public class KittySlippersModel extends BipedEntityModel<LivingEntity> {
+public class KittySlippersModel extends HumanoidModel<LivingEntity> {
 
 	public KittySlippersModel() {
 		super(0.51F);
@@ -19,16 +19,16 @@ public class KittySlippersModel extends BipedEntityModel<LivingEntity> {
 		ModelPart bipedLeftLegwear = new ModelPart(this, 16, 16);
 		ModelPart bipedRightLegwear = new ModelPart(this, 48, 16);
 
-		head1.addCuboid(-2.5F, 8.51F, -7.01F, 5, 4, 5);
-		head2.addCuboid(-2.5F, 8.51F, -7, 5, 4, 5);
-		earLeft1.addCuboid(-2, 7.51F, -4, 1, 1, 2);
-		earLeft2.addCuboid(-2, 7.51F, -4, 1, 1, 2);
-		earRight1.addCuboid(1, 7.51F, -4, 1, 1, 2);
-		earRight2.addCuboid(1, 7.51F, -4, 1, 1, 2);
-		nose1.addCuboid(-1.5F, 10.51F, -8, 3, 2, 1);
-		nose2.addCuboid(-1.5F, 10.51F, -8, 3, 2, 1);
-		bipedLeftLegwear.addCuboid(-2, 0, -2, 4, 12, 4, 0.75F);
-		bipedRightLegwear.addCuboid(-2, 0, -2, 4, 12, 4, 0.75F);
+		head1.addBox(-2.5F, 8.51F, -7.01F, 5, 4, 5);
+		head2.addBox(-2.5F, 8.51F, -7, 5, 4, 5);
+		earLeft1.addBox(-2, 7.51F, -4, 1, 1, 2);
+		earLeft2.addBox(-2, 7.51F, -4, 1, 1, 2);
+		earRight1.addBox(1, 7.51F, -4, 1, 1, 2);
+		earRight2.addBox(1, 7.51F, -4, 1, 1, 2);
+		nose1.addBox(-1.5F, 10.51F, -8, 3, 2, 1);
+		nose2.addBox(-1.5F, 10.51F, -8, 3, 2, 1);
+		bipedLeftLegwear.addBox(-2, 0, -2, 4, 12, 4, 0.75F);
+		bipedRightLegwear.addBox(-2, 0, -2, 4, 12, 4, 0.75F);
 
 		leftLeg.addChild(head1);
 		rightLeg.addChild(head2);
@@ -41,7 +41,7 @@ public class KittySlippersModel extends BipedEntityModel<LivingEntity> {
 		leftLeg.addChild(bipedLeftLegwear);
 		rightLeg.addChild(bipedRightLegwear);
 
-		setVisible(false);
+		setAllVisible(false);
 		leftLeg.visible = rightLeg.visible = true;
 	}
 }

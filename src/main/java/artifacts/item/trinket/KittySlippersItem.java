@@ -6,30 +6,30 @@ import artifacts.trinkets.Slots;
 import dev.emi.trinkets.api.SlotGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
 
 public class KittySlippersItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/kitty_slippers.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/kitty_slippers.png");
 
 	@Override
 	protected SoundEvent getExtraHurtSound() {
-		return SoundEvents.ENTITY_CAT_HURT;
+		return SoundEvents.CAT_HURT;
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new KittySlippersModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 
@@ -40,6 +40,6 @@ public class KittySlippersItem extends TrinketArtifactItem {
 
 	@Override
 	protected SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ENTITY_CAT_AMBIENT);
+		return new SoundInfo(SoundEvents.CAT_AMBIENT);
 	}
 }

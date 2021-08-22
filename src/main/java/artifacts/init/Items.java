@@ -8,23 +8,23 @@ import artifacts.item.trinket.glove.*;
 import artifacts.item.trinket.pendant.FlamePendantItem;
 import artifacts.item.trinket.pendant.ShockPendantItem;
 import artifacts.item.trinket.pendant.ThornPendantItem;
-import net.minecraft.item.FoodComponents;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.core.Registry;
+import net.minecraft.world.food.Foods;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 
 @SuppressWarnings("unused")
 public class Items {
 
 	// Misc
-	public static final Item MIMIC_SPAWN_EGG = register("mimic_spawn_egg", new SpawnEggItem(Entities.MIMIC, 0x805113, 0x212121, new Item.Settings().group(ItemGroup.MISC)));
+	public static final Item MIMIC_SPAWN_EGG = register("mimic_spawn_egg", new SpawnEggItem(Entities.MIMIC, 0x805113, 0x212121, new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 	public static final Item UMBRELLA = register("umbrella", new UmbrellaItem());
 	public static final Item WHOOPEE_CUSHION = register("whoopee_cushion", new WhoopeeCushionItem());
 
 	// Food
-	public static final Item EVERLASTING_BEEF = register("everlasting_beef", new EverlastingFoodItem(FoodComponents.BEEF));
-	public static final Item ETERNAL_STEAK = register("eternal_steak", new EverlastingFoodItem(FoodComponents.COOKED_BEEF));
+	public static final Item EVERLASTING_BEEF = register("everlasting_beef", new EverlastingFoodItem(Foods.BEEF));
+	public static final Item ETERNAL_STEAK = register("eternal_steak", new EverlastingFoodItem(Foods.COOKED_BEEF));
 
 	// Head
 	public static final Item PLASTIC_DRINKING_HAT = register("plastic_drinking_hat", new DrinkingHatItem(Artifacts.id("textures/entity/trinket/plastic_drinking_hat.png")));

@@ -8,45 +8,44 @@ import artifacts.item.ArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.emi.trinkets.api.Trinket;
 import dev.emi.trinkets.api.TrinketItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.world.World;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 import java.util.List;
 import java.util.UUID;
 
 public abstract class TrinketArtifactItem extends ArtifactItem implements Trinket {
 
-	private BipedEntityModel<LivingEntity> model;
+	private HumanoidModel<LivingEntity> model;
 
 	public TrinketArtifactItem() {
 		DispenserBlock.registerBehavior(this, TrinketItem.TRINKET_DISPENSER_BEHAVIOR);
@@ -54,26 +53,26 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
 		// Toggle artifact effects when sneak right-clicking
-		if (user.isSneaking()) {
-			ItemStack stack = user.getStackInHand(hand);
+		if (user.isShiftKeyDown()) {
+			ItemStack stack = user.getItemInHand(hand);
 			Components.ARTIFACT_ENABLED.get(stack).invert();
 
-			if (world.isClient()) {
+			if (world.isClientSide()) {
 				// Show enabled/disabled message above hotbar
-				Formatting enabledColor = effectsEnabled(stack) ? Formatting.GREEN : Formatting.RED;
-				Text enabledText = new TranslatableText(getEffectsEnabledLanguageKey(stack)).formatted(enabledColor);
-				MinecraftClient.getInstance().inGameHud.setOverlayMessage(enabledText, false);
+				ChatFormatting enabledColor = effectsEnabled(stack) ? ChatFormatting.GREEN : ChatFormatting.RED;
+				Component enabledText = new TranslatableComponent(getEffectsEnabledLanguageKey(stack)).withStyle(enabledColor);
+				Minecraft.getInstance().gui.setOverlayMessage(enabledText, false);
 			}
 
-			return TypedActionResult.success(stack);
+			return InteractionResultHolder.success(stack);
 		}
 
-		TypedActionResult<ItemStack> actionResult = Trinket.equipTrinket(user, hand);
+		InteractionResultHolder<ItemStack> actionResult = Trinket.equipTrinket(user, hand);
 
 		// Play right click equip sound
-		if (actionResult.getResult().isAccepted()) {
+		if (actionResult.getResult().consumesAction()) {
 			SoundInfo sound = this.getEquipSound();
 			user.playSound(sound.getSoundEvent(), sound.getVolume(), sound.getPitch());
 		}
@@ -82,32 +81,32 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	}
 
 	@Override
-	public final void tick(PlayerEntity player, ItemStack stack) {
+	public final void tick(Player player, ItemStack stack) {
 		if (effectsEnabled(stack)) {
 			effectTick(player, stack);
 		}
 	}
 
-	protected void effectTick(PlayerEntity player, ItemStack stack) {
+	protected void effectTick(Player player, ItemStack stack) {
 	}
 
 	@Override
-	public final Multimap<EntityAttribute, EntityAttributeModifier> getTrinketModifiers(String group, String slot, UUID uuid, ItemStack stack) {
+	public final Multimap<Attribute, AttributeModifier> getTrinketModifiers(String group, String slot, UUID uuid, ItemStack stack) {
 		if (effectsEnabled(stack)) {
 			return this.applyModifiers(group, slot, uuid, stack);
 		}
 		return HashMultimap.create();
 	}
 
-	protected Multimap<EntityAttribute, EntityAttributeModifier> applyModifiers(String group, String slot, UUID uuid, ItemStack stack) {
+	protected Multimap<Attribute, AttributeModifier> applyModifiers(String group, String slot, UUID uuid, ItemStack stack) {
 		return HashMultimap.create();
 	}
 
 	@Override
-	public void appendTooltip(ItemStack stack, World world, List<Text> tooltip, TooltipContext flags) {
-		super.appendTooltip(stack, world, tooltip, flags);
-		MutableText enabled = new TranslatableText(getEffectsEnabledLanguageKey(stack)).formatted(Formatting.GOLD);
-		Text togglekeybind = new TranslatableText("artifacts.trinket.togglekeybind").formatted(Formatting.GRAY);
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
+		super.appendHoverText(stack, world, tooltip, flags);
+		MutableComponent enabled = new TranslatableComponent(getEffectsEnabledLanguageKey(stack)).withStyle(ChatFormatting.GOLD);
+		Component togglekeybind = new TranslatableComponent("artifacts.trinket.togglekeybind").withStyle(ChatFormatting.GRAY);
 		tooltip.add(enabled.append(" ").append(togglekeybind));
 	}
 
@@ -115,7 +114,7 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	 * @return The {@link SoundEvent} to play when the artifact is right-click equipped
 	 */
 	protected SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_GENERIC);
+		return new SoundInfo(SoundEvents.ARMOR_EQUIP_GENERIC);
 	}
 
 	/**
@@ -129,29 +128,29 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	 * Used to give a Trinket a permanent status effect while wearing it.
 	 * The StatusEffectInstance is applied every 15 ticks so a duration greater than that is required.
 	 *
-	 * @return The {@link StatusEffectInstance} to be applied while wearing this artifact
+	 * @return The {@link MobEffectInstance} to be applied while wearing this artifact
 	 */
-	public StatusEffectInstance getPermanentEffect() {
+	public MobEffectInstance getPermanentEffect() {
 		return null;
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void render(String slot, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, PlayerEntityModel<AbstractClientPlayerEntity> playerModel,
-					   AbstractClientPlayerEntity player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-		BipedEntityModel<LivingEntity> model = this.getModel();
-		model.setAngles(player, limbAngle, limbDistance, animationProgress, animationProgress, headPitch);
-		model.animateModel(player, limbAngle, limbDistance, tickDelta);
+	public void render(String slot, PoseStack matrices, MultiBufferSource vertexConsumers, int light, PlayerModel<AbstractClientPlayer> playerModel,
+					   AbstractClientPlayer player, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+		HumanoidModel<LivingEntity> model = this.getModel();
+		model.setupAnim(player, limbAngle, limbDistance, animationProgress, animationProgress, headPitch);
+		model.prepareMobModel(player, limbAngle, limbDistance, tickDelta);
 		TrinketRenderHelper.followBodyRotations(player, model);
 		// TODO: stack.hasGlint()
-		VertexConsumer vertexBuilder = ItemRenderer.getItemGlintConsumer(vertexConsumers, model.getLayer(this.getTexture()), false, false);
-		model.render(matrices, vertexBuilder, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+		VertexConsumer vertexBuilder = ItemRenderer.getFoilBuffer(vertexConsumers, model.renderType(this.getTexture()), false, false);
+		model.renderToBuffer(matrices, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
 	}
 
 	@Environment(EnvType.CLIENT)
-	protected abstract Identifier getTexture();
+	protected abstract ResourceLocation getTexture();
 
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> getModel() {
+	protected HumanoidModel<LivingEntity> getModel() {
 		if (this.model == null) {
 			this.model = createModel();
 		}
@@ -160,7 +159,7 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	}
 
 	@Environment(EnvType.CLIENT)
-	protected abstract BipedEntityModel<LivingEntity> createModel();
+	protected abstract HumanoidModel<LivingEntity> createModel();
 
 	private void playExtraHurtSound(LivingEntity entity, float volume, float pitch) {
 		if (Artifacts.CONFIG.general.playExtraHurtSounds) {
@@ -176,13 +175,13 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 		return Components.ARTIFACT_ENABLED.get(stack).get();
 	}
 
-	public static void addModifier(EntityAttributeInstance instance, EntityAttributeModifier modifier) {
+	public static void addModifier(AttributeInstance instance, AttributeModifier modifier) {
 		if (!instance.hasModifier(modifier)) {
-			instance.addTemporaryModifier(modifier);
+			instance.addTransientModifier(modifier);
 		}
 	}
 
-	public static void removeModifier(EntityAttributeInstance instance, EntityAttributeModifier modifier) {
+	public static void removeModifier(AttributeInstance instance, AttributeModifier modifier) {
 		if (instance.hasModifier(modifier)) {
 			instance.removeModifier(modifier);
 		}

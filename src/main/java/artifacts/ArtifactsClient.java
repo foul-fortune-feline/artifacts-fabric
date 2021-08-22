@@ -11,14 +11,14 @@ import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 @Environment(EnvType.CLIENT)
 public class ArtifactsClient implements ClientModInitializer {
 
-	private static final ModelIdentifier UMBRELLA_HELD_MODEL = new ModelIdentifier(Artifacts.id("umbrella_in_hand"), "inventory");
+	private static final ModelResourceLocation UMBRELLA_HELD_MODEL = new ModelResourceLocation(Artifacts.id("umbrella_in_hand"), "inventory");
 
 	@Override
 	public void onInitializeClient() {
@@ -29,12 +29,12 @@ public class ArtifactsClient implements ClientModInitializer {
 		ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> out.accept(UMBRELLA_HELD_MODEL));
 
 		// ModelPredicateProvider for rendering of umbrella blocking
-		FabricModelPredicateProviderRegistry.register(Items.UMBRELLA, new Identifier("blocking"), (stack, world, entity)
-				-> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1 : 0);
+		FabricModelPredicateProviderRegistry.register(Items.UMBRELLA, new ResourceLocation("blocking"), (stack, world, entity)
+				-> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1 : 0);
 
 		LivingEntityFeatureRendererRegistrationCallback.EVENT.register((entityType, entityRenderer, registrationHelper) -> {
-			if (entityRenderer instanceof PlayerEntityRenderer) {
-				registrationHelper.register(new ArtifactFeatureRenderer((PlayerEntityRenderer) entityRenderer));
+			if (entityRenderer instanceof PlayerRenderer) {
+				registrationHelper.register(new ArtifactFeatureRenderer((PlayerRenderer) entityRenderer));
 			}
 		});
 	}

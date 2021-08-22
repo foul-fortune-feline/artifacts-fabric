@@ -1,9 +1,9 @@
 package artifacts.components;
 
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 
 public class SyncedBooleanComponent implements AutoSyncedComponent {
 
@@ -27,17 +27,17 @@ public class SyncedBooleanComponent implements AutoSyncedComponent {
 	}
 
 	@Override
-	public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity recipient) {
+	public void writeSyncPacket(FriendlyByteBuf buf, ServerPlayer recipient) {
 		buf.writeBoolean(this.bool);
 	}
 
 	@Override
-	public void applySyncPacket(PacketByteBuf buf) {
+	public void applySyncPacket(FriendlyByteBuf buf) {
 		this.bool = buf.readBoolean();
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound tag) {
+	public void readFromNbt(CompoundTag tag) {
 		if (tag.contains(this.name)) {
 			this.bool = tag.getBoolean(this.name);
 		} else {
@@ -46,7 +46,7 @@ public class SyncedBooleanComponent implements AutoSyncedComponent {
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound tag) {
+	public void writeToNbt(CompoundTag tag) {
 		tag.putBoolean(this.name, this.bool);
 	}
 

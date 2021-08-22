@@ -12,23 +12,23 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.locale.Language;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Language;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
 
 public class HeliumFlamingoItem extends TrinketArtifactItem {
 
-	public static final Identifier C2S_AIR_SWIMMING_ID = Artifacts.id("c2s_air_swimming");
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/helium_flamingo.png");
+	public static final ResourceLocation C2S_AIR_SWIMMING_ID = Artifacts.id("c2s_air_swimming");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/helium_flamingo.png");
 
 	public HeliumFlamingoItem() {
 		super();
@@ -36,29 +36,29 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 		ServerPlayNetworking.registerGlobalReceiver(C2S_AIR_SWIMMING_ID, HeliumFlamingoItem::handleAirSwimmingPacket);
 	}
 
-	private static ActionResult onPlayerSwim(PlayerEntity player) {
+	private static InteractionResult onPlayerSwim(Player player) {
 		SwimAbilityComponent swimAbilities = Components.SWIM_ABILITIES.get(player);
 
 		if (swimAbilities.isSwimming()) {
-			return ActionResult.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 
-		return ActionResult.PASS;
+		return InteractionResult.PASS;
 	}
 
-	private static void handleAirSwimmingPacket(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
+	private static void handleAirSwimmingPacket(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
 		boolean shouldSwim = buf.readBoolean();
 		server.execute(() -> Components.SWIM_ABILITIES.get(player).setSwimming(shouldSwim));
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new HeliumFlamingoModel();
 	}
 
 	@Override
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 
@@ -74,8 +74,8 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 
 	@Override
 	protected Object[] getTooltipDescriptionArguments() {
-		String translationKey = MinecraftClient.getInstance().options.keySprint.getBoundKeyTranslationKey();
-		return new Object[] {Language.getInstance().get(translationKey)};
+		String translationKey = Minecraft.getInstance().options.keySprint.saveString();
+		return new Object[] {Language.getInstance().getOrDefault(translationKey)};
 	}
 
 /*	public static boolean isFlying(LivingEntity entity) {

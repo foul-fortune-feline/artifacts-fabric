@@ -3,12 +3,12 @@ package artifacts.mixin.mixins.item.goldenhook;
 import artifacts.init.Components;
 import artifacts.init.Items;
 import artifacts.trinkets.TrinketsHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,19 +20,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
 
-	@Shadow @Nullable protected PlayerEntity attackingPlayer;
+	@Shadow @Nullable protected Player lastHurtByPlayer;
 
-	public LivingEntityMixin(EntityType<?> type, World world) {
+	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
 	}
 
-	@ModifyVariable(method = "dropXp", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;getXpToDrop(Lnet/minecraft/entity/player/PlayerEntity;)I"))
+	@ModifyVariable(method = "dropExperience", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/LivingEntity;getExperienceReward(Lnet/minecraft/world/entity/player/Player;)I"))
 	private int modifyXp(int originalXp) {
-		if (!TrinketsHelper.isEquipped(Items.GOLDEN_HOOK, this.attackingPlayer)) {
+		if (!TrinketsHelper.isEquipped(Items.GOLDEN_HOOK, this.lastHurtByPlayer)) {
 			return originalXp;
 		}
 
-		double killRatio = Components.ENTITY_KILL_TRACKER.maybeGet(this.attackingPlayer)
+		double killRatio = Components.ENTITY_KILL_TRACKER.maybeGet(this.lastHurtByPlayer)
 				.map(comp -> comp.getKillRatio(this.getType()))
 				.orElse(0D);
 
@@ -45,10 +45,10 @@ public abstract class LivingEntityMixin extends Entity {
 		return originalXp + experienceBonus;
 	}
 
-	@Inject(method = "onDeath", at = @At("HEAD"))
+	@Inject(method = "die", at = @At("HEAD"))
 	private void addToKillTracker(DamageSource source, CallbackInfo info) {
-		if (source.getAttacker() instanceof PlayerEntity) {
-			PlayerEntity player = (PlayerEntity) source.getAttacker();
+		if (source.getEntity() instanceof Player) {
+			Player player = (Player) source.getEntity();
 			Components.ENTITY_KILL_TRACKER.maybeGet(player).ifPresent(comp -> comp.addKilledEntityType(this.getType()));
 		}
 	}

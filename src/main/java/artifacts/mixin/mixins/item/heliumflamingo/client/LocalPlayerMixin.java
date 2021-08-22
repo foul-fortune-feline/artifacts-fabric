@@ -4,8 +4,8 @@ import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
 import artifacts.init.Items;
 import artifacts.trinkets.TrinketsHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -14,25 +14,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin {
+@Mixin(LocalPlayer.class)
+public abstract class LocalPlayerMixin {
 
-	@Shadow @Final protected MinecraftClient client;
+	@Shadow @Final protected Minecraft minecraft;
 	@Unique private boolean wasSprintKeyDown;
 	@Unique private boolean wasSprintingOnGround;
 	@Unique private boolean hasTouchedGround;
 
-	@Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/input/Input;tick(Z)V", shift = At.Shift.AFTER))
+	@Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/Input;tick(Z)V", shift = At.Shift.AFTER))
 	private void handleAirSwimmingInput(CallbackInfo info) {
-		ClientPlayerEntity self = (ClientPlayerEntity) (Object) this;
-		boolean isSprintKeyDown = this.client.options.keySprint.isPressed();
+		LocalPlayer self = (LocalPlayer) (Object) this;
+		boolean isSprintKeyDown = this.minecraft.options.keySprint.isDown();
 		SwimAbilityComponent swimAbilities = Components.SWIM_ABILITIES.get(self);
 
 		if (!swimAbilities.isSwimming()) {
 			if (self.isOnGround()) {
 				hasTouchedGround = true;
 			} else if (!swimAbilities.isSwimming()
-					&& self.getAir() > 0
+					&& self.getAirSupply() > 0
 					&& TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self)
 					&& (self.isSwimming()
 					|| isSprintKeyDown
@@ -40,10 +40,10 @@ public abstract class ClientPlayerEntityMixin {
 					&& !wasSprintingOnGround
 					&& hasTouchedGround
 					&& !self.isOnGround()
-					&& (!self.isTouchingWater() || swimAbilities.isSinking())
+					&& (!self.isInWater() || swimAbilities.isSinking())
 					&& !self.isFallFlying()
 					&& !self.abilities.flying
-					&& !self.hasVehicle())) {
+					&& !self.isPassenger())) {
 				swimAbilities.setSwimming(true);
 				swimAbilities.syncSwimming();
 				hasTouchedGround = false;

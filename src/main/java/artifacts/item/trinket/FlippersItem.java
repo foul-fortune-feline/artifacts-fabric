@@ -6,24 +6,24 @@ import artifacts.trinkets.Slots;
 import dev.emi.trinkets.api.SlotGroups;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 
 public class FlippersItem extends TrinketArtifactItem {
 
 	public static final int SWIM_SPEED_MULTIPLIER = 2;
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/flippers.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/flippers.png");
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new FlippersModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 

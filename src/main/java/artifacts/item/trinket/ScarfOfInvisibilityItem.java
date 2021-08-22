@@ -6,31 +6,31 @@ import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.LivingEntity;
 
 public class ScarfOfInvisibilityItem extends TrinketArtifactItem {
 
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/scarf_of_invisibility.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/scarf_of_invisibility.png");
 
 	@Override
-	public StatusEffectInstance getPermanentEffect() {
-		return new StatusEffectInstance(StatusEffects.INVISIBILITY, 20, 0, true, false);
+	public MobEffectInstance getPermanentEffect() {
+		return new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0, true, false);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
-		return new ScarfModel(RenderLayer::getEntityTranslucent);
+	protected HumanoidModel<LivingEntity> createModel() {
+		return new ScarfModel(RenderType::entityTranslucent);
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 

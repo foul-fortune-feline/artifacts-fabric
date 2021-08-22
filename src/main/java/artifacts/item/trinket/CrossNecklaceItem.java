@@ -6,25 +6,25 @@ import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.LivingEntity;
 
 public class CrossNecklaceItem extends TrinketArtifactItem {
 
 	public static final double HURT_RESISTANCE_MULTIPLIER = 3; // Hurt invuln is multiplied by this factor
-	private static final Identifier TEXTURE = Artifacts.id("textures/entity/trinket/cross_necklace.png");
+	private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/trinket/cross_necklace.png");
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected BipedEntityModel<LivingEntity> createModel() {
+	protected HumanoidModel<LivingEntity> createModel() {
 		return new CrossNecklaceModel();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	protected Identifier getTexture() {
+	protected ResourceLocation getTexture() {
 		return TEXTURE;
 	}
 
@@ -35,6 +35,6 @@ public class CrossNecklaceItem extends TrinketArtifactItem {
 
 	@Override
 	public SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND);
+		return new SoundInfo(SoundEvents.ARMOR_EQUIP_DIAMOND);
 	}
 }
