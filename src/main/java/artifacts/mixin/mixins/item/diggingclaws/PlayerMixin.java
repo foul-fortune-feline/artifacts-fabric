@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.diggingclaws;
 
 import artifacts.init.Items;
-import artifacts.item.trinket.glove.DiggingClawsItem;
+import artifacts.item.curio.hands.DiggingClawsItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

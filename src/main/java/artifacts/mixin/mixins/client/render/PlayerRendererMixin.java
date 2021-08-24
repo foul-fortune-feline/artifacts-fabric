@@ -1,7 +1,8 @@
 package artifacts.mixin.mixins.client.render;
 
 import artifacts.Artifacts;
-import artifacts.item.trinket.glove.GloveItem;
+import artifacts.client.render.trinket.CurioRenderers;
+import artifacts.client.render.trinket.renderer.GloveCurioRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
@@ -11,7 +12,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,34 +23,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerRendererMixin {
 
 	@Inject(method = "renderLeftHand", at = @At("TAIL"))
-	private void renderLeftGlove(PoseStack matrices, MultiBufferSource vertexConsumers, int light, AbstractClientPlayer player, CallbackInfo info) {
-		GloveItem equippedGlove = getGloveToRenderForHand(player, InteractionHand.OFF_HAND);
-		if (equippedGlove != null) {
-			equippedGlove.renderArm(matrices, vertexConsumers, light, player, HumanoidArm.LEFT, false);
-		}
+	private void renderLeftGlove(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, CallbackInfo callbackInfo) {
+		renderArm(matrixStack, buffer, light, player, HumanoidArm.LEFT);
 	}
 
 	@Inject(method = "renderRightHand", at = @At("TAIL"))
-	private void renderRightGlove(PoseStack matrices, MultiBufferSource vertexConsumers, int light, AbstractClientPlayer player, CallbackInfo info) {
-		GloveItem equippedGlove = getGloveToRenderForHand(player, InteractionHand.MAIN_HAND);
-		if (equippedGlove != null) {
-			equippedGlove.renderArm(matrices, vertexConsumers, light, player, HumanoidArm.RIGHT, false);
-		}
+	private void renderRightGlove(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, CallbackInfo callbackInfo) {
+		renderArm(matrixStack, buffer, light, player, HumanoidArm.RIGHT);
 	}
 
 	@Unique
-	private static GloveItem getGloveToRenderForHand(Player player, InteractionHand hand) {
+	private static void renderArm(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, HumanoidArm handSide) {
 		if (!Artifacts.CONFIG.general.showFirstPersonGloves) {
-			return null;
+			return;
 		}
 
+		InteractionHand hand = handSide == player.getMainArm() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 		String slotGroup = hand == InteractionHand.MAIN_HAND ? SlotGroups.HAND : SlotGroups.OFFHAND;
 		ItemStack stack = TrinketsApi.getTrinketComponent(player).getStack(slotGroup, Slots.GLOVES);
 
-		if (stack.getItem() instanceof GloveItem) {
-			return (GloveItem) stack.getItem();
+		GloveCurioRenderer renderer = CurioRenderers.getGloveRenderer(stack);
+		if (renderer != null) {
+			renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil());
 		}
-
-		return null;
 	}
 }

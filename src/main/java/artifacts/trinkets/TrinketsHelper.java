@@ -1,7 +1,7 @@
 package artifacts.trinkets;
 
 import artifacts.init.Components;
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import dev.emi.trinkets.api.TrinketsApi;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package artifacts.components;
 
-import artifacts.item.trinket.HeliumFlamingoItem;
+import artifacts.item.curio.belt.HeliumFlamingoItem;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.entity.PlayerComponent;
 import net.fabricmc.api.EnvType;

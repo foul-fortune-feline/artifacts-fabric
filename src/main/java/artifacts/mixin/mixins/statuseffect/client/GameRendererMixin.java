@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.statuseffect.client;
 
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

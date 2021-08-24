@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.statuseffect.client;
 
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

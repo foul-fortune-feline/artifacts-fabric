@@ -5,7 +5,7 @@ import artifacts.components.ArtifactEnabledComponent;
 import artifacts.components.EntityKillTrackerComponent;
 import artifacts.components.SwimAbilityComponent;
 import artifacts.components.SyncedBooleanComponent;
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;

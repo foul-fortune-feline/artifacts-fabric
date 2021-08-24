@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.crossnecklace;
 
 import artifacts.init.Items;
-import artifacts.item.trinket.CrossNecklaceItem;
+import artifacts.item.curio.necklace.CrossNecklaceItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;

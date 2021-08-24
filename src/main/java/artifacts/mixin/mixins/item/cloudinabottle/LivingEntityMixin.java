@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.cloudinabottle;
 
 import artifacts.init.Items;
-import artifacts.item.trinket.CloudInABottleItem;
+import artifacts.item.curio.belt.CloudInABottleItem;
 import artifacts.trinkets.TrinketsHelper;
 import artifacts.mixin.extensions.LivingEntityExtensions;
 import net.fabricmc.api.EnvType;

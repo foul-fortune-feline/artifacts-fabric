@@ -1,8 +1,8 @@
 package artifacts.mixin.mixins.item.runningshoes;
 
 import artifacts.init.Items;
-import artifacts.item.trinket.RunningShoesItem;
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.feet.RunningShoesItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import net.minecraft.world.entity.LivingEntity;

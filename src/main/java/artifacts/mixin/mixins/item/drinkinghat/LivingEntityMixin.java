@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.item.drinkinghat;
 
-import artifacts.item.trinket.DrinkingHatItem;
+import artifacts.item.curio.head.DrinkingHatItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;

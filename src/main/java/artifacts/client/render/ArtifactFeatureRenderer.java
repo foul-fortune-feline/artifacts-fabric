@@ -1,6 +1,6 @@
 package artifacts.client.render;
 
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketSlots;
@@ -17,12 +17,10 @@ import net.minecraft.world.item.ItemStack;
  * Custom trinkets feature renderer, {@link dev.emi.trinkets.TrinketFeatureRenderer} is missing parameters
  */
 public class ArtifactFeatureRenderer extends RenderLayer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> {
-	private final RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> context;
 
 	public ArtifactFeatureRenderer(
 			RenderLayerParent<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> context) {
 		super(context);
-		this.context = context;
 	}
 
 	@Override
@@ -34,7 +32,7 @@ public class ArtifactFeatureRenderer extends RenderLayer<AbstractClientPlayer, P
 			matrices.pushPose();
 			ItemStack stack = comp.getInventory().getItem(i);
 			if (stack.getItem() instanceof TrinketArtifactItem) {
-				((TrinketArtifactItem) stack.getItem()).render(names.get(i), matrices, vertexConsumers, light, context.getModel(), player, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch);
+				((TrinketArtifactItem) stack.getItem()).render(names.get(i), matrices, vertexConsumers, light, player, limbAngle, limbDistance, tickDelta, animationProgress, headYaw, headPitch, stack);
 			}
 			matrices.popPose();
 		}

@@ -1,7 +1,8 @@
 package artifacts;
 
 import artifacts.client.render.ArtifactFeatureRenderer;
-import artifacts.client.render.MimicRenderer;
+import artifacts.client.render.entity.MimicRenderer;
+import artifacts.client.render.trinket.CurioRenderers;
 import artifacts.init.Entities;
 import artifacts.init.Items;
 import net.fabricmc.api.ClientModInitializer;
@@ -22,6 +23,8 @@ public class ArtifactsClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		CurioRenderers.setupCurioRenderers();
+
 		// Mimic EntityRenderer
 		EntityRendererRegistry.INSTANCE.register(Entities.MIMIC, (dispatcher, context) -> new MimicRenderer(dispatcher));
 

@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.flippers;
 
 import artifacts.init.Items;
-import artifacts.item.trinket.FlippersItem;
+import artifacts.item.curio.feet.FlippersItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.LivingEntity;
 import artifacts.mixin.extensions.LivingEntityExtensions;
