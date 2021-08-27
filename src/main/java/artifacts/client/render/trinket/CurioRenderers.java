@@ -1,7 +1,6 @@
 package artifacts.client.render.trinket;
 
 import artifacts.client.render.trinket.model.BeltModel;
-import artifacts.client.render.trinket.model.CloudInABottleModel;
 import artifacts.client.render.trinket.model.HandsModel;
 import artifacts.client.render.trinket.model.HeadModel;
 import artifacts.client.render.trinket.model.LegsModel;
@@ -59,7 +58,7 @@ public class CurioRenderers {
         //renderers.put(Items.CHARM_OF_SINKING, new SimpleCurioRenderer("charm_of_sinking", NecklaceModel.charmOfSinking()));
 
         // belt
-        renderers.put(Items.CLOUD_IN_A_BOTTLE, new BeltCurioRenderer("cloud_in_a_bottle", CloudInABottleModel.cloudInABottle()));
+        renderers.put(Items.CLOUD_IN_A_BOTTLE, new BeltCurioRenderer("cloud_in_a_bottle", BeltModel.cloudInABottle()));
         renderers.put(Items.OBSIDIAN_SKULL, new BeltCurioRenderer("obsidian_skull", BeltModel.obsidianSkull()));
         renderers.put(Items.ANTIDOTE_VESSEL, new BeltCurioRenderer("antidote_vessel", BeltModel.antidoteVessel()));
         renderers.put(Items.UNIVERSAL_ATTRACTOR, new BeltCurioRenderer("universal_attractor", BeltModel.universalAttractor()));
