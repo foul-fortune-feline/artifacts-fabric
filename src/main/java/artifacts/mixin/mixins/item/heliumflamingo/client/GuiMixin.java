@@ -24,6 +24,7 @@ public abstract class GuiMixin {
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;blit(Lcom/mojang/blaze3d/vertex/PoseStack;IIIIII)V"),
 			slice = @Slice(from = @At(value = "INVOKE_STRING", target = "Lnet/minecraft/util/profiling/ProfilerFiller;popPush(Ljava/lang/String;)V", args = {"ldc=air"})))
 	private void renderFlamingoAir(Gui inGameHud, PoseStack matrices, int x, int y, int u, int v, int width, int height) {
+		// TODO: only when equipped
 		matrices.pushPose();
 		this.minecraft.getTextureManager().bind(FLAMINGO_ICONS_TEXTURE);
 		GuiComponent.blit(matrices, x, y, u - 16, v - 18, width, height, 32, 16);

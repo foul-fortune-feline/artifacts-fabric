@@ -19,7 +19,7 @@ public class SimpleCurioRenderer implements CurioRenderer {
     private final HumanoidModel<LivingEntity> model;
 
     public SimpleCurioRenderer(String texturePath, HumanoidModel<LivingEntity> model) {
-        this(new ResourceLocation(Artifacts.MODID, String.format("textures/entity/curio/%s.png", texturePath)), model);
+        this(Artifacts.id(String.format("textures/entity/curio/%s.png", texturePath)), model);
     }
 
     public SimpleCurioRenderer(ResourceLocation texture, HumanoidModel<LivingEntity> model) {

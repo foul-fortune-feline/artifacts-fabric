@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -37,8 +36,8 @@ public class GloveCurioRenderer implements CurioRenderer {
     }
 
     public GloveCurioRenderer(String defaultTexturePath, String slimTexturePath, Function<Boolean, HandsModel> modelFactory) {
-        this.defaultTexture = new ResourceLocation(Artifacts.MODID, String.format("textures/entity/curio/%s.png", defaultTexturePath));
-        this.slimTexture = new ResourceLocation(Artifacts.MODID, String.format("textures/entity/curio/%s.png", slimTexturePath));
+        this.defaultTexture = Artifacts.id(String.format("textures/entity/curio/%s.png", defaultTexturePath));
+        this.slimTexture = Artifacts.id(String.format("textures/entity/curio/%s.png", slimTexturePath));
         this.defaultModel = modelFactory.apply(false);
         this.slimModel = modelFactory.apply(true);
     }

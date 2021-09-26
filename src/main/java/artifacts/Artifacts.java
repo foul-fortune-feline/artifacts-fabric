@@ -28,8 +28,8 @@ import java.util.Optional;
 
 public class Artifacts implements ModInitializer {
 
-	public static final String MODID = "artifacts";
-	public static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final String MOD_ID = "artifacts";
+	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.build(
 			id("item_group"),
 			() -> new ItemStack(Items.BUNNY_HOPPERS)
@@ -62,6 +62,7 @@ public class Artifacts implements ModInitializer {
 				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
 
 		// Loot table setup
+		ModLootConditions.register();
 		LootTableLoadingCallback.EVENT.register((resourceManager, manager, id, supplier, setter) -> LootTables.onLootTableLoad(id, supplier));
 
 		// Force loading init classes
@@ -87,6 +88,6 @@ public class Artifacts implements ModInitializer {
 	}
 
 	public static ResourceLocation id(String path) {
-		return new ResourceLocation(MODID, path);
+		return new ResourceLocation(MOD_ID, path);
 	}
 }
