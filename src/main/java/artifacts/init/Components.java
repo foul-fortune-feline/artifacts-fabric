@@ -14,6 +14,9 @@ import dev.onyxstudios.cca.api.v3.item.ItemComponentInitializer;
 import nerdhub.cardinal.components.api.util.RespawnCopyStrategy;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Components implements EntityComponentInitializer, ItemComponentInitializer {
 
@@ -40,6 +43,12 @@ public class Components implements EntityComponentInitializer, ItemComponentInit
 
 	@Override
 	public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
-		registry.registerFor(item -> item instanceof TrinketArtifactItem, ARTIFACT_ENABLED, ArtifactEnabledComponent::new);
+		// Non-dynamic component registration, might fix this issue: https://github.com/florensie/artifacts-fabric/issues/35
+		AtomicInteger registerCount = new AtomicInteger();
+		Registry.ITEM.stream().filter(item -> item instanceof TrinketArtifactItem).forEach(item -> {
+			registry.registerFor(item, ARTIFACT_ENABLED, ArtifactEnabledComponent::new);
+			registerCount.getAndIncrement();
+		});
+		Artifacts.LOGGER.info("[Artifacts] Registered item components for {} Artifacts", registerCount.get());
 	}
 }
