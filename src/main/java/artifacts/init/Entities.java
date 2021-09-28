@@ -12,7 +12,7 @@ import net.minecraft.world.entity.MobCategory;
 public class Entities {
 
 	public static final EntityType<MimicEntity> MIMIC = Registry.register( Registry.ENTITY_TYPE, Artifacts.id("mimic"),
-			FabricEntityTypeBuilder.create(MobCategory.MONSTER, MimicEntity::new)
+			FabricEntityTypeBuilder.create(MobCategory.MISC, MimicEntity::new)
 					.dimensions(EntityDimensions.fixed(14 / 16F, 14 / 16F))
 					.trackRangeBlocks(64)
 					.build());
