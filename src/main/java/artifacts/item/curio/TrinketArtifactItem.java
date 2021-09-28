@@ -89,7 +89,7 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	}
 
 	@Override
-	public final void tick(Player player, ItemStack stack) {
+	public void tick(Player player, ItemStack stack) {
 		if (TrinketsHelper.areEffectsEnabled(stack)) {
 			curioTick(player, stack);
 		}

@@ -33,7 +33,7 @@ public class CurioRenderers {
         if (!stack.isEmpty()) {
             CurioRenderer renderer = getRenderer(stack.getItem());
             if (renderer instanceof GloveCurioRenderer) {
-                return Optional.of(((GloveCurioRenderer) renderer));
+                return Optional.of((GloveCurioRenderer) renderer);
             }
         }
         return Optional.empty();

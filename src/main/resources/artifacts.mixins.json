@@ -17,7 +17,7 @@
     "event.EnchantmentHelperMixin",
     "event.LivingEntitiesMixin",
     "event.LivingEntityMixin",
-    "item.aquadashers.PlayerMixin",
+    "item.aquadashers.EntityMixin",
     "item.bunnyhoppers.LivingEntityMixin",
     "item.charmofsinking.EnchantmentHelperMixin",
     "item.cloudinabottle.LivingEntityMixin",
