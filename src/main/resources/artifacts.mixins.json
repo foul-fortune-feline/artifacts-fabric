@@ -45,6 +45,7 @@
     "item.umbrella.EntityMixin",
     "item.umbrella.LivingEntityMixin",
     "item.universalattractor.PlayerMixin",
+    "item.villagerhat.VillagerMixin",
     "item.whoopeecushion.EntityMixin",
     "statuseffect.LivingEntityMixin",
     "statuseffect.MobEffectInstanceMixin",

@@ -13,13 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Tweaked loot tables
+- The Villager Hat now directly increases villager reputation and stacks with Hero of the Village
 - Updated translations
   - Chinese
   - Russian
-  
+
 ### Fixed
 - Fix XP bonus not decreasing when killing entities of the same type with the Golden Hook
 - Fix cosmetic-only mode not working for Crystal Heart
+- Possibly fixed a hard to debug crash related to cardinal components
 
 ## [3.2.1] - 2021-05-10
 ### Fixed
