@@ -6,9 +6,19 @@ plugins {
 repositories {
     maven { url = "https://maven.terraformersmc.com" }
     maven { url = "https://maven.shedaniel.me/" }
-    maven { url = "https://maven.florens.be" }
+    maven {
+        url = "https://maven.florens.be"
+        content {
+            includeGroup "be.florens"
+        }
+    }
     maven { url = "https://maven.parchmentmc.org" }
-    maven { url = "https://www.cursemaven.com" }
+    maven {
+        url = "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
     maven { url = "https://jitpack.io" } // Leave this as lowest priority
 }
 

@@ -68,6 +68,6 @@ public final class TrinketsHelper {
 	public static boolean areEffectsEnabled(ItemStack stack) {
 		return Components.ARTIFACT_ENABLED.maybeGet(stack)
 				.map(BooleanComponent::get)
-				.orElse(false);
+				.orElse(true);
 	}
 }

@@ -1,6 +1,7 @@
 package artifacts.item.curio.belt;
 
 import artifacts.Artifacts;
+import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
 import artifacts.init.SoundEvents;
 import artifacts.item.curio.TrinketArtifactItem;
@@ -38,7 +39,10 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 	}
 
 	private static InteractionResult onPlayerSwim(Player player) {
-		return Components.SWIM_ABILITIES.get(player).isSwimming() ? InteractionResult.SUCCESS : InteractionResult.PASS;
+		return Components.SWIM_ABILITIES.maybeGet(player)
+				.filter(SwimAbilityComponent::isSwimming)
+				.map(swimAbilities -> InteractionResult.SUCCESS)
+				.orElse(InteractionResult.PASS);
 	}
 
 	private static void handleAirSwimmingPacket(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender packetSender) {

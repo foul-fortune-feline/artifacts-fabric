@@ -2,6 +2,7 @@ package artifacts.item.curio;
 
 import artifacts.Artifacts;
 import artifacts.client.render.trinket.CurioRenderers;
+import artifacts.components.BooleanComponent;
 import artifacts.events.PlayHurtSoundCallback;
 import artifacts.init.Components;
 import artifacts.item.ArtifactItem;
@@ -50,7 +51,9 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 		// Toggle artifact effects when sneak right-clicking
 		if (user.isShiftKeyDown()) {
 			ItemStack stack = user.getItemInHand(hand);
-			boolean enabled = Components.ARTIFACT_ENABLED.get(stack).invert();
+			boolean enabled = Components.ARTIFACT_ENABLED.maybeGet(stack)
+					.map(BooleanComponent::invert)
+					.orElse(true);
 
 			if (level.isClientSide()) {
 				// Show enabled/disabled message above hotbar

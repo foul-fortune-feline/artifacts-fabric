@@ -21,8 +21,10 @@ public class CharmOfSinkingItem extends TrinketArtifactItem {
     }
 
     private static InteractionResult onPlayerSwim(Player player) {
-        SwimAbilityComponent swimAbilities = Components.SWIM_ABILITIES.get(player);
-        return swimAbilities.isSinking() ? InteractionResult.FAIL : InteractionResult.PASS;
+        return Components.SWIM_ABILITIES.maybeGet(player)
+                .filter(SwimAbilityComponent::isSinking)
+                .map(swimAbilities -> InteractionResult.FAIL)
+                .orElse(InteractionResult.PASS);
     }
 
     @Override

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchantmentHelper.class)
-public class EnchantmentHelperMixin {
+public abstract class EnchantmentHelperMixin {
 
     @Inject(method = "hasAquaAffinity", at = @At("HEAD"), cancellable = true)
     private static void dontSlowMiningUnderwater(LivingEntity livingEntity, CallbackInfoReturnable<Boolean> info) {
