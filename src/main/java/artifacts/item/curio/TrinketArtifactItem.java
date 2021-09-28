@@ -15,13 +15,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -36,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -47,15 +46,15 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
+	public InteractionResultHolder<ItemStack> use(Level level, Player user, InteractionHand hand) {
 		// Toggle artifact effects when sneak right-clicking
 		if (user.isShiftKeyDown()) {
 			ItemStack stack = user.getItemInHand(hand);
-			Components.ARTIFACT_ENABLED.get(stack).invert();
+			boolean enabled = Components.ARTIFACT_ENABLED.get(stack).invert();
 
-			if (world.isClientSide()) {
+			if (level.isClientSide()) {
 				// Show enabled/disabled message above hotbar
-				ChatFormatting enabledColor = effectsEnabled(stack) ? ChatFormatting.GREEN : ChatFormatting.RED;
+				ChatFormatting enabledColor = enabled ? ChatFormatting.GREEN : ChatFormatting.RED;
 				Component enabledText = new TranslatableComponent(getEffectsEnabledLanguageKey(stack)).withStyle(enabledColor);
 				Minecraft.getInstance().gui.setOverlayMessage(enabledText, false);
 			}
@@ -76,17 +75,17 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 
 	@Override
 	public final void tick(Player player, ItemStack stack) {
-		if (effectsEnabled(stack)) {
-			effectTick(player, stack);
+		if (TrinketsHelper.areEffectsEnabled(stack)) {
+			curioTick(player, stack);
 		}
 	}
 
-	protected void effectTick(Player player, ItemStack stack) {
+	protected void curioTick(LivingEntity livingEntity, ItemStack stack) {
 	}
 
 	@Override
 	public final Multimap<Attribute, AttributeModifier> getTrinketModifiers(String group, String slot, UUID uuid, ItemStack stack) {
-		if (effectsEnabled(stack)) {
+		if (TrinketsHelper.areEffectsEnabled(stack)) {
 			return this.applyModifiers(group, slot, uuid, stack);
 		}
 		return HashMultimap.create();
@@ -146,10 +145,6 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 		}
 	}
 
-	private static boolean effectsEnabled(ItemStack stack) {
-		return Components.ARTIFACT_ENABLED.get(stack).get();
-	}
-
 	public static void addModifier(AttributeInstance instance, AttributeModifier modifier) {
 		if (!instance.hasModifier(modifier)) {
 			instance.addTransientModifier(modifier);
@@ -163,10 +158,11 @@ public abstract class TrinketArtifactItem extends ArtifactItem implements Trinke
 	}
 
 	private static String getEffectsEnabledLanguageKey(ItemStack stack) {
-		return effectsEnabled(stack) ? "artifacts.trinket.effectsenabled" : "artifacts.trinket.effectsdisabled";
+		return TrinketsHelper.areEffectsEnabled(stack) ? "artifacts.trinket.effectsenabled" : "artifacts.trinket.effectsdisabled";
 	}
 
 	// From Curios
+	// TODO: Java 17 Record
 	protected static final class SoundInfo {
 		final SoundEvent soundEvent;
 		final float volume;

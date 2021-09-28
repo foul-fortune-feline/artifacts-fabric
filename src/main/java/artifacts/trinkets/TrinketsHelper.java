@@ -1,16 +1,18 @@
 package artifacts.trinkets;
 
+import artifacts.components.BooleanComponent;
 import artifacts.init.Components;
 import artifacts.item.curio.TrinketArtifactItem;
 import dev.emi.trinkets.api.TrinketsApi;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 public final class TrinketsHelper {
 
@@ -54,12 +56,18 @@ public final class TrinketsHelper {
 				ItemStack stack = inventory.getItem(i);
 
 				if (!stack.isEmpty() && stack.getItem() instanceof TrinketArtifactItem
-						&& (Components.ARTIFACT_ENABLED.get(stack).get() || ignoreEffectsDisabled)) {
+						&& (areEffectsEnabled(stack) || ignoreEffectsDisabled)) {
 					stacks.add(stack);
 				}
 			}
 		}
 
 		return stacks;
+	}
+
+	public static boolean areEffectsEnabled(ItemStack stack) {
+		return Components.ARTIFACT_ENABLED.maybeGet(stack)
+				.map(BooleanComponent::get)
+				.orElse(false);
 	}
 }

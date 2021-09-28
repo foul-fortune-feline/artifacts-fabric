@@ -3,6 +3,7 @@ package artifacts.init;
 import artifacts.Artifacts;
 import artifacts.item.EverlastingFoodItem;
 import artifacts.item.UmbrellaItem;
+import artifacts.item.curio.WhoopeeCushionItem;
 import artifacts.item.curio.belt.AntidoteVesselItem;
 import artifacts.item.curio.belt.CloudInABottleItem;
 import artifacts.item.curio.belt.CrystalHeartItem;
@@ -15,13 +16,19 @@ import artifacts.item.curio.feet.FlippersItem;
 import artifacts.item.curio.feet.KittySlippersItem;
 import artifacts.item.curio.feet.RunningShoesItem;
 import artifacts.item.curio.feet.SteadfastSpikesItem;
-import artifacts.item.curio.hands.*;
+import artifacts.item.curio.hands.DiggingClawsItem;
+import artifacts.item.curio.hands.FeralClawsItem;
+import artifacts.item.curio.hands.FireGauntletItem;
+import artifacts.item.curio.hands.GoldenHookItem;
+import artifacts.item.curio.hands.PocketPistonItem;
+import artifacts.item.curio.hands.PowerGloveItem;
+import artifacts.item.curio.hands.VampiricGloveItem;
 import artifacts.item.curio.head.DrinkingHatItem;
 import artifacts.item.curio.head.NightVisionGogglesItem;
 import artifacts.item.curio.head.SnorkelItem;
 import artifacts.item.curio.head.SuperstitiousHatItem;
 import artifacts.item.curio.head.VillagerHatItem;
-import artifacts.item.curio.WhoopeeCushionItem;
+import artifacts.item.curio.necklace.CharmOfSinkingItem;
 import artifacts.item.curio.necklace.CrossNecklaceItem;
 import artifacts.item.curio.necklace.FlamePendantItem;
 import artifacts.item.curio.necklace.LuckyScarfItem;
@@ -63,6 +70,7 @@ public class Items {
 	public static final Item SHOCK_PENDANT = register("shock_pendant", new ShockPendantItem());
 	public static final Item FLAME_PENDANT = register("flame_pendant", new FlamePendantItem());
 	public static final Item THORN_PENDANT = register("thorn_pendant", new ThornPendantItem());
+	public static final Item CHARM_OF_SINKING = register("charm_of_sinking", new CharmOfSinkingItem());
 
 	// Belt
 	public static final Item OBSIDIAN_SKULL = register("obsidian_skull", new ObsidianSkullItem());

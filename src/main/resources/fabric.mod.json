@@ -64,9 +64,6 @@
       "artifacts:trinket_enabled",
       "artifacts:entity_kill_tracker",
       "artifacts:swim_abilities"
-    ],
-    "vanguard": {
-      "curse-project-id": "401236"
-    }
+    ]
   }
 }

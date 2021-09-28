@@ -55,7 +55,7 @@ public class CurioRenderers {
         renderers.put(Items.SHOCK_PENDANT, new SimpleCurioRenderer("pendant/shock_pendant", NecklaceModel.pendant()));
         renderers.put(Items.FLAME_PENDANT, new SimpleCurioRenderer("pendant/flame_pendant", NecklaceModel.pendant()));
         renderers.put(Items.THORN_PENDANT, new SimpleCurioRenderer("pendant/thorn_pendant", NecklaceModel.pendant()));
-        //renderers.put(Items.CHARM_OF_SINKING, new SimpleCurioRenderer("charm_of_sinking", NecklaceModel.charmOfSinking()));
+        renderers.put(Items.CHARM_OF_SINKING, new SimpleCurioRenderer("charm_of_sinking", NecklaceModel.charmOfSinking()));
 
         // belt
         renderers.put(Items.CLOUD_IN_A_BOTTLE, new BeltCurioRenderer("cloud_in_a_bottle", BeltModel.cloudInABottle()));

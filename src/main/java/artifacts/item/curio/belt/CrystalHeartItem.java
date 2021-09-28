@@ -1,6 +1,7 @@
 package artifacts.item.curio.belt;
 
 import artifacts.item.curio.TrinketArtifactItem;
+import artifacts.trinkets.TrinketsHelper;
 import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
 import net.minecraft.sounds.SoundEvents;
@@ -19,7 +20,7 @@ public class CrystalHeartItem extends TrinketArtifactItem {
 
 	@Override
 	public void onEquip(Player player, ItemStack stack) {
-		if (!player.level.isClientSide()) {
+		if (!player.level.isClientSide() && TrinketsHelper.areEffectsEnabled(stack)) {
 			AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
 			if (health != null && !health.hasModifier(HEALTH_BONUS)) {
 				health.addPermanentModifier(HEALTH_BONUS);

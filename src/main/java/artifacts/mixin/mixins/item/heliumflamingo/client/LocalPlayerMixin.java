@@ -1,6 +1,5 @@
 package artifacts.mixin.mixins.item.heliumflamingo.client;
 
-import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
 import artifacts.init.Items;
 import artifacts.trinkets.TrinketsHelper;
@@ -26,33 +25,34 @@ public abstract class LocalPlayerMixin {
 	private void handleAirSwimmingInput(CallbackInfo info) {
 		LocalPlayer self = (LocalPlayer) (Object) this;
 		boolean isSprintKeyDown = this.minecraft.options.keySprint.isDown();
-		SwimAbilityComponent swimAbilities = Components.SWIM_ABILITIES.get(self);
 
-		if (!swimAbilities.isSwimming()) {
-			if (self.isOnGround()) {
-				hasTouchedGround = true;
-			} else if (!swimAbilities.isSwimming()
-					&& self.getAirSupply() > 0
-					&& TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self)
-					&& (self.isSwimming()
-					|| isSprintKeyDown
-					&& !wasSprintKeyDown
-					&& !wasSprintingOnGround
-					&& hasTouchedGround
-					&& !self.isOnGround()
-					&& (!self.isInWater() || swimAbilities.isSinking())
-					&& !self.isFallFlying()
-					&& !self.abilities.flying
-					&& !self.isPassenger())) {
-				swimAbilities.setSwimming(true);
+		Components.SWIM_ABILITIES.maybeGet(self).ifPresent(swimAbilities -> {
+			if (!swimAbilities.isSwimming()) {
+				if (self.isOnGround()) {
+					hasTouchedGround = true;
+				} else if (!swimAbilities.isSwimming()
+						&& swimAbilities.getSwimTime() >= 0
+						&& TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self)
+						&& (self.isSwimming()
+						|| isSprintKeyDown
+						&& !wasSprintKeyDown
+						&& !wasSprintingOnGround
+						&& hasTouchedGround
+						&& !self.isOnGround()
+						&& (!self.isInWater() || swimAbilities.isSinking())
+						&& !self.isFallFlying()
+						&& !self.abilities.flying
+						&& !self.isPassenger())) {
+					swimAbilities.setSwimming(true);
+					swimAbilities.syncSwimming();
+					hasTouchedGround = false;
+				}
+			} else if (self.abilities.flying) {
+				swimAbilities.setSwimming(false);
 				swimAbilities.syncSwimming();
-				hasTouchedGround = false;
+				hasTouchedGround = true;
 			}
-		} else if (self.abilities.flying) {
-			swimAbilities.setSwimming(false);
-			swimAbilities.syncSwimming();
-			hasTouchedGround = true;
-		}
+		});
 
 		wasSprintKeyDown = isSprintKeyDown;
 		if (!isSprintKeyDown) {

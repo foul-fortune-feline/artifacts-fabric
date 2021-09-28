@@ -1,7 +1,7 @@
 package artifacts.init;
 
 import artifacts.Artifacts;
-import artifacts.components.ArtifactEnabledComponent;
+import artifacts.components.BooleanComponent;
 import artifacts.components.EntityKillTrackerComponent;
 import artifacts.components.SwimAbilityComponent;
 import artifacts.components.SyncedBooleanComponent;
@@ -19,8 +19,8 @@ public class Components implements EntityComponentInitializer, ItemComponentInit
 
 	public static final ComponentKey<SyncedBooleanComponent> DROPPED_ITEM_ENTITY =
 			ComponentRegistryV3.INSTANCE.getOrCreate(Artifacts.id("dropped_item_entity"), SyncedBooleanComponent.class);
-	public static final ComponentKey<ArtifactEnabledComponent> ARTIFACT_ENABLED = // TODO: can this id be changed?
-			ComponentRegistryV3.INSTANCE.getOrCreate(Artifacts.id("trinket_enabled"), ArtifactEnabledComponent.class);
+	public static final ComponentKey<BooleanComponent> ARTIFACT_ENABLED =
+			ComponentRegistryV3.INSTANCE.getOrCreate(Artifacts.id("trinket_enabled"), BooleanComponent.class);
 	public static final ComponentKey<SwimAbilityComponent> SWIM_ABILITIES =
 			ComponentRegistryV3.INSTANCE.getOrCreate(Artifacts.id("swim_abilities"), SwimAbilityComponent.class);
 	public static final ComponentKey<EntityKillTrackerComponent> ENTITY_KILL_TRACKER =
@@ -29,12 +29,13 @@ public class Components implements EntityComponentInitializer, ItemComponentInit
 	@Override
 	public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
 		registry.registerFor(ItemEntity.class, DROPPED_ITEM_ENTITY, entity -> new SyncedBooleanComponent("wasDropped"));
-		registry.registerForPlayers(SWIM_ABILITIES, entity -> new SwimAbilityComponent(), RespawnCopyStrategy.LOSSLESS_ONLY);
+		registry.registerForPlayers(SWIM_ABILITIES, SwimAbilityComponent::new, RespawnCopyStrategy.LOSSLESS_ONLY);
 		registry.registerForPlayers(ENTITY_KILL_TRACKER, entity -> new EntityKillTrackerComponent(), RespawnCopyStrategy.LOSSLESS_ONLY);
 	}
 
 	@Override
 	public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
-		registry.registerFor(item -> item instanceof TrinketArtifactItem, ARTIFACT_ENABLED, ArtifactEnabledComponent::new);
+		registry.registerFor(item -> item instanceof TrinketArtifactItem, ARTIFACT_ENABLED,
+				stack -> new BooleanComponent("isEnabled", true));
 	}
 }

@@ -1,9 +1,9 @@
 package artifacts.mixin.mixins.item.heliumflamingo;
 
-import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
 import artifacts.init.Items;
 import artifacts.init.SoundEvents;
+import artifacts.item.curio.belt.HeliumFlamingoItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
@@ -18,31 +18,35 @@ public abstract class PlayerMixin {
 	@Inject(method = "tick", at = @At("TAIL"))
 	private void stopAirSwimming(CallbackInfo info) {
 		Player self = (Player) (Object) this;
-		SwimAbilityComponent swimAbilities = Components.SWIM_ABILITIES.get(self);
+		int maxFlightTime = HeliumFlamingoItem.MAX_FLIGHT_TIME;
+		int rechargeTime = HeliumFlamingoItem.RECHARGE_TIME;
 
-		if (swimAbilities.isSwimming()) {
-			if (!TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self) || self.getAirSupply() <= 0
-					|| self.isInWater() && !self.isSwimming() && !swimAbilities.isSinking()
-					|| (!self.isInWater() || swimAbilities.isSinking()) && self.isOnGround()) {
-				swimAbilities.setSwimming(false);
-				if (!self.isOnGround() && !self.isInWater()) {
-					self.playSound(SoundEvents.POP, 0.5F, 0.75F);
+		Components.SWIM_ABILITIES.maybeGet(self).ifPresent(swimAbilities -> {
+			if (swimAbilities.isSwimming()) {
+				if (!TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self)
+						|| swimAbilities.getSwimTime() > maxFlightTime
+						|| self.isInWater() && !self.isSwimming() && !swimAbilities.isSinking()
+						|| (!self.isInWater() || swimAbilities.isSinking()) && self.isOnGround()) {
+					swimAbilities.setSwimming(false);
+					if (!self.isOnGround() && !self.isInWater()) {
+						self.playSound(SoundEvents.POP, 0.5F, 0.75F);
+					}
 				}
-			}
 
-			if (TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self) && !self.isEyeInFluid(FluidTags.WATER)) {
-				// TODO: durability
-				/*if (self.age % 20 == 0) {
-					damageEquippedStacks(self);
-				}*/
+				if (TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self) && !self.isEyeInFluid(FluidTags.WATER)) {
+					// TODO: durability
+					/*if (self.age % 20 == 0) {
+						damageEquippedStacks(self);
+					}*/
 
-				// TODO: config
-				if (!self.abilities.invulnerable /*&& ModConfig.server.heliumFlamingo.airSupplyDrainRate.get() > 0*/) {
-					// compensate for bonus air
-					int airSupply = self.getAirSupply() - 4;
-					self.setAirSupply(airSupply - 2 /*ModConfig.server.heliumFlamingo.airSupplyDrainRate.get()*/);
+					//noinspection ConstantConditions TODO: config
+					if (!self.abilities.invulnerable && maxFlightTime > 0) {
+						swimAbilities.setSwimTime(swimAbilities.getSwimTime() + 1);
+					}
 				}
+			} else if (swimAbilities.getSwimTime() < 0) {
+				swimAbilities.setSwimTime(swimAbilities.getSwimTime() < -rechargeTime ? -rechargeTime : swimAbilities.getSwimTime() + 1);
 			}
-		}
+		});
 	}
 }

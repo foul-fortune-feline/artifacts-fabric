@@ -7,15 +7,15 @@ import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public class AntidoteVesselItem extends TrinketArtifactItem {
 
 	@Override
-	protected void effectTick(Player player, ItemStack stack) {
+	protected void curioTick(LivingEntity livingEntity, ItemStack stack) {
 		// Reduce duration of all negative status effects to 80
-		player.getActiveEffectsMap().forEach((effect, instance) -> {
+		livingEntity.getActiveEffectsMap().forEach((effect, instance) -> {
 			if (!effect.isInstantenous() && ((MobEffectAccessor) effect).getCategory() != MobEffectCategory.BENEFICIAL && instance.getDuration() > 80) {
 				((MobEffectInstanceExtensions) instance).artifacts$setDuration(80);
 			}

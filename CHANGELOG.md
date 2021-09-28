@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Helium Flamingo artifact
 - Aqua Dashers artifact
+- Charm of Sinking artifact
+- Configurable Artifact rarity
 
 ### Changed
 - Tweaked loot tables
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   
 ### Fixed
 - Fix XP bonus not decreasing when killing entities of the same type with the Golden Hook
+- Fix cosmetic-only mode not working for Crystal Heart
 
 ## [3.2.1] - 2021-05-10
 ### Fixed

@@ -12,6 +12,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
+import java.util.Collections;
 import java.util.List;
 
 public abstract class ArtifactItem extends Item {
@@ -37,15 +39,14 @@ public abstract class ArtifactItem extends Item {
 	}
 
 	protected void appendTooltipDescription(List<Component> tooltip, String translKey) {
-		// FIXME: this will break with missing arguments
-		String[] lines = String.format(Language.getInstance().getOrDefault(translKey), getTooltipDescriptionArguments()).split("\n");
+		String[] lines = String.format(Language.getInstance().getOrDefault(translKey), getTooltipDescriptionArguments().toArray()).split("\n");
 
 		for (String line : lines) {
 			tooltip.add(new TextComponent(line).withStyle(ChatFormatting.GRAY));
 		}
 	}
 
-	protected Object[] getTooltipDescriptionArguments() {
-		return new Object[0];
+	protected List<String> getTooltipDescriptionArguments() {
+		return Collections.emptyList();
 	}
 }
