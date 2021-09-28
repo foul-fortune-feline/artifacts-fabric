@@ -1,19 +1,17 @@
 package artifacts.item.curio.hands;
 
 import artifacts.item.curio.TrinketArtifactItem;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
+import artifacts.trinkets.Slot;
 import net.minecraft.sounds.SoundEvents;
 
 public class PocketPistonItem extends TrinketArtifactItem {
 
-	@Override
-	protected SoundInfo getEquipSound() {
-		return new SoundInfo(SoundEvents.PISTON_EXTEND);
+	public PocketPistonItem() {
+		super(Slot.GLOVE_MAINHAND, Slot.GLOVE_OFFHAND);
 	}
 
 	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return (group.equals(SlotGroups.HAND) || group.equals(SlotGroups.OFFHAND)) && slot.equals(Slots.GLOVES);
+	protected SoundInfo getEquipSound() {
+		return new SoundInfo(SoundEvents.PISTON_EXTEND);
 	}
 }

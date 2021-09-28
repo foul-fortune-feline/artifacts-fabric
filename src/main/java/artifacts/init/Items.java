@@ -3,6 +3,7 @@ package artifacts.init;
 import artifacts.Artifacts;
 import artifacts.item.EverlastingFoodItem;
 import artifacts.item.UmbrellaItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.item.curio.WhoopeeCushionItem;
 import artifacts.item.curio.belt.AntidoteVesselItem;
 import artifacts.item.curio.belt.CloudInABottleItem;
@@ -12,30 +13,26 @@ import artifacts.item.curio.belt.ObsidianSkullItem;
 import artifacts.item.curio.belt.UniversalAttractorItem;
 import artifacts.item.curio.feet.AquaDashersItem;
 import artifacts.item.curio.feet.BunnyHoppersItem;
-import artifacts.item.curio.feet.FlippersItem;
 import artifacts.item.curio.feet.KittySlippersItem;
 import artifacts.item.curio.feet.RunningShoesItem;
 import artifacts.item.curio.feet.SteadfastSpikesItem;
 import artifacts.item.curio.hands.DiggingClawsItem;
 import artifacts.item.curio.hands.FeralClawsItem;
 import artifacts.item.curio.hands.FireGauntletItem;
-import artifacts.item.curio.hands.GoldenHookItem;
 import artifacts.item.curio.hands.PocketPistonItem;
 import artifacts.item.curio.hands.PowerGloveItem;
 import artifacts.item.curio.hands.VampiricGloveItem;
 import artifacts.item.curio.head.DrinkingHatItem;
 import artifacts.item.curio.head.NightVisionGogglesItem;
 import artifacts.item.curio.head.SnorkelItem;
-import artifacts.item.curio.head.SuperstitiousHatItem;
-import artifacts.item.curio.head.VillagerHatItem;
 import artifacts.item.curio.necklace.CharmOfSinkingItem;
 import artifacts.item.curio.necklace.CrossNecklaceItem;
 import artifacts.item.curio.necklace.FlamePendantItem;
-import artifacts.item.curio.necklace.LuckyScarfItem;
 import artifacts.item.curio.necklace.PanicNecklaceItem;
 import artifacts.item.curio.necklace.ScarfOfInvisibilityItem;
 import artifacts.item.curio.necklace.ShockPendantItem;
 import artifacts.item.curio.necklace.ThornPendantItem;
+import artifacts.trinkets.Slot;
 import net.minecraft.core.Registry;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.CreativeModeTab;
@@ -59,11 +56,11 @@ public class Items {
 	public static final Item NOVELTY_DRINKING_HAT = register("novelty_drinking_hat", new DrinkingHatItem());
 	public static final Item SNORKEL = register("snorkel", new SnorkelItem());
 	public static final Item NIGHT_VISION_GOGGLES = register("night_vision_goggles", new NightVisionGogglesItem());
-	public static final Item VILLAGER_HAT = register("villager_hat", new VillagerHatItem());
-	public static final Item SUPERSTITIOUS_HAT = register("superstitious_hat", new SuperstitiousHatItem());
+	public static final Item VILLAGER_HAT = register("villager_hat", new TrinketArtifactItem(Slot.HAT));
+	public static final Item SUPERSTITIOUS_HAT = register("superstitious_hat", new TrinketArtifactItem(Slot.HAT));
 
 	// Necklace
-	public static final Item LUCKY_SCARF = register("lucky_scarf", new LuckyScarfItem());
+	public static final Item LUCKY_SCARF = register("lucky_scarf", new TrinketArtifactItem(Slot.NECKLACE));
 	public static final Item SCARF_OF_INVISIBILITY = register("scarf_of_invisibility", new ScarfOfInvisibilityItem());
 	public static final Item CROSS_NECKLACE = register("cross_necklace", new CrossNecklaceItem());
 	public static final Item PANIC_NECKLACE = register("panic_necklace", new PanicNecklaceItem());
@@ -87,7 +84,7 @@ public class Items {
 	public static final Item FIRE_GAUNTLET = register("fire_gauntlet", new FireGauntletItem());
 	public static final Item POCKET_PISTON = register("pocket_piston", new PocketPistonItem());
 	public static final Item VAMPIRIC_GLOVE = register("vampiric_glove", new VampiricGloveItem());
-	public static final Item GOLDEN_HOOK = register("golden_hook", new GoldenHookItem());
+	public static final Item GOLDEN_HOOK = register("golden_hook", new TrinketArtifactItem(Slot.GLOVE_MAINHAND, Slot.GLOVE_OFFHAND));
 
 	// Feet
 	public static final Item AQUA_DASHERS = register("aqua_dashers", new AquaDashersItem());
@@ -95,7 +92,7 @@ public class Items {
 	public static final Item KITTY_SLIPPERS = register("kitty_slippers", new KittySlippersItem());
 	public static final Item RUNNING_SHOES = register("running_shoes", new RunningShoesItem());
 	public static final Item STEADFAST_SPIKES = register("steadfast_spikes", new SteadfastSpikesItem());
-	public static final Item FLIPPERS = register("flippers", new FlippersItem());
+	public static final Item FLIPPERS = register("flippers", new TrinketArtifactItem(Slot.SHOES));
 
 	private static Item register(String name, Item item) {
 		return Registry.register(Registry.ITEM, Artifacts.id(name), item);

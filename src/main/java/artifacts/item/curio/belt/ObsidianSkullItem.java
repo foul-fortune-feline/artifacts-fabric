@@ -1,16 +1,14 @@
 package artifacts.item.curio.belt;
 
 import artifacts.item.curio.TrinketArtifactItem;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
+import artifacts.trinkets.Slot;
 import net.minecraft.sounds.SoundEvents;
 
 public class ObsidianSkullItem extends TrinketArtifactItem {
 
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.LEGS) && slot.equals(Slots.BELT);
-	}
+    public ObsidianSkullItem() {
+        super(Slot.BELT);
+    }
 
 	@Override
 	protected SoundInfo getEquipSound() {

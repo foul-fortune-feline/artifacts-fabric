@@ -4,10 +4,9 @@ package artifacts.item.curio.necklace;
 import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
 import artifacts.item.curio.TrinketArtifactItem;
+import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 public class CharmOfSinkingItem extends TrinketArtifactItem {
 
     public CharmOfSinkingItem() {
-        super();
+        super(Slot.NECKLACE);
         PlayerSwimCallback.EVENT.register(CharmOfSinkingItem::onPlayerSwim);
     }
 
@@ -45,10 +44,5 @@ public class CharmOfSinkingItem extends TrinketArtifactItem {
                 Components.SWIM_ABILITIES.sync(player);
             });
         }
-    }
-
-    @Override
-    public boolean canWearInSlot(String group, String slot) {
-        return group.equals(SlotGroups.CHEST) && slot.equals(Slots.NECKLACE);
     }
 }

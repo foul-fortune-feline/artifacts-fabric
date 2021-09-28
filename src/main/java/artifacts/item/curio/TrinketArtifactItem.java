@@ -6,9 +6,11 @@ import artifacts.components.BooleanComponent;
 import artifacts.events.PlayHurtSoundCallback;
 import artifacts.init.Components;
 import artifacts.item.ArtifactItem;
+import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.trinkets.api.Trinket;
 import dev.emi.trinkets.api.TrinketItem;
@@ -37,13 +39,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
-public abstract class TrinketArtifactItem extends ArtifactItem implements Trinket {
+public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 
-	public TrinketArtifactItem() {
+	private final Set<Slot> equippableSlots;
+
+	public TrinketArtifactItem(Slot... equippableSlots) {
+		this.equippableSlots = Sets.newHashSet(equippableSlots);
 		DispenserBlock.registerBehavior(this, TrinketItem.TRINKET_DISPENSER_BEHAVIOR);
 		PlayHurtSoundCallback.EVENT.register(this::playExtraHurtSound);
+	}
+
+	@Override
+	public boolean canWearInSlot(String group, String slot) {
+		return equippableSlots.stream().anyMatch(equippableSlots ->
+				equippableSlots.getSlotId().equals(slot) && equippableSlots.getGroupId().equals(group));
 	}
 
 	@Override

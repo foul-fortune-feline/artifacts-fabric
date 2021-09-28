@@ -3,8 +3,7 @@ package artifacts.item.curio.belt;
 import artifacts.Artifacts;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.extensions.LivingEntityExtensions;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
+import artifacts.trinkets.Slot;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,7 +19,8 @@ public class CloudInABottleItem extends TrinketArtifactItem {
 	public static final ResourceLocation C2S_DOUBLE_JUMPED_ID = Artifacts.id("c2s_double_jumped");
 
 	public CloudInABottleItem() {
-		ServerPlayNetworking.registerGlobalReceiver(C2S_DOUBLE_JUMPED_ID, CloudInABottleItem::handleDoubleJumpPacket);
+        super(Slot.BELT);
+        ServerPlayNetworking.registerGlobalReceiver(C2S_DOUBLE_JUMPED_ID, CloudInABottleItem::handleDoubleJumpPacket);
 	}
 
 	private static void handleDoubleJumpPacket(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) {
@@ -40,10 +40,5 @@ public class CloudInABottleItem extends TrinketArtifactItem {
 	@Override
 	protected SoundInfo getEquipSound() {
 		return new SoundInfo(SoundEvents.BOTTLE_FILL_DRAGONBREATH);
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.LEGS) && slot.equals(Slots.BELT);
 	}
 }

@@ -18,8 +18,8 @@ import java.util.List;
 
 public abstract class ArtifactItem extends Item {
 
-	public ArtifactItem(Properties settings) {
-		super(settings.stacksTo(1).tab(Artifacts.ITEM_GROUP).rarity(Rarity.RARE).fireResistant());
+	public ArtifactItem(Properties properties) {
+		super(properties.stacksTo(1).tab(Artifacts.ITEM_GROUP).rarity(Rarity.RARE).fireResistant());
 	}
 
 	public ArtifactItem() {

@@ -5,9 +5,8 @@ import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
 import artifacts.init.SoundEvents;
 import artifacts.item.curio.TrinketArtifactItem;
+import artifacts.trinkets.Slot;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.Minecraft;
@@ -33,7 +32,7 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 	public static final int RECHARGE_TIME = 300;
 
 	public HeliumFlamingoItem() {
-		super();
+		super(Slot.BELT);
 		PlayerSwimCallback.EVENT.register(HeliumFlamingoItem::onPlayerSwim);
 		ServerPlayNetworking.registerGlobalReceiver(C2S_AIR_SWIMMING_ID, HeliumFlamingoItem::handleAirSwimmingPacket);
 	}
@@ -49,11 +48,6 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 		boolean shouldSwim = buf.readBoolean();
 		server.execute(() -> Components.SWIM_ABILITIES.maybeGet(player)
 				.ifPresent(swimAbilities -> swimAbilities.setSwimming(shouldSwim)));
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.LEGS) && slot.equals(Slots.BELT);
 	}
 
 	@Override

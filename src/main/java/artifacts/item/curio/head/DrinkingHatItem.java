@@ -3,8 +3,7 @@ package artifacts.item.curio.head;
 import artifacts.Artifacts;
 import artifacts.init.Items;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slots;
-import dev.emi.trinkets.api.SlotGroups;
+import artifacts.trinkets.Slot;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +14,11 @@ import java.util.List;
 
 public class DrinkingHatItem extends TrinketArtifactItem {
 
-	@Override
+    public DrinkingHatItem() {
+        super(Slot.HAT);
+    }
+
+    @Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
 		if (Artifacts.CONFIG.general.showTooltips) {
 			if (this == Items.NOVELTY_DRINKING_HAT) {
@@ -29,10 +32,5 @@ public class DrinkingHatItem extends TrinketArtifactItem {
 	@Override
 	protected SoundInfo getEquipSound() {
 		return new SoundInfo(SoundEvents.BOTTLE_FILL);
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.HEAD) && slot.equals(Slots.HAT);
 	}
 }

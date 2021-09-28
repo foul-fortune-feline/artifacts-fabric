@@ -1,10 +1,9 @@
 package artifacts.mixin.mixins.item.flippers;
 
 import artifacts.init.Items;
-import artifacts.item.curio.feet.FlippersItem;
+import artifacts.mixin.extensions.LivingEntityExtensions;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.LivingEntity;
-import artifacts.mixin.extensions.LivingEntityExtensions;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,6 +35,6 @@ public abstract class LivingEntityMixin implements LivingEntityExtensions {
 	@Override
 	public double artifacts$getIncreasedSwimSpeed(double speed) {
 		return TrinketsHelper.isEquipped(Items.FLIPPERS, (LivingEntity) (Object) this)
-				? speed * FlippersItem.SWIM_SPEED_MULTIPLIER : speed;
+				? speed * 2 : speed;
 	}
 }

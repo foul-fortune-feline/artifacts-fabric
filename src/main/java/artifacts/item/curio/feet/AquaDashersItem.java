@@ -3,10 +3,9 @@ package artifacts.item.curio.feet;
 import artifacts.init.Components;
 import artifacts.init.Items;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slots;
+import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.LivingFluidCollisionCallback;
-import dev.emi.trinkets.api.SlotGroups;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,8 +15,9 @@ import net.minecraft.world.level.material.FluidState;
 public class AquaDashersItem extends TrinketArtifactItem {
 
 	public AquaDashersItem() {
+		super(Slot.SHOES);
 		//noinspection UnstableApiUsage
-		LivingFluidCollisionCallback.EVENT.register(AquaDashersItem::onFluidCollision);
+        LivingFluidCollisionCallback.EVENT.register(AquaDashersItem::onFluidCollision);
 	}
 
 	private static boolean onFluidCollision(LivingEntity entity, FluidState fluidState) {
@@ -40,10 +40,5 @@ public class AquaDashersItem extends TrinketArtifactItem {
 						&& !swimAbilities.isWet()
 						&& !swimAbilities.isSwimming())
 				.orElse(false);
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.FEET) && slot.equals(Slots.SHOES);
 	}
 }

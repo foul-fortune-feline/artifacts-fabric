@@ -1,9 +1,8 @@
 package artifacts.item.curio.belt;
 
 import artifacts.item.curio.TrinketArtifactItem;
+import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -18,7 +17,11 @@ public class CrystalHeartItem extends TrinketArtifactItem {
 	private static final AttributeModifier HEALTH_BONUS = new AttributeModifier(UUID.fromString("99fa0537-90b9-481a-bc76-4650987faba3"),
 			"artifacts:crystal_heart_health_bonus", 10, AttributeModifier.Operation.ADDITION);
 
-	@Override
+    public CrystalHeartItem() {
+        super(Slot.BELT);
+    }
+
+    @Override
 	public void onEquip(Player player, ItemStack stack) {
 		if (!player.level.isClientSide() && TrinketsHelper.areEffectsEnabled(stack)) {
 			AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
@@ -41,11 +44,6 @@ public class CrystalHeartItem extends TrinketArtifactItem {
 				}
 			}
 		}
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.LEGS) && slot.equals(Slots.BELT);
 	}
 
 	@Override

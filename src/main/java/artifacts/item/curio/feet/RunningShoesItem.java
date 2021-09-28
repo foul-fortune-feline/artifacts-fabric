@@ -1,9 +1,8 @@
 package artifacts.item.curio.feet;
 
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slots;
+import artifacts.trinkets.Slot;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
-import dev.emi.trinkets.api.SlotGroups;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -19,7 +18,11 @@ public class RunningShoesItem extends TrinketArtifactItem {
 	public static final AttributeModifier STEP_HEIGHT_MODIFIER = new AttributeModifier(UUID.fromString("7e97cede-a343-411f-b465-14cdf6df3666"),
 			"artifacts:running_shoes_step_height", .5, AttributeModifier.Operation.ADDITION);
 
-	@Override
+    public RunningShoesItem() {
+        super(Slot.SHOES);
+    }
+
+    @Override
 	@SuppressWarnings("ConstantConditions")
 	public void onUnequip(Player player, ItemStack stack) {
 		AttributeInstance movementSpeed = player.getAttribute(Attributes.MOVEMENT_SPEED);
@@ -27,10 +30,5 @@ public class RunningShoesItem extends TrinketArtifactItem {
 
 		removeModifier(movementSpeed, SPEED_BOOST_MODIFIER);
 		removeModifier(stepHeight, STEP_HEIGHT_MODIFIER);
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.FEET) && slot.equals(Slots.SHOES);
 	}
 }

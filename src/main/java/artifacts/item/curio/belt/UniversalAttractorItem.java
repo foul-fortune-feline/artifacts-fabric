@@ -3,8 +3,7 @@ package artifacts.item.curio.belt;
 import artifacts.init.Components;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.mixins.accessors.ItemEntityAccessor;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
+import artifacts.trinkets.Slot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +14,11 @@ import java.util.List;
 
 public class UniversalAttractorItem extends TrinketArtifactItem {
 
-	@Override
+    public UniversalAttractorItem() {
+        super(Slot.BELT);
+    }
+
+    @Override
 	// Magnet logic from Botania, see https://github.com/Vazkii/Botania
 	protected void curioTick(LivingEntity livingEntity, ItemStack stack) {
 		Vec3 playerPos = livingEntity.position().add(0, 0.75, 0);
@@ -39,10 +42,5 @@ public class UniversalAttractorItem extends TrinketArtifactItem {
 				item.setDeltaMovement(motion.scale(0.6));
 			}
 		}
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return group.equals(SlotGroups.LEGS) && slot.equals(Slots.BELT);
 	}
 }
