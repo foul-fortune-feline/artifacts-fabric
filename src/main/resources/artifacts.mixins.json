@@ -37,7 +37,6 @@
     "item.kittyslippers.NearestAttackableTargetGoalMixin",
     "item.luckyscarf.EnchantmentHelperMixin",
     "item.luckyscarf.ServerPlayerGameModeMixin",
-    "item.obsidianskull.EntityMixin",
     "item.pendant.EntityMixin",
     "item.pocketpiston.EnchantmentHelperMixin",
     "item.runningshoes.LivingEntityMixin",

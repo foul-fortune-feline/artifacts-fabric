@@ -1,8 +1,9 @@
 package artifacts.mixin.mixins.item.runningshoes;
 
+import artifacts.Artifacts;
 import artifacts.init.Items;
-import artifacts.item.curio.feet.RunningShoesItem;
 import artifacts.item.curio.TrinketArtifactItem;
+import artifacts.item.curio.feet.RunningShoesItem;
 import artifacts.trinkets.TrinketsHelper;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +27,11 @@ public abstract class LivingEntityMixin {
 
 		AttributeInstance movementSpeed = self.getAttribute(Attributes.MOVEMENT_SPEED);
 		AttributeInstance stepHeight = self.getAttribute(StepHeightEntityAttributeMain.STEP_HEIGHT);
+
+		if (movementSpeed == null || stepHeight == null) {
+			Artifacts.LOGGER.debug("Entity {} missing entity attribute(s)", this);
+			return;
+		}
 
 		if (sprinting) {
 			TrinketArtifactItem.addModifier(movementSpeed, RunningShoesItem.SPEED_BOOST_MODIFIER);

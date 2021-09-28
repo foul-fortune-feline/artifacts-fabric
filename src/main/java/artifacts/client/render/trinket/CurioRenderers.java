@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class CurioRenderers {
 
@@ -28,14 +29,14 @@ public class CurioRenderers {
         return renderers.get(curio);
     }
 
-    public static GloveCurioRenderer getGloveRenderer(ItemStack stack) {
+    public static Optional<GloveCurioRenderer> getGloveRenderer(ItemStack stack) {
         if (!stack.isEmpty()) {
             CurioRenderer renderer = getRenderer(stack.getItem());
             if (renderer instanceof GloveCurioRenderer) {
-                return ((GloveCurioRenderer) renderer);
+                return Optional.of(((GloveCurioRenderer) renderer));
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public static void setupCurioRenderers() {

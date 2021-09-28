@@ -2,7 +2,6 @@ package artifacts.mixin.mixins.client.render;
 
 import artifacts.Artifacts;
 import artifacts.client.render.trinket.CurioRenderers;
-import artifacts.client.render.trinket.renderer.GloveCurioRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.trinkets.api.SlotGroups;
 import dev.emi.trinkets.api.Slots;
@@ -42,9 +41,7 @@ public abstract class PlayerRendererMixin {
 		String slotGroup = hand == InteractionHand.MAIN_HAND ? SlotGroups.HAND : SlotGroups.OFFHAND;
 		ItemStack stack = TrinketsApi.getTrinketComponent(player).getStack(slotGroup, Slots.GLOVES);
 
-		GloveCurioRenderer renderer = CurioRenderers.getGloveRenderer(stack);
-		if (renderer != null) {
-			renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil());
-		}
+		CurioRenderers.getGloveRenderer(stack).ifPresent(renderer ->
+				renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil()));
 	}
 }
