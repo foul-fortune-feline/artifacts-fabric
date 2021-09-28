@@ -1,5 +1,7 @@
 package artifacts.mixin.mixins.item.umbrella;
 
+import artifacts.components.SwimAbilityComponent;
+import artifacts.init.Components;
 import artifacts.item.UmbrellaItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffect;
@@ -25,11 +27,12 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@ModifyVariable(method = "travel", ordinal = 0, name = "d", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/world/level/Level;getFluidState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/material/FluidState;"))
 	private double changeGravity(double gravity) {
-		boolean isFalling = this.getDeltaMovement().y <= 0.0D;
+		boolean isFalling = !this.isOnGround() && this.getDeltaMovement().y <= 0.0D;
 		boolean heldMainHand = UmbrellaItem.getHeldStatusForHand((LivingEntity) (Object) this, InteractionHand.MAIN_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
 		boolean heldOffHand = UmbrellaItem.getHeldStatusForHand((LivingEntity) (Object) this, InteractionHand.OFF_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
+		boolean isInWater = this.isInWater() && !Components.SWIM_ABILITIES.maybeGet(this).map(SwimAbilityComponent::isSinking).orElse(false);
 
-		if ((heldMainHand || heldOffHand) && isFalling && !this.hasEffect(MobEffects.SLOW_FALLING) && !isInWater()) {
+		if ((heldMainHand || heldOffHand) && isFalling && !isInWater && !this.hasEffect(MobEffects.SLOW_FALLING) ) {
 			gravity -= 0.07;
 			this.fallDistance = 0;
 		}
