@@ -1,9 +1,9 @@
 package artifacts.item.curio.belt;
 
 import artifacts.Artifacts;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.extensions.LivingEntityExtensions;
-import artifacts.trinkets.Slot;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.particles.ParticleTypes;

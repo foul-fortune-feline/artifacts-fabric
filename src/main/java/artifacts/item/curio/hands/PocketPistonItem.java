@@ -1,7 +1,7 @@
 package artifacts.item.curio.hands;
 
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import net.minecraft.sounds.SoundEvents;
 
 public class PocketPistonItem extends TrinketArtifactItem {

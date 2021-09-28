@@ -2,8 +2,8 @@ package artifacts.item.curio.necklace;
 
 import artifacts.events.LivingEntityHurtCallback;
 import artifacts.init.Items;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;

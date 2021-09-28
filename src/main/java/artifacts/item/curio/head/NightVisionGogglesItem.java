@@ -1,7 +1,7 @@
 package artifacts.item.curio.head;
 
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 

@@ -3,8 +3,8 @@ package artifacts.item.curio.necklace;
 
 import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
 import net.minecraft.server.level.ServerPlayer;

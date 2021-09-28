@@ -1,7 +1,7 @@
 package artifacts.item.curio.feet;
 
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

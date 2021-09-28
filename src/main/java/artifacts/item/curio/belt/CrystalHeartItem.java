@@ -1,7 +1,7 @@
 package artifacts.item.curio.belt;
 
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;

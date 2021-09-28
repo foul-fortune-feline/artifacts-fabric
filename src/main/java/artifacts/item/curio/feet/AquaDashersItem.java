@@ -2,8 +2,8 @@ package artifacts.item.curio.feet;
 
 import artifacts.init.Components;
 import artifacts.init.Items;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.LivingFluidCollisionCallback;
 import net.minecraft.tags.FluidTags;

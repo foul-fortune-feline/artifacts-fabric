@@ -1,9 +1,9 @@
 package artifacts.item.curio.belt;
 
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.extensions.MobEffectInstanceExtensions;
 import artifacts.mixin.mixins.accessors.MobEffectAccessor;
-import artifacts.trinkets.Slot;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;

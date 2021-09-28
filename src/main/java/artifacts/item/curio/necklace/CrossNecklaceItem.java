@@ -1,7 +1,7 @@
 package artifacts.item.curio.necklace;
 
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import net.minecraft.sounds.SoundEvents;
 
 public class CrossNecklaceItem extends TrinketArtifactItem {

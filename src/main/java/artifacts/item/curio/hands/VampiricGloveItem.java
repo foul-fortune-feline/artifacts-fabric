@@ -2,8 +2,8 @@ package artifacts.item.curio.hands;
 
 import artifacts.events.LivingEntityDamagedCallback;
 import artifacts.init.Items;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;

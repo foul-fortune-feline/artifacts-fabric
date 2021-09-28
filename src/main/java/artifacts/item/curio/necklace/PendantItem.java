@@ -1,8 +1,8 @@
 package artifacts.item.curio.necklace;
 
 import artifacts.events.LivingEntityAttackedCallback;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import net.minecraft.sounds.SoundEvents;
 
 public abstract class PendantItem extends TrinketArtifactItem {

@@ -3,10 +3,13 @@ package artifacts;
 import artifacts.compat.HaemaCompat;
 import artifacts.compat.OriginsCompat;
 import artifacts.config.ModConfig;
-import artifacts.init.*;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
-import dev.emi.trinkets.api.TrinketSlots;
+import artifacts.init.Features;
+import artifacts.init.Items;
+import artifacts.init.LootTables;
+import artifacts.init.ModLootConditions;
+import artifacts.init.Slot;
+import artifacts.init.SoundEvents;
+import artifacts.init.ToolHandlers;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -48,18 +51,7 @@ public class Artifacts implements ModInitializer {
 				PartitioningSerializer.wrap(Toml4jConfigSerializer::new)).getConfig();
 
 		// Trinkets setup
-		TrinketSlots.addSlot(SlotGroups.LEGS, Slots.BELT,
-				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_belt.png"));
-		TrinketSlots.addSlot(SlotGroups.CHEST, Slots.NECKLACE,
-				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_necklace.png"));
-		TrinketSlots.addSlot(SlotGroups.HEAD, artifacts.trinkets.Slots.HAT,
-				id("textures/item/empty_trinket_slot_hat.png"));
-		TrinketSlots.addSlot(SlotGroups.FEET, artifacts.trinkets.Slots.SHOES,
-				id("textures/item/empty_trinket_slot_shoes.png"));
-		TrinketSlots.addSlot(SlotGroups.HAND, Slots.GLOVES,
-				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
-		TrinketSlots.addSlot(SlotGroups.OFFHAND, Slots.GLOVES,
-				new ResourceLocation("trinkets", "textures/item/empty_trinket_slot_gloves.png"));
+		Slot.registerAll();
 
 		// Loot table setup
 		ModLootConditions.register();

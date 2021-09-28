@@ -1,8 +1,8 @@
 package artifacts.item.curio.feet;
 
 import artifacts.Artifacts;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.Slot;
 import com.google.common.collect.Multimap;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;

@@ -32,7 +32,6 @@ import artifacts.item.curio.necklace.PanicNecklaceItem;
 import artifacts.item.curio.necklace.ScarfOfInvisibilityItem;
 import artifacts.item.curio.necklace.ShockPendantItem;
 import artifacts.item.curio.necklace.ThornPendantItem;
-import artifacts.trinkets.Slot;
 import net.minecraft.core.Registry;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.CreativeModeTab;

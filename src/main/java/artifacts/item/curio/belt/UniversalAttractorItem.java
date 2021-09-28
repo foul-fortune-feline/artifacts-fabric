@@ -1,9 +1,9 @@
 package artifacts.item.curio.belt;
 
 import artifacts.init.Components;
+import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.mixins.accessors.ItemEntityAccessor;
-import artifacts.trinkets.Slot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
