@@ -12,7 +12,7 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 16
       - name: Build
         uses: eskatos/gradle-command-action@v1
         with:
@@ -44,4 +44,4 @@ jobs:
           display_name: ${{ steps.changelog_reader.outputs.version }} for Minecraft 1.16.3-1.16.5
           game_versions: 1.16.3,1.16.4,1.16.5,fabric
           release_type: release
-          relations: fabric-api:requiredDependency,trinkets-fabric:requiredDependency,cardinal-components:embeddedLibrary,cloth-config:requiredDependency,modmenu:optionalDependency
+          relations: fabric-api:requiredDependency,trinkets-fabric:requiredDependency,expandability:embeddedLibrary,cardinal-components:embeddedLibrary,cloth-config:requiredDependency,modmenu:optionalDependency

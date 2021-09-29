@@ -4,14 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [4.0.0] - 2021-09-29
 ### Added
 - Helium Flamingo artifact
+- Aqua Dashers artifact
+- Charm of Sinking artifact
+- Configurable Artifact rarity
 
 ### Changed
-- Updated translations
-  - Chinese
-  - Russian
+- Tweaked loot tables
+- The Villager Hat now directly increases villager reputation and stacks with Hero of the Village
+- Tweaked some textures and models
+- Updated several translations
+
+### Fixed
+- Fix XP bonus not decreasing when killing entities of the same type with the Golden Hook
+- Fix cosmetic-only mode not working for Crystal Heart
+- Fix Obsidian Skull not working on hot surfaces like magma blocks
+- Fix mimics counting towards the hostile mob spawn cap
+- Fixed subtitles
+- Possibly fixed a hard to debug crash related to cardinal components registering
 
 ## [3.2.1] - 2021-05-10
 ### Fixed
@@ -114,7 +126,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crash when using the pendants
 
 ## 2.0.1 - 2020-11-29
-## Fixed
+### Fixed
 - Server side crash when toggling artifact effects
 - Whoopee Cushion effect always active
 

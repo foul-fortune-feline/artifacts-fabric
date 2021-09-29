@@ -4,16 +4,15 @@ import artifacts.mixin.extensions.DefaultedRegistryExtensions;
 import com.google.common.collect.EvictingQueue;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.entity.PlayerComponent;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.nbt.NbtString;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntityType;
 
 @SuppressWarnings("UnstableApiUsage")
 public class EntityKillTrackerComponent implements PlayerComponent<Component> {
@@ -35,10 +34,10 @@ public class EntityKillTrackerComponent implements PlayerComponent<Component> {
 	}
 
 	@Override
-	public void readFromNbt(NbtCompound tag) {
+	public void readFromNbt(CompoundTag tag) {
 		if (tag.contains("lastKilledEntities")) {
-			this.lastKilledEntityTypes = tag.getList("lastKilledEnitties", 8).stream()
-					.map(entityTypeId -> Registry.ENTITY_TYPE.getOrEmpty(new Identifier(entityTypeId.asString())))
+			this.lastKilledEntityTypes = tag.getList("lastKilledEntities", 8).stream()
+					.map(entityTypeId -> Registry.ENTITY_TYPE.getOptional(new ResourceLocation(entityTypeId.getAsString())))
 					.filter(Optional::isPresent)
 					.map(Optional::get)
 					.collect(Collectors.toCollection(() -> EvictingQueue.create(MAX_SIZE)));
@@ -46,13 +45,13 @@ public class EntityKillTrackerComponent implements PlayerComponent<Component> {
 	}
 
 	@Override
-	public void writeToNbt(NbtCompound tag) {
+	public void writeToNbt(CompoundTag tag) {
 		//noinspection unchecked
 		tag.put("lastKilledEntities", this.lastKilledEntityTypes.stream()
 				.map(((DefaultedRegistryExtensions<EntityType<?>>) Registry.ENTITY_TYPE)::artifacts$getIdOrEmpty)
+				//.flatMap(Optional::stream) TODO: Java 9+
 				.filter(Optional::isPresent)
-				.map(Object::toString)
-				.map(NbtString::of)
-				.collect(Collectors.toCollection(NbtList::new)));
+				.map(identifier -> StringTag.valueOf(identifier.get().toString()))
+				.collect(Collectors.toCollection(ListTag::new)));
 	}
 }

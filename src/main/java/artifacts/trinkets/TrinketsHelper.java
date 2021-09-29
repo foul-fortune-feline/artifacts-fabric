@@ -1,13 +1,14 @@
 package artifacts.trinkets;
 
+import artifacts.components.BooleanComponent;
 import artifacts.init.Components;
-import artifacts.item.trinket.TrinketArtifactItem;
+import artifacts.item.curio.TrinketArtifactItem;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +49,25 @@ public final class TrinketsHelper {
 		List<ItemStack> stacks = new ArrayList<>();
 
 		// LivingEntity not currently supported by Trinkets
-		if (entity instanceof PlayerEntity) {
-			Inventory inventory = TrinketsApi.getTrinketsInventory((PlayerEntity) entity);
+		if (entity instanceof Player) {
+			Container inventory = TrinketsApi.getTrinketsInventory((Player) entity);
 
-			for (int i = 0; i < inventory.size(); i++) {
-				ItemStack stack = inventory.getStack(i);
+			for (int i = 0; i < inventory.getContainerSize(); i++) {
+				ItemStack stack = inventory.getItem(i);
 
 				if (!stack.isEmpty() && stack.getItem() instanceof TrinketArtifactItem
-						&& (Components.ARTIFACT_ENABLED.get(stack).get() || ignoreEffectsDisabled)) {
+						&& (areEffectsEnabled(stack) || ignoreEffectsDisabled)) {
 					stacks.add(stack);
 				}
 			}
 		}
 
 		return stacks;
+	}
+
+	public static boolean areEffectsEnabled(ItemStack stack) {
+		return Components.ARTIFACT_ENABLED.maybeGet(stack)
+				.map(BooleanComponent::get)
+				.orElse(true);
 	}
 }

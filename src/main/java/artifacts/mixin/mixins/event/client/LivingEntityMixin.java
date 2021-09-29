@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.event.client;
 
 import artifacts.events.PlayHurtSoundCallback;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,10 +15,10 @@ public abstract class LivingEntityMixin {
 	protected abstract float getSoundVolume();
 
 	@Shadow
-	protected abstract float getSoundPitch();
+	protected abstract float getVoicePitch();
 
-	@Inject(method = "handleStatus", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getHurtSound(Lnet/minecraft/entity/damage/DamageSource;)Lnet/minecraft/sound/SoundEvent;"))
+	@Inject(method = "handleEntityEvent", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)Lnet/minecraft/sounds/SoundEvent;"))
 	private void onClientPlayHurtSound(byte status, CallbackInfo info) {
-		PlayHurtSoundCallback.EVENT.invoker().play((LivingEntity) (Object) this, this.getSoundVolume(), this.getSoundPitch());
+		PlayHurtSoundCallback.EVENT.invoker().play((LivingEntity) (Object) this, this.getSoundVolume(), this.getVoicePitch());
 	}
 }

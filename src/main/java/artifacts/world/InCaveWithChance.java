@@ -2,31 +2,30 @@ package artifacts.world;
 
 import artifacts.Artifacts;
 import com.mojang.serialization.Codec;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig;
-import net.minecraft.world.gen.decorator.Decorator;
-import net.minecraft.world.gen.decorator.DecoratorContext;
-
 import java.util.Random;
 import java.util.stream.Stream;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.placement.DecorationContext;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 
-public class InCaveWithChance extends Decorator<ChanceDecoratorConfig> {
+public class InCaveWithChance extends FeatureDecorator<ChanceDecoratorConfiguration> {
 
-	public InCaveWithChance(Codec<ChanceDecoratorConfig> codec) {
+	public InCaveWithChance(Codec<ChanceDecoratorConfiguration> codec) {
 		super(codec);
 	}
 
 	@Override
-	public Stream<BlockPos> getPositions(DecoratorContext context, Random random, ChanceDecoratorConfig config, BlockPos pos) {
+	public Stream<BlockPos> getPositions(DecorationContext context, Random random, ChanceDecoratorConfiguration config, BlockPos pos) {
 		if (random.nextInt(100) < config.chance) {
 			int x = random.nextInt(16);
 			int z = random.nextInt(16);
 			pos = new BlockPos(pos.getX() + x, Artifacts.CONFIG.worldgen.campsite.minY, pos.getZ() + z);
 			while (pos.getY() <= Artifacts.CONFIG.worldgen.campsite.maxY) {
-				if (context.getBlockState(pos).isAir() && context.getBlockState(pos.down()).getMaterial().blocksMovement()) {
+				if (context.getBlockState(pos).isAir() && context.getBlockState(pos.below()).getMaterial().blocksMotion()) {
 					return Stream.of(pos);
 				}
-				pos = pos.up();
+				pos = pos.above();
 			}
 		}
 		return Stream.empty();

@@ -2,7 +2,7 @@ package artifacts.events;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.world.entity.LivingEntity;
 
 /**
  * Callback for playing hurt sound on both server and client for a LivingEntity

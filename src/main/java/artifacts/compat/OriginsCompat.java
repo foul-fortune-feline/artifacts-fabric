@@ -7,9 +7,8 @@ import io.github.apace100.origins.power.factory.condition.ConditionFactory;
 import io.github.apace100.origins.registry.ModRegistries;
 import io.github.apace100.origins.util.SerializableData;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import java.util.function.BiFunction;
 
 public class OriginsCompat implements Runnable {
@@ -19,9 +18,9 @@ public class OriginsCompat implements Runnable {
 		RegistryEntryAddedCallback.event(ModRegistries.ENTITY_CONDITION).register(OriginsCompat::playerConditionAdded);
 	}
 
-	private static void playerConditionAdded(int rawId, Identifier id, ConditionFactory<LivingEntity> conditionFactory) {
+	private static void playerConditionAdded(int rawId, ResourceLocation id, ConditionFactory<LivingEntity> conditionFactory) {
 		// Held-up umbrella blocks origins:exposed_to_sun condition
-		if (conditionFactory.getSerializerId().equals(new Identifier(Origins.MODID, "exposed_to_sun"))) {
+		if (conditionFactory.getSerializerId().equals(new ResourceLocation(Origins.MODID, "exposed_to_sun"))) {
 			//noinspection unchecked
 			ConditionFactoryAccessor<LivingEntity> conditionAccess = (ConditionFactoryAccessor<LivingEntity>) conditionFactory;
 			BiFunction<SerializableData.Instance, LivingEntity, Boolean> origCondition = conditionAccess.getCondition();

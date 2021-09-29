@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.accessors;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface ItemStackAccessor {
 
 	// Get around ItemStack.getHolder returning null if the stack is empty
+	// TODO: this is horrible, should add our own field instead
 	@Accessor
-	Entity getHolder();
+	Entity getEntityRepresentation();
 }

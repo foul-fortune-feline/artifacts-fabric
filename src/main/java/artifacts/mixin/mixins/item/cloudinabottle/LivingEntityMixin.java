@@ -1,20 +1,20 @@
 package artifacts.mixin.mixins.item.cloudinabottle;
 
 import artifacts.init.Items;
-import artifacts.item.trinket.CloudInABottleItem;
+import artifacts.item.curio.belt.CloudInABottleItem;
 import artifacts.trinkets.TrinketsHelper;
 import artifacts.mixin.extensions.LivingEntityExtensions;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -37,15 +37,15 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 	@Unique
 	private boolean hasDoubleJumped = false;
 
-	public LivingEntityMixin(EntityType<?> type, World world) {
+	public LivingEntityMixin(EntityType<?> type, Level world) {
 		super(type, world);
 	}
 
 	@Shadow
-	protected abstract void jump();
+	protected abstract void jumpFromGround();
 
 	@Shadow
-	public abstract boolean isClimbing();
+	public abstract boolean onClimbable();
 
 	@Unique
 	@Override
@@ -53,19 +53,19 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 		// Call the vanilla jump method
 		// We modify the behaviour of this method in multiple places if artifacts$isDoubleJumping is true
 		this.isDoubleJumping = true;
-		this.jump();
+		this.jumpFromGround();
 
 		// Play jump sound
 		LivingEntity self = (LivingEntity) (Object) this;
 		SoundEvent jumpSound = TrinketsHelper.isEquipped(Items.WHOOPEE_CUSHION, self) ?
-				artifacts.init.SoundEvents.FART : SoundEvents.BLOCK_WOOL_FALL;
+				artifacts.init.SoundEvents.FART : SoundEvents.WOOL_FALL;
 		this.playSound(jumpSound, 1, 0.9F + self.getRandom().nextFloat() * 0.2F);
 
 		// Reset fall distance for fall damage
 		this.fallDistance = 0;
 
 		// Send double jump packet to server if we're on the client
-		if (this.world.isClient) {
+		if (this.level.isClientSide) {
 			sendDoubleJumpPacket();
 		}
 
@@ -79,7 +79,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 		ClientPlayNetworking.send(CloudInABottleItem.C2S_DOUBLE_JUMPED_ID, PacketByteBufs.empty());
 	}
 
-	@ModifyVariable(method = "handleFallDamage", ordinal = 0, at = @At("HEAD"))
+	@ModifyVariable(method = "causeFallDamage", ordinal = 0, at = @At("HEAD"))
 	private float reduceFallDistance(float fallDistance) {
 		// FIXME: this probably also works if we didn't double jump, intended?
 		if (TrinketsHelper.isEquipped(Items.CLOUD_IN_A_BOTTLE, (LivingEntity) (Object) this)) {
@@ -90,24 +90,24 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	@Inject(method = "tickMovement", at = @At("HEAD"))
+	@Inject(method = "aiStep", at = @At("HEAD"))
 	private void invokeDoubleJump(CallbackInfo info) {
 		LivingEntity self = (LivingEntity) (Object) this;
 		jumpWasReleased |= !this.jumping;
 
-		if ((this.isOnGround() || this.isClimbing()) && !this.isTouchingWater()) {
+		if ((this.isOnGround() || this.onClimbable()) && !this.isInWater()) {
 			this.hasDoubleJumped = false;
 		}
 
-		boolean flying = self instanceof PlayerEntity && ((PlayerEntity) self).abilities.flying;
-		if (this.jumping && this.jumpWasReleased && !this.isTouchingWater() && !this.isOnGround() && !this.hasVehicle()
+		boolean flying = self instanceof Player && ((Player) self).abilities.flying;
+		if (this.jumping && this.jumpWasReleased && !this.isInWater() && !this.isOnGround() && !this.isPassenger()
 				&& !this.hasDoubleJumped && !flying && TrinketsHelper.isEquipped(Items.CLOUD_IN_A_BOTTLE, self)) {
 			this.artifacts$doubleJump();
 			this.hasDoubleJumped = true;
 		}
 	}
 
-	@Inject(method = "jump", at = @At("RETURN"))
+	@Inject(method = "jumpFromGround", at = @At("RETURN"))
 	private void setJumpReleased(CallbackInfo info) {
 		this.jumpWasReleased = false;
 	}
@@ -115,19 +115,19 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 	// The next three injectors modify the behaviour of the vanilla jump
 	// method if the artifacts$isDoubleJumping field is set to true
 
-	@Inject(method = "getJumpVelocity", cancellable = true, at = @At("HEAD"))
+	@Inject(method = "getJumpPower", cancellable = true, at = @At("HEAD"))
 	private void increaseBaseDoubleJumpVelocity(CallbackInfoReturnable<Float> info) {
 		if (this.isDoubleJumping) {
 			info.setReturnValue(0.5f);
 		}
 	}
 
-	@ModifyArg(method = "jump", index = 1, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setVelocity(DDD)V"))
+	@ModifyArg(method = "jumpFromGround", index = 1, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setDeltaMovement(DDD)V"))
 	private double sprintingDoubleJumpUpwardVelocityMultiplier(double y) {
 		return this.isDoubleJumping && this.isSprinting() ? y * 1.5 : y;
 	}
 
-	@ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.2f))
+	@ModifyConstant(method = "jumpFromGround", constant = @Constant(floatValue = 0.2f))
 	private float sprintingDoubleJumpHorizontalVelocityMultiplier(float multiplier) {
 		return this.isDoubleJumping ? 0.5f : multiplier;
 	}

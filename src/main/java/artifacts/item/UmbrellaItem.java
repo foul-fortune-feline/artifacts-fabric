@@ -1,20 +1,20 @@
 package artifacts.item;
 
 import artifacts.init.Items;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DispenserBlock;
 
 public class UmbrellaItem extends ArtifactItem {
 
 	public UmbrellaItem() {
-		DispenserBlock.registerBehavior(this, ArmorItem.DISPENSER_BEHAVIOR);
+		DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
 	}
 
     /* TODO: wait for fapi/lib
@@ -23,13 +23,13 @@ public class UmbrellaItem extends ArtifactItem {
         return true;
     }*/
 
-	public static HeldStatus getHeldStatusForHand(LivingEntity entity, Hand hand) {
-		if (entity.getStackInHand(hand).getItem() != Items.UMBRELLA) {
+	public static HeldStatus getHeldStatusForHand(LivingEntity entity, InteractionHand hand) {
+		if (entity.getItemInHand(hand).getItem() != Items.UMBRELLA) {
 			return HeldStatus.NONE;
 		}
 
-		if (entity.isUsingItem() && entity.getActiveHand() == hand && !entity.getActiveItem().isEmpty()
-				&& entity.getActiveItem().getUseAction() == UseAction.BLOCK) {
+		if (entity.isUsingItem() && entity.getUsedItemHand() == hand && !entity.getUseItem().isEmpty()
+				&& entity.getUseItem().getUseAnimation() == UseAnim.BLOCK) {
 			return HeldStatus.BLOCKING;
 		}
 
@@ -37,7 +37,7 @@ public class UmbrellaItem extends ArtifactItem {
 	}
 
 	public static boolean isHeldUpInEitherHand(LivingEntity entity) {
-		for (Hand hand : Hand.values()) {
+		for (InteractionHand hand : InteractionHand.values()) {
 			if (getHeldStatusForHand(entity, hand) == HeldStatus.HELD_UP) {
 				return true;
 			}
@@ -47,20 +47,20 @@ public class UmbrellaItem extends ArtifactItem {
 	}
 
 	@Override
-	public UseAction getUseAction(ItemStack stack) {
-		return UseAction.BLOCK;
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return UseAnim.BLOCK;
 	}
 
 	@Override
-	public int getMaxUseTime(ItemStack stack) {
+	public int getUseDuration(ItemStack stack) {
 		return 72000;
 	}
 
 	@Override
-	public TypedActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand) {
-		ItemStack itemstack = player.getStackInHand(hand);
-		player.setCurrentHand(hand);
-		return TypedActionResult.consume(itemstack);
+	public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+		ItemStack itemstack = player.getItemInHand(hand);
+		player.startUsingItem(hand);
+		return InteractionResultHolder.consume(itemstack);
 	}
 
 	public enum HeldStatus {

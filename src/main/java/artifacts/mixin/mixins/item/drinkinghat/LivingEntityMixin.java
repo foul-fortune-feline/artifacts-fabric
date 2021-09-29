@@ -1,11 +1,11 @@
 package artifacts.mixin.mixins.item.drinkinghat;
 
-import artifacts.item.trinket.DrinkingHatItem;
+import artifacts.item.curio.head.DrinkingHatItem;
 import artifacts.trinkets.TrinketsHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.UseAction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LivingEntityMixin {
 
 	@Shadow
-	protected int itemUseTimeLeft;
+	protected int useItemRemaining;
 
 	@Shadow
-	public abstract ItemStack getActiveItem();
+	public abstract ItemStack getUseItem();
 
-	@Inject(method = "setCurrentHand", at = @At(value = "INVOKE_ASSIGN", shift = At.Shift.AFTER, target = "Lnet/minecraft/item/ItemStack;getMaxUseTime()I"))
-	private void decreaseDrinkingDuration(Hand hand, CallbackInfo info) {
+	@Inject(method = "startUsingItem", at = @At(value = "INVOKE_ASSIGN", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/item/ItemStack;getUseDuration()I"))
+	private void decreaseDrinkingDuration(InteractionHand hand, CallbackInfo info) {
 		if (TrinketsHelper.isEquipped(stack -> stack.getItem() instanceof DrinkingHatItem, (LivingEntity) (Object) this)) {
-			if (this.getActiveItem().getUseAction() == UseAction.DRINK) {
-				this.itemUseTimeLeft /= 4;
+			if (this.getUseItem().getUseAnimation() == UseAnim.DRINK) {
+				this.useItemRemaining /= 4;
 			}
 		}
 	}

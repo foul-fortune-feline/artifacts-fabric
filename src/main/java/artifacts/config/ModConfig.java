@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 
-@Config(name = Artifacts.MODID)
+@Config(name = Artifacts.MOD_ID)
 @Config.Gui.Background("minecraft:textures/block/mossy_cobblestone.png")
 public final class ModConfig extends PartitioningSerializer.GlobalData {
 	@ConfigEntry.Category("general")
@@ -40,6 +40,8 @@ public final class ModConfig extends PartitioningSerializer.GlobalData {
 
 	@Config(name = "worldgen")
 	public static final class WorldGen implements ConfigData {
+		@ConfigEntry.Gui.Tooltip(count = 6)
+		public float artifactRarity = 1;
 		@ConfigEntry.Gui.CollapsibleObject(startExpanded = true)
 		public Campsite campsite = new Campsite();
 

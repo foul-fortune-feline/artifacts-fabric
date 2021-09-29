@@ -3,10 +3,10 @@ package artifacts.mixin.mixins.item.diggingclaws;
 import artifacts.init.ToolHandlers;
 import artifacts.mixin.mixins.accessors.ItemStackAccessor;
 import net.fabricmc.fabric.impl.tool.attribute.ToolManagerImpl;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,7 +26,7 @@ public abstract class ToolmanagerImplMixin {
 	@ModifyVariable(method = "handleIsEffectiveOnIgnoresVanilla", argsOnly = true, at = @At("HEAD"))
 	private static LivingEntity getUserFromStackHolder(LivingEntity user, BlockState state, ItemStack stack) {
 		//noinspection ConstantConditions
-		Entity holder = ((ItemStackAccessor) (Object) stack).getHolder();
+		Entity holder = ((ItemStackAccessor) (Object) stack).getEntityRepresentation();
 		return user == null && holder instanceof LivingEntity ? (LivingEntity) holder : null;
 	}
 
@@ -37,7 +37,7 @@ public abstract class ToolmanagerImplMixin {
 	private static void invokeNonToolsHandlers(BlockState state, ItemStack stack, LivingEntity user, boolean vanillaResult, CallbackInfoReturnable<Boolean> info) {
 		if (!info.getReturnValueZ()) {
 			info.setReturnValue(ToolHandlers.NON_TOOLS_HANDLER.invoker()
-					.isEffectiveOn(null, state, stack, user).isAccepted());
+					.isEffectiveOn(null, state, stack, user).consumesAction());
 		}
 	}
 }

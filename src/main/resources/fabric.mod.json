@@ -40,10 +40,11 @@
   ],
 
   "depends": {
+    "minecraft": ">=1.16.2",
     "fabricloader": ">=0.7.4",
     "fabric": ">=0.28.0",
-    "minecraft": ">=1.16.2",
     "trinkets": "*",
+    "expandability": ">=2.0.0",
     "cardinal-components-base": ">=2.7.5",
     "cardinal-components-entity": ">=2.7.5",
     "cardinal-components-item": ">=2.7.5",
@@ -63,9 +64,6 @@
       "artifacts:trinket_enabled",
       "artifacts:entity_kill_tracker",
       "artifacts:swim_abilities"
-    ],
-    "vanguard": {
-      "curse-project-id": "401236"
-    }
+    ]
   }
 }
