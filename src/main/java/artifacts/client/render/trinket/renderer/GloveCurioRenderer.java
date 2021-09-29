@@ -5,7 +5,9 @@ import artifacts.client.render.TrinketRenderHelper;
 import artifacts.client.render.trinket.model.HandsModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.emi.trinkets.api.SlotGroups;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.client.TrinketRenderer;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -13,6 +15,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
 
-public class GloveCurioRenderer implements CurioRenderer {
+public class GloveCurioRenderer implements TrinketRenderer {
 
     private final ResourceLocation defaultTexture;
     private final ResourceLocation slimTexture;
@@ -51,14 +54,15 @@ public class GloveCurioRenderer implements CurioRenderer {
     }
 
     protected static boolean hasSlimArms(Entity entity) {
-        return entity instanceof AbstractClientPlayer && ((AbstractClientPlayer) entity).getModelName().equals("slim");
+        return entity instanceof AbstractClientPlayer player && player.getModelName().equals("slim");
     }
 
     @Override
-    public final void render(String slot, int index, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch, ItemStack stack) {
+    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch) {
         boolean hasSlimArms = hasSlimArms(entity);
         HandsModel model = getModel(hasSlimArms);
-        HumanoidArm handSide = slot.split(":")[0].equals(SlotGroups.HAND) ? entity.getMainArm() : entity.getMainArm().getOpposite();
+        InteractionHand hand = slotReference.index() % 2 == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+        HumanoidArm handSide = hand == InteractionHand.MAIN_HAND ? entity.getMainArm() : entity.getMainArm().getOpposite();
 
         model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);

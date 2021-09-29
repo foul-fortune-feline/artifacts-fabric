@@ -5,6 +5,9 @@ import artifacts.client.render.TrinketRenderHelper;
 import artifacts.client.render.trinket.model.BeltModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.client.TrinketRenderer;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -13,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-public class BeltCurioRenderer implements CurioRenderer {
+public class BeltCurioRenderer implements TrinketRenderer {
 
     private final ResourceLocation texture;
     private final BeltModel model;
@@ -36,12 +39,12 @@ public class BeltCurioRenderer implements CurioRenderer {
     }
 
     @Override
-    public final void render(String slot, int index, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch, ItemStack stack) {
+    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch) {
         BeltModel model = getModel();
 
         model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
-        model.setCharmPosition(index);
+        model.setCharmPosition(slotReference.index()); // TODO: not sure if this index is correct
         TrinketRenderHelper.followBodyRotations(entity, model);
         render(matrixStack, buffer, light, stack.hasFoil());
     }

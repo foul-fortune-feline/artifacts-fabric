@@ -2,7 +2,6 @@ package artifacts.item.curio.head;
 
 import artifacts.Artifacts;
 import artifacts.init.Items;
-import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -13,10 +12,6 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class DrinkingHatItem extends TrinketArtifactItem {
-
-    public DrinkingHatItem() {
-        super(Slot.HAT);
-    }
 
     @Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
@@ -30,7 +25,7 @@ public class DrinkingHatItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.BOTTLE_FILL);
 	}
 }

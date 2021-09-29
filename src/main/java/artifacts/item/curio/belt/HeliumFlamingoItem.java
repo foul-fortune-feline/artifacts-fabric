@@ -3,7 +3,6 @@ package artifacts.item.curio.belt;
 import artifacts.Artifacts;
 import artifacts.components.SwimAbilityComponent;
 import artifacts.init.Components;
-import artifacts.init.Slot;
 import artifacts.init.SoundEvents;
 import artifacts.item.curio.TrinketArtifactItem;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
@@ -32,7 +31,6 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 	public static final int RECHARGE_TIME = 300;
 
 	public HeliumFlamingoItem() {
-		super(Slot.BELT);
 		PlayerSwimCallback.EVENT.register(HeliumFlamingoItem::onPlayerSwim);
 		ServerPlayNetworking.registerGlobalReceiver(C2S_AIR_SWIMMING_ID, HeliumFlamingoItem::handleAirSwimmingPacket);
 	}
@@ -51,7 +49,7 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.POP, 1f, 0.7f);
 	}
 

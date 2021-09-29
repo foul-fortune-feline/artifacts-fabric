@@ -6,8 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
@@ -24,16 +24,13 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, M extend
 	@Shadow
 	protected M model;
 
-	protected LivingEntityRendererMixin(EntityRenderDispatcher dispatcher) {
-		super(dispatcher);
+	protected LivingEntityRendererMixin(EntityRendererProvider.Context context) {
+		super(context);
 	}
 
 	@Inject(method = "render", at = @At("HEAD"))
 	private void renderUmbrella(T entity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i, CallbackInfo info) {
-		if (this.model instanceof HumanoidModel) {
-			//noinspection rawtypes
-			HumanoidModel model = (HumanoidModel) this.model;
-
+		if (this.model instanceof HumanoidModel model) {
 			boolean heldMainHand = UmbrellaItem.getHeldStatusForHand(entity, InteractionHand.MAIN_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
 			boolean heldOffHand = UmbrellaItem.getHeldStatusForHand(entity, InteractionHand.OFF_HAND) == UmbrellaItem.HeldStatus.HELD_UP;
 			boolean rightHanded = Minecraft.getInstance().options.mainHand == HumanoidArm.RIGHT;

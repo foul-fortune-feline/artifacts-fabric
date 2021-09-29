@@ -5,6 +5,7 @@ import artifacts.init.Components;
 import artifacts.init.Items;
 import artifacts.item.curio.belt.HeliumFlamingoItem;
 import artifacts.trinkets.TrinketsHelper;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -60,7 +61,7 @@ public abstract class GuiMixin {
 			float progress = 1 - swimTime / (float) maxProgressTime;
 
 			matrices.pushPose();
-			this.minecraft.getTextureManager().bind(FLAMINGO_ICONS_TEXTURE);
+			RenderSystem.setShaderTexture(0, FLAMINGO_ICONS_TEXTURE);
 			int full = Mth.ceil((progress - 2D / maxProgressTime) * 10);
 			int partial = Mth.ceil(progress * 10) - full;
 

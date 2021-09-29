@@ -4,6 +4,9 @@ import artifacts.Artifacts;
 import artifacts.client.render.TrinketRenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.client.TrinketRenderer;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -13,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-public class SimpleCurioRenderer implements CurioRenderer {
+public class SimpleCurioRenderer implements TrinketRenderer {
 
     private final ResourceLocation texture;
     private final HumanoidModel<LivingEntity> model;
@@ -36,7 +39,7 @@ public class SimpleCurioRenderer implements CurioRenderer {
     }
 
     @Override
-    public final void render(String slot, int index, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch, ItemStack stack) {
+    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch) {
         HumanoidModel<LivingEntity> model = getModel();
 
         model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);

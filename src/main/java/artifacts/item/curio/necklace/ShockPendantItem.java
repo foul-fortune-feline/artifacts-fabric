@@ -25,8 +25,8 @@ public class ShockPendantItem extends PendantItem {
 			if (lightning != null) {
 				lightning.moveTo(Vec3.atBottomCenterOf(attacker.blockPosition()));
 
-				if (attacker instanceof ServerPlayer) {
-					lightning.setCause((ServerPlayer) attacker);
+				if (attacker instanceof ServerPlayer serverPlayer) {
+					lightning.setCause(serverPlayer);
 				}
 
 				attacker.level.addFreshEntity(lightning);

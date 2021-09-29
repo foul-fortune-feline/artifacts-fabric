@@ -17,10 +17,8 @@ public abstract class EntityMixin {
 	@Inject(method = "thunderHit", at = @At("HEAD"), cancellable = true)
 	private void lightningImmune(ServerLevel world, LightningBolt lightning, CallbackInfo info) {
 		//noinspection ConstantConditions
-		if ((Entity) (Object) this instanceof LivingEntity) {
-			if (TrinketsHelper.isEquipped(Items.SHOCK_PENDANT, (LivingEntity) (Object) this)) {
-				info.cancel();
-			}
+		if ((Entity) (Object) this instanceof LivingEntity entity && TrinketsHelper.isEquipped(Items.SHOCK_PENDANT, entity)) {
+			info.cancel();
 		}
 	}
 }

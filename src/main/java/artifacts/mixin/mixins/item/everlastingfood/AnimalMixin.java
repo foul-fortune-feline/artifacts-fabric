@@ -3,6 +3,7 @@ package artifacts.mixin.mixins.item.everlastingfood;
 import artifacts.Artifacts;
 import artifacts.item.EverlastingFoodItem;
 import artifacts.mixin.extensions.AnimalExtensions;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -27,7 +28,7 @@ public abstract class AnimalMixin implements AnimalExtensions {
 	}
 
 	@Inject(method = "usePlayerItem", at = @At("HEAD"), cancellable = true)
-	private void cancelEat(Player player, ItemStack stack, CallbackInfo info) {
+	private void cancelEat(Player player, InteractionHand interactionHand, ItemStack stack, CallbackInfo info) {
 		Item item = stack.getItem();
 
 		if (item instanceof EverlastingFoodItem) {

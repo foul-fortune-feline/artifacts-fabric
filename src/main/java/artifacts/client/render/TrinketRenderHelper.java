@@ -24,17 +24,14 @@ public final class TrinketRenderHelper {
 	public static void followBodyRotations(final LivingEntity livingEntity,
 										   final HumanoidModel<LivingEntity> model) {
 
-		EntityRenderer<? super LivingEntity> render = Minecraft.getInstance()
+		EntityRenderer<? super LivingEntity> renderer = Minecraft.getInstance()
 				.getEntityRenderDispatcher().getRenderer(livingEntity);
 
-		if (render instanceof LivingEntityRenderer) {
+		if (renderer instanceof LivingEntityRenderer livingRenderer) {
 			//noinspection unchecked
-			LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>> livingRenderer =
-					(LivingEntityRenderer<LivingEntity, EntityModel<LivingEntity>>) render;
 			EntityModel<LivingEntity> entityModel = livingRenderer.getModel();
 
-			if (entityModel instanceof HumanoidModel) {
-				HumanoidModel<LivingEntity> bipedModel = (HumanoidModel<LivingEntity>) entityModel;
+			if (entityModel instanceof HumanoidModel<LivingEntity> bipedModel) {
 				bipedModel.copyPropertiesTo(model);
 			}
 		}

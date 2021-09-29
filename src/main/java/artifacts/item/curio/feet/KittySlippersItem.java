@@ -1,15 +1,10 @@
 package artifacts.item.curio.feet;
 
-import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 
 public class KittySlippersItem extends TrinketArtifactItem {
-
-    public KittySlippersItem() {
-        super(Slot.SHOES);
-    }
 
     @Override
 	protected SoundEvent getExtraHurtSound() {
@@ -17,7 +12,7 @@ public class KittySlippersItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.CAT_AMBIENT);
 	}
 }

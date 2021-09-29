@@ -24,6 +24,7 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+
 import java.util.EnumSet;
 
 public class MimicEntity extends Mob implements Enemy {
@@ -49,8 +50,8 @@ public class MimicEntity extends Mob implements Enemy {
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, SpawnGroupData entityData, CompoundTag entityTag) {
-		if (getMoveControl() instanceof MimicMovementController) {
-			((MimicMovementController) moveControl).setDirection(random.nextInt(4) * 90, false);
+		if (getMoveControl() instanceof MimicMovementController mimicMoveControl) {
+			mimicMoveControl.setDirection(random.nextInt(4) * 90, false);
 		}
 		return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityTag);
 	}
@@ -114,7 +115,7 @@ public class MimicEntity extends Mob implements Enemy {
 	public void playerTouch(Player player) {
 		super.playerTouch(player);
 		// noinspection ConstantConditions
-		if (attackCooldown <= 0 && player.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL && canSee(player)
+		if (attackCooldown <= 0 && player.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL && hasLineOfSight(player)
 				&& distanceToSqr(player.getBoundingBox().getCenter().subtract(0, getBoundingBox().getYsize() / 2, 0)) < 1
 				&& player.hurt(DamageSource.mobAttack(this), (float) getAttribute(Attributes.ATTACK_DAMAGE).getValue())) {
 			attackCooldown = 20;
@@ -130,8 +131,8 @@ public class MimicEntity extends Mob implements Enemy {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		if (source.getEntity() instanceof Player) {
-			setTarget((LivingEntity) source.getEntity());
+		if (source.getEntity() instanceof Player player) {
+			setTarget(player);
 		}
 
 		if (ticksInAir <= 0 && source.isProjectile() && !source.isBypassMagic()) {
@@ -139,8 +140,8 @@ public class MimicEntity extends Mob implements Enemy {
 			return false;
 		}
 
-		if (isOnGround() && getRandom().nextBoolean() && getMoveControl() instanceof MimicMovementController) {
-			((MimicMovementController) getMoveControl()).setDirection(getRandom().nextInt(4) * 90, true);
+		if (isOnGround() && getRandom().nextBoolean() && getMoveControl() instanceof MimicMovementController mimicMoveControl) {
+			mimicMoveControl.setDirection(getRandom().nextInt(4) * 90, true);
 		}
 
 		return super.hurt(source, amount);
@@ -187,10 +188,10 @@ public class MimicEntity extends Mob implements Enemy {
 		public boolean canUse() {
 			LivingEntity target = mimic.getTarget();
 
-			return target instanceof Player
+			return target instanceof Player player
 					&& target.isAlive()
 					&& target.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL
-					&& !((Player) target).abilities.invulnerable;
+					&& !player.getAbilities().invulnerable;
 		}
 
 		@Override
@@ -203,19 +204,19 @@ public class MimicEntity extends Mob implements Enemy {
 		public boolean canContinueToUse() {
 			LivingEntity target = mimic.getTarget();
 
-			return target instanceof Player
+			return target instanceof Player player
 					&& target.isAlive()
 					&& target.getCommandSenderWorld().getDifficulty() != Difficulty.PEACEFUL
-					&& !((Player) target).abilities.invulnerable
+					&& !player.getAbilities().invulnerable
 					&& --timeRemaining > 0;
 		}
 
 		@Override
 		public void tick() {
 			super.tick();
-			if (mimic.getTarget() != null && mimic.getMoveControl() instanceof MimicMovementController) {
+			if (mimic.getTarget() != null && mimic.getMoveControl() instanceof MimicMovementController mimicMoveControl) {
 				mimic.lookAt(mimic.getTarget(), 10, 10);
-				((MimicMovementController) mimic.getMoveControl()).setDirection(mimic.yRot, true);
+				mimicMoveControl.setDirection(mimic.getYRot(), true);
 			}
 		}
 	}
@@ -241,13 +242,13 @@ public class MimicEntity extends Mob implements Enemy {
 			if (--nextRandomizeTime <= 0) {
 				nextRandomizeTime = 480 + mimic.getRandom().nextInt(320);
 				if (mimic.isDormant) {
-					chosenDegrees = Math.round(mimic.yRot / 90) * 90;
+					chosenDegrees = Math.round(mimic.getYRot() / 90) * 90;
 				} else {
 					chosenDegrees = mimic.getRandom().nextInt(4) * 90;
 				}
 			}
-			if (mimic.getMoveControl() instanceof MimicMovementController) {
-				((MimicMovementController) mimic.getMoveControl()).setDirection(chosenDegrees, false);
+			if (mimic.getMoveControl() instanceof MimicMovementController mimicMoveControl) {
+				mimicMoveControl.setDirection(chosenDegrees, false);
 			}
 		}
 	}
@@ -272,8 +273,8 @@ public class MimicEntity extends Mob implements Enemy {
 			if (mimic.getRandom().nextFloat() < 0.8F) {
 				mimic.jumpControl.jump();
 			}
-			if (mimic.getMoveControl() instanceof MimicMovementController) {
-				((MimicMovementController) mimic.getMoveControl()).setSpeed(1.2);
+			if (mimic.getMoveControl() instanceof MimicMovementController mimicMoveControl) {
+				mimicMoveControl.setSpeed(1.2);
 			}
 		}
 	}
@@ -294,8 +295,8 @@ public class MimicEntity extends Mob implements Enemy {
 
 		@Override
 		public void tick() {
-			if (mimic.getMoveControl() instanceof MimicMovementController) {
-				((MimicMovementController) mimic.getMoveControl()).setSpeed(1);
+			if (mimic.getMoveControl() instanceof MimicMovementController mimicMoveControl) {
+				mimicMoveControl.setSpeed(1);
 			}
 		}
 	}
@@ -309,7 +310,7 @@ public class MimicEntity extends Mob implements Enemy {
 		public MimicMovementController(MimicEntity mimic) {
 			super(mimic);
 			this.mimic = mimic;
-			rotationDegrees = 180 * mimic.yRot / (float) Math.PI;
+			rotationDegrees = 180 * mimic.getYRot() / (float) Math.PI;
 			jumpDelay = mimic.random.nextInt(320) + 640;
 		}
 
@@ -327,7 +328,8 @@ public class MimicEntity extends Mob implements Enemy {
 
 		@Override
 		public void tick() {
-			mimic.yHeadRot = mimic.yBodyRot = mimic.yRot = rotlerp(mimic.yRot, rotationDegrees, 90);
+			mimic.setYRot(rotlerp(mimic.getYRot(), rotationDegrees, 90));
+			mimic.yHeadRot = mimic.yBodyRot = mimic.getYRot();
 
 			if (operation != Operation.MOVE_TO) {
 				mimic.setZza(0);

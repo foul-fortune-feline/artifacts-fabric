@@ -3,17 +3,22 @@ package artifacts.trinkets;
 import artifacts.components.BooleanComponent;
 import artifacts.init.Components;
 import artifacts.item.curio.TrinketArtifactItem;
+import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.minecraft.world.Container;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+/**
+ * Helper methods for Trinkets API
+ */
 public final class TrinketsHelper {
 
 	private TrinketsHelper() {
@@ -36,38 +41,37 @@ public final class TrinketsHelper {
 	}
 
 	public static boolean isEquipped(Predicate<ItemStack> filter, LivingEntity entity, boolean ignoreEffectsDisabled) {
-		for (ItemStack stack : getAllEquipped(entity, ignoreEffectsDisabled)) {
-			if (filter.test(stack)) {
-				return true;
-			}
-		}
-
-		return false;
+		return TrinketsApi.getTrinketComponent(entity)
+				.map(comp -> comp.isEquipped(stack -> (areEffectsEnabled(stack) || ignoreEffectsDisabled) && filter.test(stack)))
+				.orElse(false);
 	}
 
 	public static List<ItemStack> getAllEquipped(LivingEntity entity, boolean ignoreEffectsDisabled) {
-		List<ItemStack> stacks = new ArrayList<>();
-
-		// LivingEntity not currently supported by Trinkets
-		if (entity instanceof Player) {
-			Container inventory = TrinketsApi.getTrinketsInventory((Player) entity);
-
-			for (int i = 0; i < inventory.getContainerSize(); i++) {
-				ItemStack stack = inventory.getItem(i);
-
-				if (!stack.isEmpty() && stack.getItem() instanceof TrinketArtifactItem
-						&& (areEffectsEnabled(stack) || ignoreEffectsDisabled)) {
-					stacks.add(stack);
-				}
-			}
-		}
-
-		return stacks;
+		return TrinketsApi.getTrinketComponent(entity).stream()
+				.flatMap(comp -> comp.getAllEquipped().stream())
+				.map(Tuple::getB)
+				.filter(stack -> !stack.isEmpty() && stack.getItem() instanceof TrinketArtifactItem && (areEffectsEnabled(stack) || ignoreEffectsDisabled))
+				.collect(Collectors.toList());
 	}
 
 	public static boolean areEffectsEnabled(ItemStack stack) {
 		return Components.ARTIFACT_ENABLED.maybeGet(stack)
 				.map(BooleanComponent::get)
 				.orElse(true);
+	}
+
+	public static List<ItemStack> getAllEquippedForSlot(LivingEntity entity, String groupId, String slotId) {
+		return getAllEquippedForSlot(entity, groupId, slotId, false);
+	}
+
+	public static List<ItemStack> getAllEquippedForSlot(LivingEntity entity, String groupId, String slotId, boolean ignoreEffectsDisabled) {
+		return TrinketsApi.getTrinketComponent(entity)
+				.map(TrinketComponent::getInventory)
+				.flatMap(invByGroup -> Optional.ofNullable(invByGroup.get(groupId)))
+				.flatMap(invBySlot -> Optional.ofNullable(invBySlot.get(slotId)))
+				.stream()
+				.flatMap(inv -> IntStream.range(0, inv.getContainerSize()).mapToObj(inv::getItem))
+				.filter(stack -> stack.getItem() instanceof TrinketArtifactItem && (areEffectsEnabled(stack) || ignoreEffectsDisabled))
+				.collect(Collectors.toList());
 	}
 }

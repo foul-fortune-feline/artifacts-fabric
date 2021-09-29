@@ -13,9 +13,8 @@ public abstract class EntityMixin {
 
 	@Inject(method = "isInRain", at = @At("RETURN"), cancellable = true)
 	private void umbrellaBlocksRain(CallbackInfoReturnable<Boolean> info) {
-		Entity self = (Entity) (Object) this;
-
-		if (info.getReturnValueZ() && self instanceof LivingEntity && UmbrellaItem.isHeldUpInEitherHand((LivingEntity) self)) {
+		//noinspection ConstantConditions
+		if (info.getReturnValueZ() && (Object) this instanceof LivingEntity entity && UmbrellaItem.isHeldUpInEitherHand(entity)) {
 			info.setReturnValue(false);
 		}
 	}

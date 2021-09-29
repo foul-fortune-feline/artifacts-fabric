@@ -7,7 +7,6 @@ import artifacts.init.Features;
 import artifacts.init.Items;
 import artifacts.init.LootTables;
 import artifacts.init.ModLootConditions;
-import artifacts.init.Slot;
 import artifacts.init.SoundEvents;
 import artifacts.init.ToolHandlers;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -24,8 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,10 +35,9 @@ public class Artifacts implements ModInitializer {
 			() -> new ItemStack(Items.BUNNY_HOPPERS)
 	);
 	public static ModConfig CONFIG;
-	private static final Map<String, Runnable> COMPAT_HANDLERS = Collections.unmodifiableMap(new HashMap<String, Runnable>() {{
-		put("origins", new OriginsCompat());
-		put("haema", new HaemaCompat());
-	}});
+	private static final Map<String, Runnable> COMPAT_HANDLERS = Map.of(
+			"origins", new OriginsCompat(),
+			"haema", new HaemaCompat());
 
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
@@ -49,9 +45,6 @@ public class Artifacts implements ModInitializer {
 		// Config
 		Artifacts.CONFIG = AutoConfig.register(ModConfig.class,
 				PartitioningSerializer.wrap(Toml4jConfigSerializer::new)).getConfig();
-
-		// Trinkets setup
-		Slot.registerAll();
 
 		// Loot table setup
 		ModLootConditions.register();
@@ -67,7 +60,7 @@ public class Artifacts implements ModInitializer {
 		COMPAT_HANDLERS.forEach((modId, compatHandler) -> {
 			if (FabricLoader.getInstance().isModLoaded(modId)) {
 				Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modId);
-				String modName = modContainer.isPresent() ? modContainer.get().getMetadata().getName() : modId;
+				String modName = modContainer.map(c -> c.getMetadata().getName()).orElse(modId);
 
 				LOGGER.info("[Artifacts] Running compat handler for " + modName);
 				compatHandler.run();

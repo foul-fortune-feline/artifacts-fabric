@@ -6,6 +6,7 @@ plugins {
 repositories {
     maven { url = "https://maven.terraformersmc.com" }
     maven { url = "https://maven.shedaniel.me/" }
+    maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
     maven {
         url = "https://maven.florens.be"
         content {
@@ -33,6 +34,10 @@ targetCompatibility = JavaVersion.VERSION_16
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
+
+loom {
+    accessWidenerPath = file("src/main/resources/artifacts.accesswidener")
+}
 
 sourceSets {
     testmod {
@@ -66,13 +71,19 @@ dependencies {
     modImplementation include("com.github.emilyploszaj:step-height-entity-attribute:${project.step_height_attr_version}") {
         transitive = false
     }
-    modImplementation "me.shedaniel:RoughlyEnoughItems:${project.rei_version}"
+    modImplementation "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 
     // Compat
     modCompileOnly("com.github.apace100:origins-fabric:v${project.origins_version}") {
         transitive = false
     }
-    modCompileOnly("com.github.williambl:haema:v${project.haema_version}") {
+    modCompileOnly("com.github.apace100:apoli:v${project.apoli_version}") {
+        transitive = false
+    }
+    modCompileOnly("com.github.apace100:calio:v${project.calio_version}") {
+        transitive = false
+    }
+    modCompileOnly("curse.maven:haema-391257:${project.haema_version}") {
         transitive = false
     }
 

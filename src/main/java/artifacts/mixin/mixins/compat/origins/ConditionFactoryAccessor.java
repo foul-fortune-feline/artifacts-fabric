@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.compat.origins;
 
-import io.github.apace100.origins.power.factory.condition.ConditionFactory;
-import io.github.apace100.origins.util.SerializableData;
+import io.github.apace100.apoli.power.factory.condition.ConditionFactory;
+import io.github.apace100.calio.data.SerializableData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 

@@ -44,8 +44,7 @@ public class BooleanComponent implements Component {
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
-		} else if (obj instanceof BooleanComponent) {
-			BooleanComponent other = (BooleanComponent) obj;
+		} else if (obj instanceof BooleanComponent other) {
 			return this.get() == other.get() && this.name.equals(other.name);
 		}
 		return false;

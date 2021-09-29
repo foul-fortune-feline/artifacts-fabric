@@ -1,6 +1,5 @@
 package artifacts.item.curio.belt;
 
-import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.extensions.MobEffectInstanceExtensions;
 import artifacts.mixin.mixins.accessors.MobEffectAccessor;
@@ -10,10 +9,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 public class AntidoteVesselItem extends TrinketArtifactItem {
-
-    public AntidoteVesselItem() {
-        super(Slot.BELT);
-    }
 
     @Override
 	protected void curioTick(LivingEntity livingEntity, ItemStack stack) {
@@ -26,7 +21,7 @@ public class AntidoteVesselItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	public SoundInfo getEquipSound() {
+	public SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.BOTTLE_FILL);
 	}
 }

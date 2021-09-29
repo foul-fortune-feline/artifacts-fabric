@@ -3,7 +3,6 @@ package artifacts.mixin.mixins.item.diggingclaws;
 import artifacts.init.ToolHandlers;
 import artifacts.mixin.mixins.accessors.ItemStackAccessor;
 import net.fabricmc.fabric.impl.tool.attribute.ToolManagerImpl;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -26,8 +25,7 @@ public abstract class ToolmanagerImplMixin {
 	@ModifyVariable(method = "handleIsEffectiveOnIgnoresVanilla", argsOnly = true, at = @At("HEAD"))
 	private static LivingEntity getUserFromStackHolder(LivingEntity user, BlockState state, ItemStack stack) {
 		//noinspection ConstantConditions
-		Entity holder = ((ItemStackAccessor) (Object) stack).getEntityRepresentation();
-		return user == null && holder instanceof LivingEntity ? (LivingEntity) holder : null;
+		return user == null && ((ItemStackAccessor) (Object) stack).getEntityRepresentation() instanceof LivingEntity livingEntity ? livingEntity : null;
 	}
 
 	/**

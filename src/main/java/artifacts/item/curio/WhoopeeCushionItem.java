@@ -5,13 +5,7 @@ import artifacts.init.SoundEvents;
 public class WhoopeeCushionItem extends TrinketArtifactItem {
 
 	@Override
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.FART);
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		// Wear in any slot
-		return true;
 	}
 }

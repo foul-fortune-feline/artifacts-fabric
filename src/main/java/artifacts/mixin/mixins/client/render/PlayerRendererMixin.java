@@ -1,15 +1,13 @@
 package artifacts.mixin.mixins.client.render;
 
 import artifacts.Artifacts;
-import artifacts.client.render.trinket.CurioRenderers;
+import artifacts.client.render.trinket.renderer.GloveCurioRenderer;
+import artifacts.trinkets.TrinketsHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.emi.trinkets.api.SlotGroups;
-import dev.emi.trinkets.api.Slots;
-import dev.emi.trinkets.api.TrinketsApi;
+import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,6 +15,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(PlayerRenderer.class)
 public abstract class PlayerRendererMixin {
@@ -37,11 +37,15 @@ public abstract class PlayerRendererMixin {
 			return;
 		}
 
-		InteractionHand hand = handSide == player.getMainArm() ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-		String slotGroup = hand == InteractionHand.MAIN_HAND ? SlotGroups.HAND : SlotGroups.OFFHAND;
-		ItemStack stack = TrinketsApi.getTrinketComponent(player).getStack(slotGroup, Slots.GLOVES);
+		String groupId = handSide == player.getMainArm() ? "hand" : "offhand";
+		List<ItemStack> allEquippedGloves = TrinketsHelper.getAllEquippedForSlot(player, groupId, "glove", true);
 
-		CurioRenderers.getGloveRenderer(stack).ifPresent(renderer ->
-				renderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil()));
+		for (ItemStack stack : allEquippedGloves) {
+			TrinketRendererRegistry.getRenderer(stack.getItem()).ifPresent(renderer -> {
+				if (renderer instanceof GloveCurioRenderer gloveRenderer) {
+					gloveRenderer.renderFirstPersonArm(matrixStack, buffer, light, player, handSide, stack.hasFoil());
+				}
+			});
+		}
 	}
 }

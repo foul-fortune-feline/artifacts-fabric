@@ -3,6 +3,7 @@ package artifacts.mixin.mixins.statuseffect.client;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,11 +18,11 @@ public abstract class LivingEntityMixin {
 	 * Doing it here makes sure it is set to permanent everytime the server sent an update packet
 	 */
 	@Inject(method = "forceAddEffect", at = @At("HEAD"))
-	private void showStatusEffectPermanent(MobEffectInstance effect, CallbackInfo info) {
+	private void showStatusEffectPermanent(MobEffectInstance effect, Entity __, CallbackInfo info) {
 		//noinspection ConstantConditions
-		if ((Object) this instanceof LivingEntity) {
+		if ((Object) this instanceof LivingEntity entity) {
 
-			TrinketsHelper.getAllEquipped((LivingEntity) (Object) this).forEach(stack -> {
+			TrinketsHelper.getAllEquipped(entity).forEach(stack -> {
 				MobEffectInstance trinketPermEffect = ((TrinketArtifactItem) stack.getItem()).getPermanentEffect();
 
 				if (trinketPermEffect != null && trinketPermEffect.getEffect() == effect.getEffect()) {

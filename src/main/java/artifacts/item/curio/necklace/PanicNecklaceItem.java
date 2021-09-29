@@ -2,7 +2,6 @@ package artifacts.item.curio.necklace;
 
 import artifacts.events.LivingEntityHurtCallback;
 import artifacts.init.Items;
-import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import net.minecraft.sounds.SoundEvents;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 public class PanicNecklaceItem extends TrinketArtifactItem {
 
 	public PanicNecklaceItem() {
-        super(Slot.NECKLACE);
         LivingEntityHurtCallback.EVENT.register(PanicNecklaceItem::applyEffects);
 	}
 
@@ -25,7 +23,7 @@ public class PanicNecklaceItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.ARMOR_EQUIP_DIAMOND);
 	}
 }

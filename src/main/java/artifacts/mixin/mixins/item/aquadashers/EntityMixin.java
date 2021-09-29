@@ -86,6 +86,6 @@ public abstract class EntityMixin {
     @Unique
     private boolean isRunningWithAquaDashers() {
         // noinspection ConstantConditions
-        return (Object) this instanceof LivingEntity && TrinketsHelper.isEquipped(Items.AQUA_DASHERS, (LivingEntity) (Object) this) && AquaDashersItem.canSprintOnWater((LivingEntity) (Object) this);
+        return (Object) this instanceof LivingEntity entity && TrinketsHelper.isEquipped(Items.AQUA_DASHERS, entity) && AquaDashersItem.canSprintOnWater(entity);
     }
 }

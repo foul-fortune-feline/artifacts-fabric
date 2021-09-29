@@ -38,6 +38,7 @@
   "mixins": [
     "artifacts.mixins.json"
   ],
+  "accessWidener": "artifacts.accesswidener",
 
   "depends": {
     "minecraft": ">=1.16.2",

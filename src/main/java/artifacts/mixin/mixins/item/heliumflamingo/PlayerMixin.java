@@ -40,7 +40,7 @@ public abstract class PlayerMixin {
 					}*/
 
 					//noinspection ConstantConditions TODO: config
-					if (!self.abilities.invulnerable && maxFlightTime > 0) {
+					if (!self.getAbilities().invulnerable && maxFlightTime > 0) {
 						swimAbilities.setSwimTime(swimAbilities.getSwimTime() + 1);
 					}
 				}

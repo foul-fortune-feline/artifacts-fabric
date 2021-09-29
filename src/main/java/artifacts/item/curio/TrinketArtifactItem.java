@@ -1,25 +1,18 @@
 package artifacts.item.curio;
 
 import artifacts.Artifacts;
-import artifacts.client.render.trinket.CurioRenderers;
 import artifacts.components.BooleanComponent;
 import artifacts.events.PlayHurtSoundCallback;
 import artifacts.init.Components;
-import artifacts.init.Slot;
 import artifacts.item.ArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
-import com.mojang.blaze3d.vertex.PoseStack;
+import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.Trinket;
 import dev.emi.trinkets.api.TrinketItem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -36,26 +29,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DispenserBlock;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 
-	private final Set<Slot> equippableSlots;
-
-	public TrinketArtifactItem(Slot... equippableSlots) {
-		this.equippableSlots = Sets.newHashSet(equippableSlots);
-		DispenserBlock.registerBehavior(this, TrinketItem.TRINKET_DISPENSER_BEHAVIOR);
+	public TrinketArtifactItem() {
+		// DispenserBlock.registerBehavior(this, TrinketItem.TRINKET_DISPENSER_BEHAVIOR); TODO: bug, missing in trinkets rewrite
 		PlayHurtSoundCallback.EVENT.register(this::playExtraHurtSound);
-	}
-
-	@Override
-	public boolean canWearInSlot(String group, String slot) {
-		return equippableSlots.stream().anyMatch(equippableSlots ->
-				equippableSlots.getSlotId().equals(slot) && equippableSlots.getGroupId().equals(group));
 	}
 
 	@Override
@@ -77,21 +59,22 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 			return InteractionResultHolder.success(stack);
 		}
 
-		InteractionResultHolder<ItemStack> actionResult = Trinket.equipTrinket(user, hand);
+		ItemStack stack = user.getItemInHand(hand);
+		if (TrinketItem.equipItem(user, stack)) {
+			// Play right click equip sound
+			SoundInfo sound = this.getEquipSoundInfo();
+			user.playSound(sound.soundEvent(), sound.volume(), sound.pitch());
 
-		// Play right click equip sound
-		if (actionResult.getResult().consumesAction()) {
-			SoundInfo sound = this.getEquipSound();
-			user.playSound(sound.getSoundEvent(), sound.getVolume(), sound.getPitch());
+			return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
 		}
 
-		return actionResult;
+		return super.use(level, user, hand);
 	}
 
 	@Override
-	public void tick(Player player, ItemStack stack) {
+	public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
 		if (TrinketsHelper.areEffectsEnabled(stack)) {
-			curioTick(player, stack);
+			curioTick(entity, stack);
 		}
 	}
 
@@ -99,14 +82,14 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	}
 
 	@Override
-	public final Multimap<Attribute, AttributeModifier> getTrinketModifiers(String group, String slot, UUID uuid, ItemStack stack) {
+	public final Multimap<Attribute, AttributeModifier> getModifiers(ItemStack stack, SlotReference slot, LivingEntity entity, UUID uuid) {
 		if (TrinketsHelper.areEffectsEnabled(stack)) {
-			return this.applyModifiers(group, slot, uuid, stack);
+			return this.applyModifiers(stack, slot, entity, uuid);
 		}
 		return HashMultimap.create();
 	}
 
-	protected Multimap<Attribute, AttributeModifier> applyModifiers(String group, String slot, UUID uuid, ItemStack stack) {
+	protected Multimap<Attribute, AttributeModifier> applyModifiers(ItemStack stack, SlotReference slot, LivingEntity entity, UUID uuid) {
 		return HashMultimap.create();
 	}
 
@@ -119,9 +102,9 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	}
 
 	/**
-	 * @return The {@link SoundEvent} to play when the artifact is right-click equipped
+	 * @return The {@link SoundInfo} to play when the artifact is right-click equipped
 	 */
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.ARMOR_EQUIP_GENERIC);
 	}
 
@@ -140,14 +123,6 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	 */
 	public MobEffectInstance getPermanentEffect() {
 		return null;
-	}
-
-	@Environment(EnvType.CLIENT)
-	public void render(String slot, PoseStack matrices, MultiBufferSource buffer, int light, AbstractClientPlayer player, float limbAngle,
-					   float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch, ItemStack stack) {
-		// TODO: support slot index (used by belt renderer)
-		CurioRenderers.getRenderer(this).render(slot, 0, matrices, buffer, light, player, limbAngle,
-				limbDistance, tickDelta, animationProgress, headYaw, headPitch, stack);
 	}
 
 	private void playExtraHurtSound(LivingEntity entity, float volume, float pitch) {
@@ -176,33 +151,14 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 		return TrinketsHelper.areEffectsEnabled(stack) ? "artifacts.trinket.effectsenabled" : "artifacts.trinket.effectsdisabled";
 	}
 
-	// From Curios
-	// TODO: Java 17 Record
-	protected static final class SoundInfo {
-		final SoundEvent soundEvent;
-		final float volume;
-		final float pitch;
+	protected record SoundInfo(SoundEvent soundEvent, float volume, float pitch) {
+
+		// Changes access modifier to public
+		@SuppressWarnings({"RedundantRecordConstructor", "RedundantSuppression"})
+		public SoundInfo {}
 
 		public SoundInfo(SoundEvent soundEvent) {
 			this(soundEvent, 1f, 1f);
-		}
-
-		public SoundInfo(SoundEvent soundEvent, float volume, float pitch) {
-			this.soundEvent = soundEvent;
-			this.volume = volume;
-			this.pitch = pitch;
-		}
-
-		public SoundEvent getSoundEvent() {
-			return this.soundEvent;
-		}
-
-		public float getVolume() {
-			return this.volume;
-		}
-
-		public float getPitch() {
-			return this.pitch;
 		}
 	}
 }

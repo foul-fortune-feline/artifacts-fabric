@@ -15,8 +15,8 @@ public class EverlastingFoodItem extends ArtifactItem {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entity) {
-		if (!world.isClientSide && entity instanceof Player) {
-			((Player) entity).getCooldowns().addCooldown(this, Artifacts.CONFIG.general.everlastingFoodCooldown);
+		if (!world.isClientSide && entity instanceof Player player) {
+			player.getCooldowns().addCooldown(this, Artifacts.CONFIG.general.everlastingFoodCooldown);
 		}
 
 		// Stack decrement is cancelled in LivingEntity.eatFood() mixin

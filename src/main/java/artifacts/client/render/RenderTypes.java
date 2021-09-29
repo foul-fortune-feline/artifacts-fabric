@@ -6,27 +6,26 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 
 @Environment(EnvType.CLIENT)
 public abstract class RenderTypes extends RenderType {
 
-	private RenderTypes(String name, VertexFormat fmt, int glMode, int size, boolean doCrumbling, boolean depthSorting, Runnable onEnable, Runnable onDisable) {
-		super(name, fmt, glMode, size, doCrumbling, depthSorting, onEnable, onDisable);
-		throw new IllegalStateException(" This class must not be instantiated");
+	public RenderTypes(String string, VertexFormat vertexFormat, VertexFormat.Mode mode, int i, boolean bl, boolean bl2, Runnable runnable, Runnable runnable2) {
+		super(string, vertexFormat, mode, i, bl, bl2, runnable, runnable2);
+		throw new IllegalStateException("This class must not be instantiated");
 	}
 
 	// See ForgeRenderTypes#getUnlitTranslucent
 	public static RenderType unlit(ResourceLocation textureLocation) {
 		CompositeState renderState = CompositeState.builder()
+				//TODO: .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_UNLIT_SHADER)
 				.setTextureState(new TextureStateShard(textureLocation, false, false))
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
-				.setAlphaState(DEFAULT_ALPHA)
 				.setCullState(NO_CULL)
 				.setLightmapState(LIGHTMAP)
 				.setOverlayState(OVERLAY)
 				.createCompositeState(true);
-		return create("artifacts_entity_unlit", DefaultVertexFormat.NEW_ENTITY, GL11.GL_QUADS, 256, true, true, renderState);
+		return create("artifacts_entity_unlit", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, renderState);
 	}
 }

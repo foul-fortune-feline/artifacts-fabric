@@ -1,7 +1,6 @@
 package artifacts.item.curio.belt;
 
 import artifacts.Artifacts;
-import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.mixin.extensions.LivingEntityExtensions;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -19,7 +18,6 @@ public class CloudInABottleItem extends TrinketArtifactItem {
 	public static final ResourceLocation C2S_DOUBLE_JUMPED_ID = Artifacts.id("c2s_double_jumped");
 
 	public CloudInABottleItem() {
-        super(Slot.BELT);
         ServerPlayNetworking.registerGlobalReceiver(C2S_DOUBLE_JUMPED_ID, CloudInABottleItem::handleDoubleJumpPacket);
 	}
 
@@ -38,7 +36,7 @@ public class CloudInABottleItem extends TrinketArtifactItem {
 	}
 
 	@Override
-	protected SoundInfo getEquipSound() {
+	protected SoundInfo getEquipSoundInfo() {
 		return new SoundInfo(SoundEvents.BOTTLE_FILL_DRAGONBREATH);
 	}
 }

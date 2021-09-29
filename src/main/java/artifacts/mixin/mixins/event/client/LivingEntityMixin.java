@@ -15,7 +15,7 @@ public abstract class LivingEntityMixin {
 	protected abstract float getSoundVolume();
 
 	@Shadow
-	protected abstract float getVoicePitch();
+	public abstract float getVoicePitch();
 
 	@Inject(method = "handleEntityEvent", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getHurtSound(Lnet/minecraft/world/damagesource/DamageSource;)Lnet/minecraft/sounds/SoundEvent;"))
 	private void onClientPlayHurtSound(byte status, CallbackInfo info) {

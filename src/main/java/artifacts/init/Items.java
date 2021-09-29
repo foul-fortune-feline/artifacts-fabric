@@ -55,11 +55,11 @@ public class Items {
 	public static final Item NOVELTY_DRINKING_HAT = register("novelty_drinking_hat", new DrinkingHatItem());
 	public static final Item SNORKEL = register("snorkel", new SnorkelItem());
 	public static final Item NIGHT_VISION_GOGGLES = register("night_vision_goggles", new NightVisionGogglesItem());
-	public static final Item VILLAGER_HAT = register("villager_hat", new TrinketArtifactItem(Slot.HAT));
-	public static final Item SUPERSTITIOUS_HAT = register("superstitious_hat", new TrinketArtifactItem(Slot.HAT));
+	public static final Item VILLAGER_HAT = register("villager_hat", new TrinketArtifactItem());
+	public static final Item SUPERSTITIOUS_HAT = register("superstitious_hat", new TrinketArtifactItem());
 
 	// Necklace
-	public static final Item LUCKY_SCARF = register("lucky_scarf", new TrinketArtifactItem(Slot.NECKLACE));
+	public static final Item LUCKY_SCARF = register("lucky_scarf", new TrinketArtifactItem());
 	public static final Item SCARF_OF_INVISIBILITY = register("scarf_of_invisibility", new ScarfOfInvisibilityItem());
 	public static final Item CROSS_NECKLACE = register("cross_necklace", new CrossNecklaceItem());
 	public static final Item PANIC_NECKLACE = register("panic_necklace", new PanicNecklaceItem());
@@ -83,7 +83,7 @@ public class Items {
 	public static final Item FIRE_GAUNTLET = register("fire_gauntlet", new FireGauntletItem());
 	public static final Item POCKET_PISTON = register("pocket_piston", new PocketPistonItem());
 	public static final Item VAMPIRIC_GLOVE = register("vampiric_glove", new VampiricGloveItem());
-	public static final Item GOLDEN_HOOK = register("golden_hook", new TrinketArtifactItem(Slot.GLOVE_MAINHAND, Slot.GLOVE_OFFHAND));
+	public static final Item GOLDEN_HOOK = register("golden_hook", new TrinketArtifactItem());
 
 	// Feet
 	public static final Item AQUA_DASHERS = register("aqua_dashers", new AquaDashersItem());
@@ -91,7 +91,7 @@ public class Items {
 	public static final Item KITTY_SLIPPERS = register("kitty_slippers", new KittySlippersItem());
 	public static final Item RUNNING_SHOES = register("running_shoes", new RunningShoesItem());
 	public static final Item STEADFAST_SPIKES = register("steadfast_spikes", new SteadfastSpikesItem());
-	public static final Item FLIPPERS = register("flippers", new TrinketArtifactItem(Slot.SHOES));
+	public static final Item FLIPPERS = register("flippers", new TrinketArtifactItem());
 
 	private static Item register(String name, Item item) {
 		return Registry.register(Registry.ITEM, Artifacts.id(name), item);

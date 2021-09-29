@@ -2,10 +2,10 @@ package artifacts.item.curio.feet;
 
 import artifacts.init.Components;
 import artifacts.init.Items;
-import artifacts.init.Slot;
 import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.LivingFluidCollisionCallback;
+import dev.emi.trinkets.api.SlotReference;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,22 +17,21 @@ import net.minecraft.world.level.material.FluidState;
 public class AquaDashersItem extends TrinketArtifactItem {
 
 	public AquaDashersItem() {
-		super(Slot.SHOES);
 		//noinspection UnstableApiUsage
         LivingFluidCollisionCallback.EVENT.register(AquaDashersItem::onFluidCollision);
 	}
 
 	@Override
-	public void tick(Player player, ItemStack stack) {
-		Components.SWIM_ABILITIES.maybeGet(this).ifPresent(swimAbilities -> {
-			if (player.isInWater()) {
+	public void tick(ItemStack stack, SlotReference slot, LivingEntity entity) {
+		Components.SWIM_ABILITIES.maybeGet(entity).ifPresent(swimAbilities -> {
+			if (entity.isInWater()) {
 				swimAbilities.setWet(true);
-			} else if (player.isOnGround() || player.abilities.flying) {
+			} else if (entity.isOnGround() || (entity instanceof Player player && player.getAbilities().flying)) {
 				swimAbilities.setWet(false);
 			}
 		});
 
-		super.tick(player, stack);
+		super.tick(stack, slot, entity);
 	}
 
 	private static boolean onFluidCollision(LivingEntity entity, FluidState fluidState) {

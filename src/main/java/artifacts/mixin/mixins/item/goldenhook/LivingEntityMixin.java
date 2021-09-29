@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
@@ -26,7 +26,7 @@ public abstract class LivingEntityMixin extends Entity {
 		super(type, world);
 	}
 
-	@ModifyVariable(method = "dropExperience", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/entity/LivingEntity;getExperienceReward(Lnet/minecraft/world/entity/player/Player;)I"))
+	@ModifyArg(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ExperienceOrb;award(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;I)V"))
 	private int modifyXp(int originalXp) {
 		if (!TrinketsHelper.isEquipped(Items.GOLDEN_HOOK, this.lastHurtByPlayer)) {
 			return originalXp;
@@ -47,8 +47,7 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@Inject(method = "die", at = @At("HEAD"))
 	private void addToKillTracker(DamageSource source, CallbackInfo info) {
-		if (source.getEntity() instanceof Player) {
-			Player player = (Player) source.getEntity();
+		if (source.getEntity() instanceof Player player) {
 			Components.ENTITY_KILL_TRACKER.maybeGet(player).ifPresent(comp -> comp.addKilledEntityType(this.getType()));
 		}
 	}
