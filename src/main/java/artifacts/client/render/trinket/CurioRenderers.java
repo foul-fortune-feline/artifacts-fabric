@@ -1,67 +1,85 @@
 package artifacts.client.render.trinket;
 
+import artifacts.Artifacts;
+import artifacts.client.render.trinket.model.ArmsModel;
 import artifacts.client.render.trinket.model.BeltModel;
-import artifacts.client.render.trinket.model.HandsModel;
 import artifacts.client.render.trinket.model.HeadModel;
 import artifacts.client.render.trinket.model.LegsModel;
 import artifacts.client.render.trinket.model.NecklaceModel;
 import artifacts.client.render.trinket.model.ScarfModel;
 import artifacts.client.render.trinket.renderer.BeltCurioRenderer;
+import artifacts.client.render.trinket.renderer.CurioRenderer;
 import artifacts.client.render.trinket.renderer.GloveCurioRenderer;
 import artifacts.client.render.trinket.renderer.GlowingCurioRenderer;
 import artifacts.client.render.trinket.renderer.GlowingGloveCurioRenderer;
-import artifacts.client.render.trinket.renderer.SimpleCurioRenderer;
 import artifacts.init.Items;
+import artifacts.init.ModelLayers;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 
-public class CurioRenderers {
+public class CurioRenderers implements SimpleSynchronousResourceReloadListener {
 
-    public static void setupCurioRenderers() {
+    @Override
+    public void onResourceManagerReload(ResourceManager resourceManager) {
         // head
-        TrinketRendererRegistry.registerRenderer(Items.PLASTIC_DRINKING_HAT, new SimpleCurioRenderer("drinking_hat/plastic_drinking_hat", HeadModel.drinkingHat()));
-        TrinketRendererRegistry.registerRenderer(Items.NOVELTY_DRINKING_HAT, new SimpleCurioRenderer("drinking_hat/novelty_drinking_hat", HeadModel.drinkingHat()));
-        TrinketRendererRegistry.registerRenderer(Items.SNORKEL, new SimpleCurioRenderer("snorkel", HeadModel.snorkel()));
-        TrinketRendererRegistry.registerRenderer(Items.NIGHT_VISION_GOGGLES, new GlowingCurioRenderer("night_vision_goggles", HeadModel.nightVisionGoggles()));
-        TrinketRendererRegistry.registerRenderer(Items.SUPERSTITIOUS_HAT, new SimpleCurioRenderer("superstitious_hat", HeadModel.superstitiousHat()));
-        TrinketRendererRegistry.registerRenderer(Items.VILLAGER_HAT, new SimpleCurioRenderer("villager_hat", HeadModel.villagerHat()));
+        TrinketRendererRegistry.registerRenderer(Items.PLASTIC_DRINKING_HAT, new CurioRenderer("drinking_hat/plastic_drinking_hat", new HeadModel(bakeLayer(ModelLayers.DRINKING_HAT))));
+        TrinketRendererRegistry.registerRenderer(Items.NOVELTY_DRINKING_HAT, new CurioRenderer("drinking_hat/novelty_drinking_hat", new HeadModel(bakeLayer(ModelLayers.DRINKING_HAT))));
+        TrinketRendererRegistry.registerRenderer(Items.SNORKEL, new CurioRenderer("snorkel", new HeadModel(bakeLayer(ModelLayers.SNORKEL), RenderType::entityTranslucent)));
+        TrinketRendererRegistry.registerRenderer(Items.NIGHT_VISION_GOGGLES, new GlowingCurioRenderer("night_vision_goggles", new HeadModel(bakeLayer(ModelLayers.NIGHT_VISION_GOGGLES))));
+        TrinketRendererRegistry.registerRenderer(Items.SUPERSTITIOUS_HAT, new CurioRenderer("superstitious_hat", new HeadModel(bakeLayer(ModelLayers.SUPERSTITIOUS_HAT), RenderType::entityCutoutNoCull)));
+        TrinketRendererRegistry.registerRenderer(Items.VILLAGER_HAT, new CurioRenderer("villager_hat", new HeadModel(bakeLayer(ModelLayers.VILLAGER_HAT))));
 
         // necklace
-        TrinketRendererRegistry.registerRenderer(Items.LUCKY_SCARF, new SimpleCurioRenderer("scarf/lucky_scarf", ScarfModel.scarf(RenderType::entityCutoutNoCull)));
-        TrinketRendererRegistry.registerRenderer(Items.SCARF_OF_INVISIBILITY, new SimpleCurioRenderer("scarf/scarf_of_invisibility", ScarfModel.scarf(RenderType::entityTranslucent)));
-        TrinketRendererRegistry.registerRenderer(Items.CROSS_NECKLACE, new SimpleCurioRenderer("cross_necklace", NecklaceModel.crossNecklace()));
-        TrinketRendererRegistry.registerRenderer(Items.PANIC_NECKLACE, new SimpleCurioRenderer("panic_necklace", NecklaceModel.panicNecklace()));
-        TrinketRendererRegistry.registerRenderer(Items.SHOCK_PENDANT, new SimpleCurioRenderer("pendant/shock_pendant", NecklaceModel.pendant()));
-        TrinketRendererRegistry.registerRenderer(Items.FLAME_PENDANT, new SimpleCurioRenderer("pendant/flame_pendant", NecklaceModel.pendant()));
-        TrinketRendererRegistry.registerRenderer(Items.THORN_PENDANT, new SimpleCurioRenderer("pendant/thorn_pendant", NecklaceModel.pendant()));
-        TrinketRendererRegistry.registerRenderer(Items.CHARM_OF_SINKING, new SimpleCurioRenderer("charm_of_sinking", NecklaceModel.charmOfSinking()));
+        TrinketRendererRegistry.registerRenderer(Items.LUCKY_SCARF, new CurioRenderer("scarf/lucky_scarf", new ScarfModel(bakeLayer(ModelLayers.SCARF), RenderType::entityCutoutNoCull)));
+        TrinketRendererRegistry.registerRenderer(Items.SCARF_OF_INVISIBILITY, new CurioRenderer("scarf/scarf_of_invisibility",  new ScarfModel(bakeLayer(ModelLayers.SCARF), RenderType::entityTranslucent)));
+        TrinketRendererRegistry.registerRenderer(Items.CROSS_NECKLACE, new CurioRenderer("cross_necklace", new NecklaceModel(bakeLayer(ModelLayers.CROSS_NECKLACE))));
+        TrinketRendererRegistry.registerRenderer(Items.PANIC_NECKLACE, new CurioRenderer("panic_necklace", new NecklaceModel(bakeLayer(ModelLayers.PANIC_NECKLACE))));
+        TrinketRendererRegistry.registerRenderer(Items.SHOCK_PENDANT, new CurioRenderer("pendant/shock_pendant", new NecklaceModel(bakeLayer(ModelLayers.PENDANT))));
+        TrinketRendererRegistry.registerRenderer(Items.FLAME_PENDANT, new CurioRenderer("pendant/flame_pendant", new NecklaceModel(bakeLayer(ModelLayers.PENDANT))));
+        TrinketRendererRegistry.registerRenderer(Items.THORN_PENDANT, new CurioRenderer("pendant/thorn_pendant", new NecklaceModel(bakeLayer(ModelLayers.PENDANT))));
+        TrinketRendererRegistry.registerRenderer(Items.CHARM_OF_SINKING, new CurioRenderer("charm_of_sinking", new NecklaceModel(bakeLayer(ModelLayers.CHARM_OF_SINKING))));
 
         // belt
-        TrinketRendererRegistry.registerRenderer(Items.CLOUD_IN_A_BOTTLE, new BeltCurioRenderer("cloud_in_a_bottle", BeltModel.cloudInABottle()));
-        TrinketRendererRegistry.registerRenderer(Items.OBSIDIAN_SKULL, new BeltCurioRenderer("obsidian_skull", BeltModel.obsidianSkull()));
-        TrinketRendererRegistry.registerRenderer(Items.ANTIDOTE_VESSEL, new BeltCurioRenderer("antidote_vessel", BeltModel.antidoteVessel()));
-        TrinketRendererRegistry.registerRenderer(Items.UNIVERSAL_ATTRACTOR, new BeltCurioRenderer("universal_attractor", BeltModel.universalAttractor()));
-        TrinketRendererRegistry.registerRenderer(Items.CRYSTAL_HEART, new BeltCurioRenderer("crystal_heart", BeltModel.crystalHeart()));
-        TrinketRendererRegistry.registerRenderer(Items.HELIUM_FLAMINGO, new SimpleCurioRenderer("helium_flamingo", BeltModel.heliumFlamingo()));
+        TrinketRendererRegistry.registerRenderer(Items.CLOUD_IN_A_BOTTLE, new BeltCurioRenderer("cloud_in_a_bottle", BeltModel.createCloudInABottleModel()));
+        TrinketRendererRegistry.registerRenderer(Items.OBSIDIAN_SKULL, new BeltCurioRenderer("obsidian_skull", BeltModel.createObsidianSkullModel()));
+        TrinketRendererRegistry.registerRenderer(Items.ANTIDOTE_VESSEL, new BeltCurioRenderer("antidote_vessel", BeltModel.createAntidoteVesselModel()));
+        TrinketRendererRegistry.registerRenderer(Items.UNIVERSAL_ATTRACTOR, new BeltCurioRenderer("universal_attractor", BeltModel.createUniversalAttractorModel()));
+        TrinketRendererRegistry.registerRenderer(Items.CRYSTAL_HEART, new BeltCurioRenderer("crystal_heart", BeltModel.createCrystalHeartModel()));
+        TrinketRendererRegistry.registerRenderer(Items.HELIUM_FLAMINGO, new CurioRenderer("helium_flamingo", BeltModel.createHeliumFlamingoModel()));
 
         // hands
-        TrinketRendererRegistry.registerRenderer(Items.DIGGING_CLAWS, new GloveCurioRenderer("claws/digging_claws", "claws/digging_claws", HandsModel::claws));
-        TrinketRendererRegistry.registerRenderer(Items.FERAL_CLAWS, new GloveCurioRenderer("claws/feral_claws", "claws/feral_claws", HandsModel::claws));
-        TrinketRendererRegistry.registerRenderer(Items.POWER_GLOVE, new GloveCurioRenderer("power_glove"));
-        TrinketRendererRegistry.registerRenderer(Items.FIRE_GAUNTLET, new GlowingGloveCurioRenderer("fire_gauntlet"));
-        TrinketRendererRegistry.registerRenderer(Items.POCKET_PISTON, new GloveCurioRenderer("pocket_piston"));
-        TrinketRendererRegistry.registerRenderer(Items.VAMPIRIC_GLOVE, new GloveCurioRenderer("vampiric_glove"));
-        TrinketRendererRegistry.registerRenderer(Items.GOLDEN_HOOK, new GloveCurioRenderer("golden_hook", HandsModel::goldenHook));
+        TrinketRendererRegistry.registerRenderer(Items.DIGGING_CLAWS, new GloveCurioRenderer("claws/digging_claws", "claws/digging_claws", ArmsModel.createClawsModel(false), ArmsModel.createClawsModel(true)));
+        TrinketRendererRegistry.registerRenderer(Items.FERAL_CLAWS, new GloveCurioRenderer("claws/feral_claws", "claws/feral_claws", ArmsModel.createClawsModel(false), ArmsModel.createClawsModel(true)));
+        TrinketRendererRegistry.registerRenderer(Items.POWER_GLOVE, new GloveCurioRenderer("power_glove", ArmsModel.createGloveModel(false), ArmsModel.createGloveModel(true)));
+        TrinketRendererRegistry.registerRenderer(Items.FIRE_GAUNTLET, new GlowingGloveCurioRenderer("fire_gauntlet", ArmsModel.createGloveModel(false), ArmsModel.createGloveModel(true)));
+        TrinketRendererRegistry.registerRenderer(Items.POCKET_PISTON, new GloveCurioRenderer("pocket_piston", ArmsModel.createGloveModel(false), ArmsModel.createGloveModel(true)));
+        TrinketRendererRegistry.registerRenderer(Items.VAMPIRIC_GLOVE, new GloveCurioRenderer("vampiric_glove", ArmsModel.createGloveModel(false), ArmsModel.createGloveModel(true)));
+        TrinketRendererRegistry.registerRenderer(Items.GOLDEN_HOOK, new GloveCurioRenderer("golden_hook/golden_hook_default", "golden_hook/golden_hook_slim", ArmsModel.createGoldenHookModel(false), ArmsModel.createGoldenHookModel(true)));
 
         // feet
-        TrinketRendererRegistry.registerRenderer(Items.AQUA_DASHERS, new SimpleCurioRenderer("aqua_dashers", LegsModel.aquaDashers(1.25F)));
-        TrinketRendererRegistry.registerRenderer(Items.BUNNY_HOPPERS, new SimpleCurioRenderer("bunny_hoppers", LegsModel.bunnyHoppers()));
-        TrinketRendererRegistry.registerRenderer(Items.KITTY_SLIPPERS, new SimpleCurioRenderer("kitty_slippers", LegsModel.kittySlippers()));
-        TrinketRendererRegistry.registerRenderer(Items.RUNNING_SHOES, new SimpleCurioRenderer("running_shoes", LegsModel.shoes(0.5F)));
-        TrinketRendererRegistry.registerRenderer(Items.STEADFAST_SPIKES, new SimpleCurioRenderer("steadfast_spikes", LegsModel.steadfastSpikes()));
-        TrinketRendererRegistry.registerRenderer(Items.FLIPPERS, new SimpleCurioRenderer("flippers", LegsModel.flippers()));
+        TrinketRendererRegistry.registerRenderer(Items.AQUA_DASHERS, new CurioRenderer("aqua_dashers", new LegsModel(bakeLayer(ModelLayers.AQUA_DASHERS))));
+        TrinketRendererRegistry.registerRenderer(Items.BUNNY_HOPPERS, new CurioRenderer("bunny_hoppers", new LegsModel(bakeLayer(ModelLayers.BUNNY_HOPPERS))));
+        TrinketRendererRegistry.registerRenderer(Items.KITTY_SLIPPERS, new CurioRenderer("kitty_slippers", new LegsModel(bakeLayer(ModelLayers.KITTY_SLIPPERS))));
+        TrinketRendererRegistry.registerRenderer(Items.RUNNING_SHOES, new CurioRenderer("running_shoes", new LegsModel(bakeLayer(ModelLayers.RUNNING_SHOES))));
+        TrinketRendererRegistry.registerRenderer(Items.STEADFAST_SPIKES, new CurioRenderer("steadfast_spikes", new LegsModel(bakeLayer(ModelLayers.STEADFAST_SPIKES))));
+        TrinketRendererRegistry.registerRenderer(Items.FLIPPERS, new CurioRenderer("flippers", new LegsModel(bakeLayer(ModelLayers.FLIPPERS))));
 
         // curio
-        TrinketRendererRegistry.registerRenderer(Items.WHOOPEE_CUSHION, new SimpleCurioRenderer("whoopee_cushion", HeadModel.whoopeeCushion()));
+        TrinketRendererRegistry.registerRenderer(Items.WHOOPEE_CUSHION, new CurioRenderer("whoopee_cushion", new HeadModel(bakeLayer(ModelLayers.WHOOPEE_CUSHION))));
+    }
+
+    public static ModelPart bakeLayer(ModelLayerLocation layerLocation) {
+        return Minecraft.getInstance().getEntityModels().bakeLayer(layerLocation);
+    }
+
+    @Override
+    public ResourceLocation getFabricId() {
+        return Artifacts.id("trinket_renderers");
     }
 }

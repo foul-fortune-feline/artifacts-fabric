@@ -19,7 +19,7 @@ public abstract class RenderTypes extends RenderType {
 	// See ForgeRenderTypes#getUnlitTranslucent
 	public static RenderType unlit(ResourceLocation textureLocation) {
 		CompositeState renderState = CompositeState.builder()
-				//TODO: .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_UNLIT_SHADER)
+				// FIXME CRASH: .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_UNLIT_SHADER)
 				.setTextureState(new TextureStateShard(textureLocation, false, false))
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setCullState(NO_CULL)

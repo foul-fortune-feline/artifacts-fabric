@@ -1,7 +1,6 @@
 package artifacts.client.render.trinket.renderer;
 
 import artifacts.Artifacts;
-import artifacts.client.render.TrinketRenderHelper;
 import artifacts.client.render.trinket.model.BeltModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -39,14 +38,14 @@ public class BeltCurioRenderer implements TrinketRenderer {
     }
 
     @Override
-    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch) {
+    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         BeltModel model = getModel();
 
-        model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
+        model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
-        model.setCharmPosition(slotReference.index()); // TODO: not sure if this index is correct
-        TrinketRenderHelper.followBodyRotations(entity, model);
-        render(matrixStack, buffer, light, stack.hasFoil());
+        model.setCharmPosition(slotReference.index());
+        TrinketRenderer.followBodyRotations(entity, model);
+        render(poseStack, multiBufferSource, light, stack.hasFoil());
     }
 
     protected void render(PoseStack matrixStack, MultiBufferSource buffer, int light, boolean hasFoil) {

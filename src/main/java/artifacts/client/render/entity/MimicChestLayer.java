@@ -3,10 +3,12 @@ package artifacts.client.render.entity;
 import artifacts.client.render.entity.model.MimicChestLayerModel;
 import artifacts.client.render.entity.model.MimicModel;
 import artifacts.entity.MimicEntity;
+import artifacts.init.ModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -29,13 +31,13 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
     public final Material vanillaChestMaterial;
     public final List<Material> chestMaterials;
 
-    public MimicChestLayer(RenderLayerParent<MimicEntity, MimicModel> entityRenderer) {
+    public MimicChestLayer(RenderLayerParent<MimicEntity, MimicModel> entityRenderer, EntityModelSet modelSet) {
         super(entityRenderer);
 
         Calendar calendar = Calendar.getInstance();
         boolean isChristmas = calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 24 && calendar.get(Calendar.DATE) <= 26;
 
-        chestModel = new MimicChestLayerModel();
+        chestModel = new MimicChestLayerModel(modelSet.bakeLayer(ModelLayers.MIMIC_OVERLAY));
         chestMaterials = new ArrayList<>();
         vanillaChestMaterial = Sheets.chooseMaterial(null, ChestType.SINGLE, isChristmas);
 

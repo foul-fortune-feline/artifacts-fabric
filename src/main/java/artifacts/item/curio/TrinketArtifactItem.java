@@ -1,7 +1,6 @@
 package artifacts.item.curio;
 
 import artifacts.Artifacts;
-import artifacts.components.BooleanComponent;
 import artifacts.events.PlayHurtSoundCallback;
 import artifacts.item.ArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
@@ -60,7 +59,7 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 		}
 
 		ItemStack stack = user.getItemInHand(hand);
-		if (TrinketItem.equipItem(user, stack)) {
+		if (TrinketItem.equipItem(user, stack)) { // TODO: this does toooo much
 			// Play right click equip sound
 			SoundInfo sound = this.getEquipSoundInfo();
 			user.playSound(sound.soundEvent(), sound.volume(), sound.pitch());

@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
-public class GlowingCurioRenderer extends SimpleCurioRenderer {
+public class GlowingCurioRenderer extends CurioRenderer {
 
     private final ResourceLocation glowTexture;
 
@@ -27,10 +27,10 @@ public class GlowingCurioRenderer extends SimpleCurioRenderer {
     }
 
     @Override
-    protected void render(PoseStack matrixStack, MultiBufferSource buffer, int light, boolean hasFoil) {
-        super.render(matrixStack, buffer, light, hasFoil);
+    protected void render(PoseStack poseStack, MultiBufferSource multiBufferSource, int light, boolean hasFoil) {
+        super.render(poseStack, multiBufferSource, light, hasFoil);
         RenderType renderType = RenderTypes.unlit(getGlowTexture());
-        VertexConsumer builder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
-        getModel().renderToBuffer(matrixStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        VertexConsumer builder = ItemRenderer.getFoilBuffer(multiBufferSource, renderType, false, hasFoil);
+        getModel().renderToBuffer(poseStack, builder, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 }

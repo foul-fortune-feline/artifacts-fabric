@@ -1,7 +1,7 @@
 package artifacts.client.render.trinket.renderer;
 
 import artifacts.Artifacts;
-import artifacts.client.render.trinket.model.HandsModel;
+import artifacts.client.render.trinket.model.ArmsModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.emi.trinkets.api.SlotReference;
@@ -20,35 +20,30 @@ import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.function.Function;
 
 public class GloveCurioRenderer implements TrinketRenderer {
 
     private final ResourceLocation defaultTexture;
     private final ResourceLocation slimTexture;
-    private final HandsModel defaultModel;
-    private final HandsModel slimModel;
+    private final ArmsModel defaultModel;
+    private final ArmsModel slimModel;
 
-    public GloveCurioRenderer(String name) {
-        this(String.format("glove/%s/%s_default", name, name), String.format("glove/%s/%s_slim", name, name), HandsModel::glove);
+    public GloveCurioRenderer(String name, ArmsModel defaultModel, ArmsModel slimModel) {
+        this(String.format("glove/%s/%s_default", name, name), String.format("glove/%s/%s_slim", name, name), defaultModel, slimModel);
     }
 
-    public GloveCurioRenderer(String name, Function<Boolean, HandsModel> modelFactory) {
-        this(String.format("%s/%s_default", name, name), String.format("%s/%s_slim", name, name), modelFactory);
-    }
-
-    public GloveCurioRenderer(String defaultTexturePath, String slimTexturePath, Function<Boolean, HandsModel> modelFactory) {
+    public GloveCurioRenderer(String defaultTexturePath, String slimTexturePath, ArmsModel defaultModel, ArmsModel slimModel) {
         this.defaultTexture = Artifacts.id(String.format("textures/entity/curio/%s.png", defaultTexturePath));
         this.slimTexture = Artifacts.id(String.format("textures/entity/curio/%s.png", slimTexturePath));
-        this.defaultModel = modelFactory.apply(false);
-        this.slimModel = modelFactory.apply(true);
+        this.defaultModel = defaultModel;
+        this.slimModel = slimModel;
     }
 
     protected ResourceLocation getTexture(boolean hasSlimArms) {
         return hasSlimArms ? slimTexture : defaultTexture;
     }
 
-    protected HandsModel getModel(boolean hasSlimArms) {
+    protected ArmsModel getModel(boolean hasSlimArms) {
         return hasSlimArms ? slimModel : defaultModel;
     }
 
@@ -57,29 +52,29 @@ public class GloveCurioRenderer implements TrinketRenderer {
     }
 
     @Override
-    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch) {
+    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         boolean hasSlimArms = hasSlimArms(entity);
-        HandsModel model = getModel(hasSlimArms);
-        InteractionHand hand = slotReference.index() % 2 == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+        ArmsModel model = getModel(hasSlimArms);
+        InteractionHand hand = slotReference.index() % 2 == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND; // FIXME: no bueno?
         HumanoidArm handSide = hand == InteractionHand.MAIN_HAND ? entity.getMainArm() : entity.getMainArm().getOpposite();
 
-        model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
+        model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
         TrinketRenderer.followBodyRotations(entity, model);
 
-        renderArm(model, matrixStack, buffer, handSide, light, hasSlimArms, stack.hasFoil());
+        renderArm(model, poseStack, multiBufferSource, handSide, light, hasSlimArms, stack.hasFoil());
     }
 
-    protected void renderArm(HandsModel model, PoseStack matrixStack, MultiBufferSource buffer, HumanoidArm handSide, int light, boolean hasSlimArms, boolean hasFoil) {
+    protected void renderArm(ArmsModel model, PoseStack matrixStack, MultiBufferSource buffer, HumanoidArm handSide, int light, boolean hasSlimArms, boolean hasFoil) {
         RenderType renderType = model.renderType(getTexture(hasSlimArms));
         VertexConsumer vertexBuilder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
-        model.renderHand(handSide, matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+        model.renderArm(handSide, matrixStack, vertexBuilder, light, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
     }
 
     public final void renderFirstPersonArm(PoseStack matrixStack, MultiBufferSource buffer, int light, AbstractClientPlayer player, HumanoidArm side, boolean hasFoil) {
         if (!player.isSpectator()) {
             boolean hasSlimArms = hasSlimArms(player);
-            HandsModel model = getModel(hasSlimArms);
+            ArmsModel model = getModel(hasSlimArms);
 
             ModelPart arm = side == HumanoidArm.LEFT ? model.leftArm : model.rightArm;
 
@@ -95,7 +90,7 @@ public class GloveCurioRenderer implements TrinketRenderer {
         }
     }
 
-    protected void renderFirstPersonArm(HandsModel model, ModelPart arm, PoseStack matrixStack, MultiBufferSource buffer, int light, boolean hasSlimArms, boolean hasFoil) {
+    protected void renderFirstPersonArm(ArmsModel model, ModelPart arm, PoseStack matrixStack, MultiBufferSource buffer, int light, boolean hasSlimArms, boolean hasFoil) {
         RenderType renderType = model.renderType(getTexture(hasSlimArms));
         VertexConsumer builder = ItemRenderer.getFoilBuffer(buffer, renderType, false, hasFoil);
         arm.render(matrixStack, builder, light, OverlayTexture.NO_OVERLAY);

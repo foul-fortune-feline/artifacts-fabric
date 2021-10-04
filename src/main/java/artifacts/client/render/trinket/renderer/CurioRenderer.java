@@ -15,16 +15,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-public class SimpleCurioRenderer implements TrinketRenderer {
+public class CurioRenderer implements TrinketRenderer {
 
     private final ResourceLocation texture;
     private final HumanoidModel<LivingEntity> model;
 
-    public SimpleCurioRenderer(String texturePath, HumanoidModel<LivingEntity> model) {
+    public CurioRenderer(String texturePath, HumanoidModel<LivingEntity> model) {
         this(Artifacts.id(String.format("textures/entity/curio/%s.png", texturePath)), model);
     }
 
-    public SimpleCurioRenderer(ResourceLocation texture, HumanoidModel<LivingEntity> model) {
+    public CurioRenderer(ResourceLocation texture, HumanoidModel<LivingEntity> model) {
         this.texture = texture;
         this.model = model;
     }
@@ -38,13 +38,13 @@ public class SimpleCurioRenderer implements TrinketRenderer {
     }
 
     @Override
-    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack matrixStack, MultiBufferSource buffer, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ticks, float headYaw, float headPitch) {
+    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         HumanoidModel<LivingEntity> model = getModel();
 
-        model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
+        model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
         TrinketRenderer.followBodyRotations(entity, model);
-        render(matrixStack, buffer, light, stack.hasFoil());
+        render(poseStack, multiBufferSource, light, stack.hasFoil());
     }
 
     protected void render(PoseStack matrixStack, MultiBufferSource buffer, int light, boolean hasFoil) {
