@@ -1,5 +1,6 @@
 package artifacts.client.render.trinket.model;
 
+import artifacts.client.render.RenderTypeFactory;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
@@ -8,10 +9,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.function.Function;
 
 public class HeadModel {
 
@@ -19,7 +17,7 @@ public class HeadModel {
         return bake(mesh, RenderType::entityCutoutNoCull, 32, 32);
     }
 
-    private static HumanoidModel<LivingEntity> bake(MeshDefinition mesh, Function<ResourceLocation, RenderType> renderType, int textureWidth, int textureHeight) {
+    private static HumanoidModel<LivingEntity> bake(MeshDefinition mesh, RenderTypeFactory renderType, int textureWidth, int textureHeight) {
         HumanoidModel<LivingEntity> model = new HumanoidModel<>(LayerDefinition.create(mesh, textureWidth, textureHeight).bakeRoot(), renderType);
         model.setAllVisible(false);
         model.head.visible = true;

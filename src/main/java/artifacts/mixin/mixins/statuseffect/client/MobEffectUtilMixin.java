@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MobEffectUtil.class)
 public abstract class MobEffectUtilMixin {
 
-	// TODO: There might be a better place for this
 	@Inject(method = "formatDuration", at = @At("HEAD"), cancellable = true)
 	private static void setFromArtifactString(MobEffectInstance effect, float multiplier, CallbackInfoReturnable<String> info) {
 		LocalPlayer player = Minecraft.getInstance().player;

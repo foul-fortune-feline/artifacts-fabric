@@ -5,6 +5,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 
 public class MimicModel extends EntityModel<MimicEntity> {
 
@@ -13,24 +19,21 @@ public class MimicModel extends EntityModel<MimicEntity> {
     protected final ModelPart upperMouthOverlay;
     protected final ModelPart lowerMouthOverlay;
 
-    public MimicModel() {
-        texWidth = 64;
-        texHeight = 32;
+    public MimicModel(ModelPart modelPart) {
+        upperTeeth = modelPart.getChild("upper_teeth");
+        lowerTeeth = modelPart.getChild("lower_teeth");
+        upperMouthOverlay = modelPart.getChild("upper_mouth_overlay");
+        lowerMouthOverlay = modelPart.getChild("lower_mouth_overlay");
+    }
 
-        upperTeeth = new ModelPart(this, 0, 0);
-        lowerTeeth = new ModelPart(this, 0, 15);
-        upperMouthOverlay = new ModelPart(this, 24, 0);
-        lowerMouthOverlay = new ModelPart(this, 36, 15);
-
-        upperTeeth.addBox(-6, 0, -13, 12, 3, 12);
-        lowerTeeth.addBox(-6, -4, -13, 12, 3, 12);
-        upperMouthOverlay.addBox(-6, 0, -13, 12, 0, 12, 0.02F);
-        lowerMouthOverlay.addBox(-6, -1, -13, 12, 0, 12, 0.02F);
-
-        upperTeeth.setPos(0, 15, 7);
-        lowerTeeth.setPos(0, 15, 7);
-        upperMouthOverlay.setPos(0, 15, 7);
-        lowerMouthOverlay.setPos(0, 15, 7);
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        root.addOrReplaceChild("upper_teeth", CubeListBuilder.create().addBox(-6, 0, -13, 12, 3, 12), PartPose.offset(0, 15, 7));
+        root.addOrReplaceChild("lower_teeth", CubeListBuilder.create().texOffs(0, 15).addBox(-6, -4, -13, 12, 3, 12), PartPose.offset(0, 15, 7));
+        root.addOrReplaceChild("upper_mouth_overlay", CubeListBuilder.create().texOffs(24, 0).addBox(-6, 0, -13, 12, 0, 12, new CubeDeformation(0.02f)), PartPose.offset(0, 15, 7));
+        root.addOrReplaceChild("lower_mouth_overlay", CubeListBuilder.create().texOffs(36, 15).addBox(-6, -1, -13, 12, 0, 12, new CubeDeformation(0.02f)), PartPose.offset(0, 15, 7));
+        return LayerDefinition.create(mesh, 64, 32);
     }
 
     @Override

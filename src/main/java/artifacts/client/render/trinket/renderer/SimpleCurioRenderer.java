@@ -1,7 +1,6 @@
 package artifacts.client.render.trinket.renderer;
 
 import artifacts.Artifacts;
-import artifacts.client.render.TrinketRenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.emi.trinkets.api.SlotReference;
@@ -44,7 +43,7 @@ public class SimpleCurioRenderer implements TrinketRenderer {
 
         model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
-        TrinketRenderHelper.followBodyRotations(entity, model);
+        TrinketRenderer.followBodyRotations(entity, model);
         render(matrixStack, buffer, light, stack.hasFoil());
     }
 

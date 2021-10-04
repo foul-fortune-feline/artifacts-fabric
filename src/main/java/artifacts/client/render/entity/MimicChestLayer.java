@@ -29,7 +29,6 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
     public final Material vanillaChestMaterial;
     public final List<Material> chestMaterials;
 
-    @SuppressWarnings("deprecation")
     public MimicChestLayer(RenderLayerParent<MimicEntity, MimicModel> entityRenderer) {
         super(entityRenderer);
 
@@ -44,6 +43,7 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
         // The following Forge mod compatibility is kept just in case
         if (FabricLoader.getInstance().isModLoaded("lootr")) {
             ResourceLocation chestLocation = new ResourceLocation("lootr", "chest");
+            //noinspection deprecation
             chestMaterials.add(new Material(TextureAtlas.LOCATION_BLOCKS, chestLocation));
         } else {
             if (!isChristmas && FabricLoader.getInstance().isModLoaded("quark")) {

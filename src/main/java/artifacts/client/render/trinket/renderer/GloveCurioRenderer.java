@@ -1,7 +1,6 @@
 package artifacts.client.render.trinket.renderer;
 
 import artifacts.Artifacts;
-import artifacts.client.render.TrinketRenderHelper;
 import artifacts.client.render.trinket.model.HandsModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -66,7 +65,7 @@ public class GloveCurioRenderer implements TrinketRenderer {
 
         model.setupAnim(entity, limbSwing, limbSwingAmount, ticks, headYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
-        TrinketRenderHelper.followBodyRotations(entity, model);
+        TrinketRenderer.followBodyRotations(entity, model);
 
         renderArm(model, matrixStack, buffer, handSide, light, hasSlimArms, stack.hasFoil());
     }
