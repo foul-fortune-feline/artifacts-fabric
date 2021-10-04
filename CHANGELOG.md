@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2021-10-04
+### Fixed
+- No longer depend on cardinal components for items, fixes related crash
+  - As a side effect, Artifacts that were set to have effects disabled have had their effects re-enabled
+- Fix issue with aqua dashers working when resurfacing from water
+- Fix everlasting beef dropping for non-player kills
+
 ## [4.0.0] - 2021-09-29
 ### Added
 - Helium Flamingo artifact
@@ -191,7 +198,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/florensie/artifacts-fabric/compare/v3.2.1...HEAD
+[Unreleased]: https://github.com/florensie/artifacts-fabric/compare/v4.0.1...HEAD
+[4.0.1]: https://github.com/florensie/artifacts-fabric/compare/v4.0.0...v4.0.1
+[4.0.0]: https://github.com/florensie/artifacts-fabric/compare/v3.2.1...v4.0.0
 [3.2.1]: https://github.com/florensie/artifacts-fabric/compare/v3.2.0...v3.2.1
 [3.2.0]: https://github.com/florensie/artifacts-fabric/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/florensie/artifacts-fabric/compare/v3.0.3...v3.1.0

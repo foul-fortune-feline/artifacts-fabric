@@ -24,7 +24,7 @@ public class AquaDashersItem extends TrinketArtifactItem {
 
 	@Override
 	public void tick(Player player, ItemStack stack) {
-		Components.SWIM_ABILITIES.maybeGet(this).ifPresent(swimAbilities -> {
+		Components.SWIM_ABILITIES.maybeGet(player).ifPresent(swimAbilities -> {
 			if (player.isInWater()) {
 				swimAbilities.setWet(true);
 			} else if (player.isOnGround() || player.abilities.flying) {

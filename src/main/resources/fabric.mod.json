@@ -47,7 +47,6 @@
     "expandability": ">=2.0.0",
     "cardinal-components-base": ">=2.7.5",
     "cardinal-components-entity": ">=2.7.5",
-    "cardinal-components-item": ">=2.7.5",
     "cloth-config2": ">=4.9",
     "step-height-entity-attribute": "*"
   },

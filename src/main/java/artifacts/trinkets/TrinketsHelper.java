@@ -1,9 +1,8 @@
 package artifacts.trinkets;
 
-import artifacts.components.BooleanComponent;
-import artifacts.init.Components;
 import artifacts.item.curio.TrinketArtifactItem;
 import dev.emi.trinkets.api.TrinketsApi;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -66,8 +65,15 @@ public final class TrinketsHelper {
 	}
 
 	public static boolean areEffectsEnabled(ItemStack stack) {
-		return Components.ARTIFACT_ENABLED.maybeGet(stack)
-				.map(BooleanComponent::get)
-				.orElse(true);
+		if (!(stack.getItem() instanceof TrinketArtifactItem)) {
+			return false;
+		}
+
+		CompoundTag tag = stack.getTagElement("Artifacts");
+		if (tag == null || !tag.contains("Status", 1)) {
+			return true;
+		}
+
+		return TrinketArtifactItem.ArtifactStatus.values()[tag.getByte("Status")].hasEffects();
 	}
 }
