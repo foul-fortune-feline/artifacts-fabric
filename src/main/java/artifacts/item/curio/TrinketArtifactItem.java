@@ -59,7 +59,7 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 		}
 
 		ItemStack stack = user.getItemInHand(hand);
-		if (TrinketItem.equipItem(user, stack)) { // TODO: this does toooo much
+		if (TrinketItem.equipItem(user, stack)) {
 			// Play right click equip sound
 			SoundInfo sound = this.getEquipSoundInfo();
 			user.playSound(sound.soundEvent(), sound.volume(), sound.pitch());

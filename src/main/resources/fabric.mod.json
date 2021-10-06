@@ -25,6 +25,10 @@
     "client": [
       "artifacts.ArtifactsClient"
     ],
+    "artifacts-compathandlers": [
+      "artifacts.compat.HaemaCompat",
+      "artifacts.compat.OriginsCompat"
+    ],
     "modmenu": [
       "artifacts.integrations.ModMenuConfig"
     ],
@@ -41,13 +45,13 @@
   "accessWidener": "artifacts.accesswidener",
 
   "depends": {
-    "minecraft": ">=1.16.2",
+    "minecraft": ">=1.17",
     "fabricloader": ">=0.7.4",
     "fabric": ">=0.28.0",
-    "trinkets": "*",
-    "expandability": ">=2.0.0",
-    "cardinal-components-base": ">=2.7.5",
-    "cardinal-components-entity": ">=2.7.5",
+    "trinkets": ">=3.0.0",
+    "expandability": ">=3.0.0",
+    "cardinal-components-base": ">=3.0.0",
+    "cardinal-components-entity": ">=3.0.0",
     "cloth-config2": ">=4.9",
     "step-height-entity-attribute": "*"
   },
@@ -61,7 +65,6 @@
   "custom": {
     "cardinal-components": [
       "artifacts:dropped_item_entity",
-      "artifacts:trinket_enabled",
       "artifacts:entity_kill_tracker",
       "artifacts:swim_abilities"
     ]

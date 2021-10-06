@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -55,8 +54,9 @@ public class GloveCurioRenderer implements TrinketRenderer {
     public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         boolean hasSlimArms = hasSlimArms(entity);
         ArmsModel model = getModel(hasSlimArms);
-        InteractionHand hand = slotReference.index() % 2 == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND; // FIXME: no bueno?
-        HumanoidArm handSide = hand == InteractionHand.MAIN_HAND ? entity.getMainArm() : entity.getMainArm().getOpposite();
+
+        String slotGroup = slotReference.inventory().getSlotType().getGroup();
+        HumanoidArm handSide = slotGroup.equals("hand") ? entity.getMainArm() : entity.getMainArm().getOpposite();
 
         model.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
         model.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);

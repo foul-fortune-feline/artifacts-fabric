@@ -4,8 +4,11 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.Util;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+
+import java.util.function.Function;
 
 
 @Environment(EnvType.CLIENT)
@@ -17,9 +20,10 @@ public abstract class RenderTypes extends RenderType {
 	}
 
 	// See ForgeRenderTypes#getUnlitTranslucent
-	public static RenderType unlit(ResourceLocation textureLocation) {
+	private static final Function<ResourceLocation, RenderType> UNLIT_TRANSLUCENT = Util.memoize(Util.memoize(textureLocation -> {
 		CompositeState renderState = CompositeState.builder()
-				// FIXME CRASH: .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_UNLIT_SHADER)
+				// TODO (from forge): .setShaderState(RENDERTYPE_ENTITY_TRANSLUCENT_UNLIT_SHADER)
+				.setShaderState(RENDERTYPE_ENTITY_CUTOUT_NO_CULL_SHADER)
 				.setTextureState(new TextureStateShard(textureLocation, false, false))
 				.setTransparencyState(TRANSLUCENT_TRANSPARENCY)
 				.setCullState(NO_CULL)
@@ -27,5 +31,9 @@ public abstract class RenderTypes extends RenderType {
 				.setOverlayState(OVERLAY)
 				.createCompositeState(true);
 		return create("artifacts_entity_unlit", DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true, renderState);
+	}));
+
+	public static RenderType unlit(ResourceLocation textureLocation) {
+		return UNLIT_TRANSLUCENT.apply(textureLocation);
 	}
 }

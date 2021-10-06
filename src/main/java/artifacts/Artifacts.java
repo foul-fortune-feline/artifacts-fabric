@@ -1,5 +1,6 @@
 package artifacts;
 
+import artifacts.compat.CompatHandler;
 import artifacts.compat.HaemaCompat;
 import artifacts.compat.OriginsCompat;
 import artifacts.config.ModConfig;
@@ -57,15 +58,15 @@ public class Artifacts implements ModInitializer {
 		Features.register();
 
 		// Compat Handlers
-		COMPAT_HANDLERS.forEach((modId, compatHandler) -> {
-			if (FabricLoader.getInstance().isModLoaded(modId)) {
-				Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(modId);
-				String modName = modContainer.map(c -> c.getMetadata().getName()).orElse(modId);
+		for (CompatHandler handler : FabricLoader.getInstance().getEntrypoints("artifacts:compat_handlers", CompatHandler.class)) {
+			if (FabricLoader.getInstance().isModLoaded(handler.modId())) {
+				Optional<ModContainer> modContainer = FabricLoader.getInstance().getModContainer(handler.modId());
+				String modName = modContainer.map(c -> c.getMetadata().getName()).orElse(handler.modId());
 
 				LOGGER.info("[Artifacts] Running compat handler for " + modName);
-				compatHandler.run();
+				handler.run();
 			}
-		});
+		}
 
 		// Tool Handlers
 		ToolHandlers.register();

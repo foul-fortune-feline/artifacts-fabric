@@ -42,6 +42,6 @@ jobs:
           changelog_type: markdown
           changelog: ${{ steps.changelog_reader.outputs.changes }}
           display_name: ${{ steps.changelog_reader.outputs.version }} for Minecraft 1.16.3-1.16.5
-          game_versions: 1.16.3,1.16.4,1.16.5,fabric
+          game_versions: 1.17,1.17-Snapshot,1.17.1,fabric
           release_type: release
           relations: fabric-api:requiredDependency,trinkets-fabric:requiredDependency,expandability:embeddedLibrary,cardinal-components:embeddedLibrary,cloth-config:requiredDependency,modmenu:optionalDependency

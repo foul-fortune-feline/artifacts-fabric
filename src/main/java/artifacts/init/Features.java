@@ -15,9 +15,10 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.ChanceDecoratorConfiguration;
 import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
+
 import java.util.function.Predicate;
 
-// TODO: Biome Modifications API is experimental, remove suppress warning when stable
+// Biome Modifications API is experimental, remove suppress warning when stable
 @SuppressWarnings("deprecation")
 public class Features {
 

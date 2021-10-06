@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
-public class HaemaCompat implements Runnable {
+public class HaemaCompat implements CompatHandler {
 
 	@Override
 	public void run() {
@@ -24,5 +24,10 @@ public class HaemaCompat implements Runnable {
 				return 20;
 			}
 		});
+	}
+
+	@Override
+	public String modId() {
+		return "haema";
 	}
 }
