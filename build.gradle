@@ -122,10 +122,21 @@ curseforge {
         project {
             id = "401236"
             releaseType = "release"
+
+            changelogType = "markdown"
             changelog = System.getenv("CHANGELOG") ?: "https://github.com/florensie/artifacts-fabric/blob/1.17-fabric/CHANGELOG.md"
+
             addGameVersion "1.17"
             addGameVersion "1.17.1"
             addGameVersion "Fabric"
+            relations {
+                requiredDependency "fabric-api"
+                requiredDependency "cloth-config"
+                requiredDependency "trinkets-fabric"
+                embeddedLibrary "cardinal-components"
+                embeddedLibrary "expandability"
+                optionalDependency "modmenu"
+            }
 
             mainArtifact(remapJar.archiveFile) {
                 displayName = "${project.mod_version} for Minecraft 1.17-1.17.1"
