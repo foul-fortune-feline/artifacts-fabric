@@ -8,6 +8,7 @@ import artifacts.item.curio.TrinketArtifactItem;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 
 import java.util.Collections;
@@ -35,11 +35,11 @@ public class HeliumFlamingoItem extends TrinketArtifactItem {
 		ServerPlayNetworking.registerGlobalReceiver(C2S_AIR_SWIMMING_ID, HeliumFlamingoItem::handleAirSwimmingPacket);
 	}
 
-	private static InteractionResult onPlayerSwim(Player player) {
+	private static TriState onPlayerSwim(Player player) {
 		return Components.SWIM_ABILITIES.maybeGet(player)
 				.filter(SwimAbilityComponent::isSwimming)
-				.map(swimAbilities -> InteractionResult.SUCCESS)
-				.orElse(InteractionResult.PASS);
+				.map(swimAbilities -> TriState.TRUE)
+				.orElse(TriState.DEFAULT);
 	}
 
 	private static void handleAirSwimmingPacket(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender packetSender) {

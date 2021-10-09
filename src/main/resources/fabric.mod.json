@@ -49,7 +49,7 @@
     "fabricloader": ">=0.7.4",
     "fabric": ">=0.28.0",
     "trinkets": ">=3.0.0",
-    "expandability": ">=3.0.0",
+    "expandability": ">=4.0.0",
     "cardinal-components-base": ">=3.0.0",
     "cardinal-components-entity": ">=3.0.0",
     "cloth-config2": ">=4.9",

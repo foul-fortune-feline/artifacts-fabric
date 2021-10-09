@@ -7,8 +7,8 @@ import artifacts.item.curio.TrinketArtifactItem;
 import artifacts.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
 import dev.emi.trinkets.api.SlotReference;
+import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -19,11 +19,11 @@ public class CharmOfSinkingItem extends TrinketArtifactItem {
         PlayerSwimCallback.EVENT.register(CharmOfSinkingItem::onPlayerSwim);
     }
 
-    private static InteractionResult onPlayerSwim(Player player) {
+    private static TriState onPlayerSwim(Player player) {
         return Components.SWIM_ABILITIES.maybeGet(player)
                 .filter(SwimAbilityComponent::isSinking)
-                .map(swimAbilities -> InteractionResult.FAIL)
-                .orElse(InteractionResult.PASS);
+                .map(swimAbilities -> TriState.FALSE)
+                .orElse(TriState.DEFAULT);
     }
 
     @Override
