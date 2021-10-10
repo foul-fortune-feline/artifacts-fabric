@@ -20,7 +20,7 @@ public abstract class LivingEntityMixin implements LivingEntityExtensions {
 
 	// This is a big method, so I feel more comfortable with a slice than an ordinal
 	// big method, big annotation, big fun
-	@ModifyArg(method = "travel", index = 0, allow = 1,
+	@ModifyArg(method = "travel", allow = 1,
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"),
 			slice = @Slice(
 					from = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isInWater()Z"),
@@ -34,7 +34,6 @@ public abstract class LivingEntityMixin implements LivingEntityExtensions {
 	@Unique
 	@Override
 	public double artifacts$getIncreasedSwimSpeed(double speed) {
-		return TrinketsHelper.isEquipped(Items.FLIPPERS, (LivingEntity) (Object) this)
-				? speed * 2 : speed;
+		return TrinketsHelper.isEquipped(Items.FLIPPERS, (LivingEntity) (Object) this) ? speed * 2 : speed;
 	}
 }
