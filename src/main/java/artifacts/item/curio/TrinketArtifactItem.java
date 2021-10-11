@@ -9,6 +9,7 @@ import com.google.common.collect.Multimap;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.Trinket;
 import dev.emi.trinkets.api.TrinketItem;
+import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
@@ -37,6 +38,7 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	public TrinketArtifactItem() {
 		// DispenserBlock.registerBehavior(this, TrinketItem.TRINKET_DISPENSER_BEHAVIOR); TODO: bug, missing in trinkets rewrite
 		PlayHurtSoundCallback.EVENT.register(this::playExtraHurtSound);
+		TrinketsApi.registerTrinket(this, this);
 	}
 
 	@Override
