@@ -1,8 +1,6 @@
 package artifacts;
 
 import artifacts.compat.CompatHandler;
-import artifacts.compat.HaemaCompat;
-import artifacts.compat.OriginsCompat;
 import artifacts.config.ModConfig;
 import artifacts.init.Features;
 import artifacts.init.Items;
@@ -24,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Map;
 import java.util.Optional;
 
 public class Artifacts implements ModInitializer {
@@ -36,9 +33,6 @@ public class Artifacts implements ModInitializer {
 			() -> new ItemStack(Items.BUNNY_HOPPERS)
 	);
 	public static ModConfig CONFIG;
-	private static final Map<String, Runnable> COMPAT_HANDLERS = Map.of(
-			"origins", new OriginsCompat(),
-			"haema", new HaemaCompat());
 
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
