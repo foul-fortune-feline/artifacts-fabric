@@ -27,7 +27,7 @@ public class HaemaCompat implements CompatHandler {
 	}
 
 	@Override
-	public String modId() {
+	public String getModId() {
 		return "haema";
 	}
 }

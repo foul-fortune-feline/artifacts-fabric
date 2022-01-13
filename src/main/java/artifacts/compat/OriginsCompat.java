@@ -26,7 +26,7 @@ public class OriginsCompat implements CompatHandler {
 	}
 
 	@Override
-	public String modId() {
+	public String getModId() {
 		return "origins";
 	}
 }
