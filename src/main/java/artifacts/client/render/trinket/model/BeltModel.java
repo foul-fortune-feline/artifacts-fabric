@@ -1,7 +1,7 @@
 package artifacts.client.render.trinket.model;
 
 import artifacts.client.render.trinket.CurioRenderers;
-import artifacts.init.ModelLayers;
+import artifacts.common.init.ModModelLayers;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
@@ -56,7 +56,7 @@ public class BeltModel extends HumanoidModel<LivingEntity> {
     }
 
     public static BeltModel createCloudInABottleModel() {
-        return new BeltModel(CurioRenderers.bakeLayer(ModelLayers.CLOUD_IN_A_BOTTLE), RenderType::entityTranslucent, 3, -3, -0.5F) {
+        return new BeltModel(CurioRenderers.bakeLayer(ModModelLayers.CLOUD_IN_A_BOTTLE), RenderType::entityTranslucent, 3, -3, -0.5F) {
             private final ModelPart cloud = charm.getChild("cloud");
 
             @Override
@@ -69,7 +69,7 @@ public class BeltModel extends HumanoidModel<LivingEntity> {
     }
 
     public static HumanoidModel<LivingEntity> createHeliumFlamingoModel() {
-        ModelPart part = CurioRenderers.bakeLayer(ModelLayers.HELIUM_FLAMINGO);
+        ModelPart part = CurioRenderers.bakeLayer(ModModelLayers.HELIUM_FLAMINGO);
         return new HumanoidModel<>(part, RenderType::entityCutoutNoCull) {
             @Override
             protected Iterable<ModelPart> headParts() {
@@ -84,19 +84,19 @@ public class BeltModel extends HumanoidModel<LivingEntity> {
     }
 
     public static BeltModel createObsidianSkullModel() {
-        return new BeltModel(CurioRenderers.bakeLayer(ModelLayers.OBSIDIAN_SKULL), 4.5F, -4F, -0.5F);
+        return new BeltModel(CurioRenderers.bakeLayer(ModModelLayers.OBSIDIAN_SKULL), 4.5F, -4F, -0.5F);
     }
 
     public static BeltModel createAntidoteVesselModel() {
-        return new BeltModel(CurioRenderers.bakeLayer(ModelLayers.ANTIDOTE_VESSEL), 4, -3, -0.5F);
+        return new BeltModel(CurioRenderers.bakeLayer(ModModelLayers.ANTIDOTE_VESSEL), 4, -3, -0.5F);
     }
 
     public static BeltModel createUniversalAttractorModel() {
-        return new BeltModel(CurioRenderers.bakeLayer(ModelLayers.UNIVERSAL_ATTRACTOR), 2.5F, -3, 0);
+        return new BeltModel(CurioRenderers.bakeLayer(ModModelLayers.UNIVERSAL_ATTRACTOR), 2.5F, -3, 0);
     }
 
     public static BeltModel createCrystalHeartModel() {
-        return new BeltModel(CurioRenderers.bakeLayer(ModelLayers.CRYSTAL_HEART), RenderType::entityTranslucent, 2.5F, -3.01F, 0);
+        return new BeltModel(CurioRenderers.bakeLayer(ModModelLayers.CRYSTAL_HEART), RenderType::entityTranslucent, 2.5F, -3.01F, 0);
     }
 
     private static MeshDefinition createBelt(CubeListBuilder charm) {

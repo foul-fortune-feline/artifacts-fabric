@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.item.everlastingfood;
 
-import artifacts.item.EverlastingFoodItem;
+import artifacts.common.item.EverlastingFoodItem;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;

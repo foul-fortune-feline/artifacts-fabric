@@ -1,9 +1,10 @@
 package artifacts.mixin.mixins.item.cloudinabottle;
 
-import artifacts.init.Items;
-import artifacts.item.curio.belt.CloudInABottleItem;
+import artifacts.common.init.ModItems;
+import artifacts.common.init.ModSoundEvents;
+import artifacts.common.item.curio.belt.CloudInABottleItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import artifacts.mixin.extensions.LivingEntityExtensions;
-import artifacts.trinkets.TrinketsHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -62,8 +63,8 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 
 		// Play jump sound
 		LivingEntity self = (LivingEntity) (Object) this;
-		SoundEvent jumpSound = TrinketsHelper.isEquipped(Items.WHOOPEE_CUSHION, self) ?
-				artifacts.init.SoundEvents.FART : SoundEvents.WOOL_FALL;
+		SoundEvent jumpSound = TrinketsHelper.isEquipped(ModItems.WHOOPEE_CUSHION, self) ?
+				ModSoundEvents.FART : SoundEvents.WOOL_FALL;
 		this.playSound(jumpSound, 1, 0.9F + self.getRandom().nextFloat() * 0.2F);
 
 		// Reset fall distance for fall damage
@@ -87,7 +88,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 	@ModifyVariable(method = "causeFallDamage", ordinal = 0, at = @At("HEAD"))
 	private float reduceFallDistance(float fallDistance) {
 		// FIXME: this probably also works if we didn't double jump, intended?
-		if (TrinketsHelper.isEquipped(Items.CLOUD_IN_A_BOTTLE, (LivingEntity) (Object) this)) {
+		if (TrinketsHelper.isEquipped(ModItems.CLOUD_IN_A_BOTTLE, (LivingEntity) (Object) this)) {
 			fallDistance = Math.max(0, fallDistance - 3);
 		}
 
@@ -106,7 +107,7 @@ public abstract class LivingEntityMixin extends Entity implements LivingEntityEx
 
 		boolean flying = self instanceof Player player && player.getAbilities().flying;
 		if (this.jumping && this.jumpWasReleased && !this.isInWater() && !this.isOnGround() && !this.isPassenger()
-				&& !this.hasDoubleJumped && !flying && TrinketsHelper.isEquipped(Items.CLOUD_IN_A_BOTTLE, self)) {
+				&& !this.hasDoubleJumped && !flying && TrinketsHelper.isEquipped(ModItems.CLOUD_IN_A_BOTTLE, self)) {
 			this.artifacts$doubleJump();
 			this.hasDoubleJumped = true;
 		}

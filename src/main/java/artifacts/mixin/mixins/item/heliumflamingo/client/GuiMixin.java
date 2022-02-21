@@ -1,10 +1,10 @@
 package artifacts.mixin.mixins.item.heliumflamingo.client;
 
 import artifacts.Artifacts;
-import artifacts.init.Components;
-import artifacts.init.Items;
-import artifacts.item.curio.belt.HeliumFlamingoItem;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModComponents;
+import artifacts.common.init.ModItems;
+import artifacts.common.item.curio.belt.HeliumFlamingoItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
@@ -44,11 +44,11 @@ public abstract class GuiMixin {
 	private void renderFlamingoAir(PoseStack matrices, CallbackInfo ci) {
 		Player player = this.getCameraPlayer();
 
-		if (/*TODO: ModConfig.server.isCosmetic(HeliumFlamingoItem.this) ||*/ player == null || !TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, player)) {
+		if (/*TODO: ModConfig.server.isCosmetic(HeliumFlamingoItem.this) ||*/ player == null || !TrinketsHelper.isEquipped(ModItems.HELIUM_FLAMINGO, player)) {
 			return;
 		}
 
-		Components.SWIM_ABILITIES.maybeGet(player).ifPresent(swimAbilities -> {
+		ModComponents.SWIM_ABILITIES.maybeGet(player).ifPresent(swimAbilities -> {
 			int left = this.screenWidth / 2 + 91;
 			int top = this.screenHeight + getStatusBarHeightOffset(player);
 

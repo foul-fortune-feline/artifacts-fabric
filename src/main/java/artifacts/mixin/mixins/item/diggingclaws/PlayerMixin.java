@@ -1,8 +1,8 @@
 package artifacts.mixin.mixins.item.diggingclaws;
 
-import artifacts.init.Items;
-import artifacts.item.curio.hands.DiggingClawsItem;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.item.curio.hands.DiggingClawsItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -42,7 +42,7 @@ public abstract class PlayerMixin extends LivingEntity {
 	// TODO: identical artifacts-forge behaviour but could do this on the speed mutliplier instead of end result
 	@Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
 	private void increaseMiningSpeed(BlockState block, CallbackInfoReturnable<Float> info) {
-		if (TrinketsHelper.isEquipped(Items.DIGGING_CLAWS, this)) {
+		if (TrinketsHelper.isEquipped(ModItems.DIGGING_CLAWS, this)) {
 			info.setReturnValue(info.getReturnValueF() + DiggingClawsItem.MINING_SPEED_INCREASE);
 		}
 	}

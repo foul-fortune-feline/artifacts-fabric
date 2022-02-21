@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.kittyslippers;
 
-import artifacts.init.Items;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -27,7 +27,7 @@ public abstract class CreeperMixin extends Monster {
 	@Inject(method = "registerGoals", at = @At("TAIL"))
 	private void addPlayerFleeGoal(CallbackInfo info) {
 		this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Player.class,
-				(entity) -> TrinketsHelper.isEquipped(Items.KITTY_SLIPPERS, entity), 6.0f, 1.0,
+				(entity) -> TrinketsHelper.isEquipped(ModItems.KITTY_SLIPPERS, entity), 6.0f, 1.0,
 				1.2, EntitySelector.NO_CREATIVE_OR_SPECTATOR::test));
 	}
 }

@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.event;
 
-import artifacts.events.PlayHurtSoundCallback;
+import artifacts.common.events.PlayHurtSoundCallback;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;

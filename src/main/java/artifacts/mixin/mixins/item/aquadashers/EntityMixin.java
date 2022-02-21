@@ -1,9 +1,9 @@
 package artifacts.mixin.mixins.item.aquadashers;
 
-import artifacts.init.Items;
-import artifacts.init.SoundEvents;
-import artifacts.item.curio.feet.AquaDashersItem;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.init.ModSoundEvents;
+import artifacts.common.item.curio.feet.AquaDashersItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,7 +48,7 @@ public abstract class EntityMixin {
     @Inject(method = "playStepSound", at = @At("HEAD"))
     private void playWaterStepSound(BlockPos pos, BlockState blockState, CallbackInfo callbackInfo) {
         if (blockState.getMaterial().isLiquid() && isRunningWithAquaDashers()) {
-            ((LivingEntity) (Object) this).playSound(SoundEvents.WATER_STEP, 0.15F, 1);
+            ((LivingEntity) (Object) this).playSound(ModSoundEvents.WATER_STEP, 0.15F, 1);
         }
     }
 
@@ -86,6 +86,6 @@ public abstract class EntityMixin {
     @Unique
     private boolean isRunningWithAquaDashers() {
         // noinspection ConstantConditions
-        return (Object) this instanceof LivingEntity entity && TrinketsHelper.isEquipped(Items.AQUA_DASHERS, entity) && AquaDashersItem.canSprintOnWater(entity);
+        return (Object) this instanceof LivingEntity entity && TrinketsHelper.isEquipped(ModItems.AQUA_DASHERS, entity) && AquaDashersItem.canSprintOnWater(entity);
     }
 }

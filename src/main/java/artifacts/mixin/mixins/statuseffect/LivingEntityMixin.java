@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.statuseffect;
 
-import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

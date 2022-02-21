@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.pendant;
 
-import artifacts.init.Items;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LightningBolt;
@@ -17,7 +17,7 @@ public abstract class EntityMixin {
 	@Inject(method = "thunderHit", at = @At("HEAD"), cancellable = true)
 	private void lightningImmune(ServerLevel world, LightningBolt lightning, CallbackInfo info) {
 		//noinspection ConstantConditions
-		if ((Entity) (Object) this instanceof LivingEntity entity && TrinketsHelper.isEquipped(Items.SHOCK_PENDANT, entity)) {
+		if ((Entity) (Object) this instanceof LivingEntity entity && TrinketsHelper.isEquipped(ModItems.SHOCK_PENDANT, entity)) {
 			info.cancel();
 		}
 	}

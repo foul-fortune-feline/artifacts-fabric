@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.item.diggingclaws;
 
-import artifacts.init.ToolHandlers;
+import artifacts.common.init.ModToolHandlers;
 import artifacts.mixin.mixins.accessors.ItemStackAccessor;
 import net.fabricmc.fabric.impl.tool.attribute.ToolManagerImpl;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,7 +34,7 @@ public abstract class ToolmanagerImplMixin {
 	@Inject(method = "handleIsEffectiveOnIgnoresVanilla", at = @At(value = "TAIL"), cancellable = true)
 	private static void invokeNonToolsHandlers(BlockState state, ItemStack stack, LivingEntity user, boolean vanillaResult, CallbackInfoReturnable<Boolean> info) {
 		if (!info.getReturnValueZ()) {
-			info.setReturnValue(ToolHandlers.NON_TOOLS_HANDLER.invoker()
+			info.setReturnValue(ModToolHandlers.NON_TOOLS_HANDLER.invoker()
 					.isEffectiveOn(null, state, stack, user).consumesAction());
 		}
 	}

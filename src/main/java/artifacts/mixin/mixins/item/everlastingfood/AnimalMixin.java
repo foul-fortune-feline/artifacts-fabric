@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.everlastingfood;
 
 import artifacts.Artifacts;
-import artifacts.item.EverlastingFoodItem;
+import artifacts.common.item.EverlastingFoodItem;
 import artifacts.mixin.extensions.AnimalExtensions;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.animal.Animal;

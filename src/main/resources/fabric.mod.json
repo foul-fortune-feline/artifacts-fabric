@@ -26,17 +26,17 @@
       "artifacts.ArtifactsClient"
     ],
     "artifacts-compathandlers": [
-      "artifacts.compat.HaemaCompat",
-      "artifacts.compat.OriginsCompat"
+      "artifacts.common.compat.HaemaCompat",
+      "artifacts.common.compat.OriginsCompat"
     ],
     "modmenu": [
-      "artifacts.integrations.ModMenuConfig"
+      "artifacts.client.integrations.ModMenuConfig"
     ],
     "cardinal-components": [
-      "artifacts.init.Components"
+      "artifacts.common.init.ModComponents"
     ],
     "rei_plugins": [
-      "artifacts.integrations.REIPlugin"
+      "artifacts.client.integrations.REIPlugin"
     ]
   },
   "mixins": [

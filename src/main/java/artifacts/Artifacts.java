@@ -1,13 +1,13 @@
 package artifacts;
 
-import artifacts.compat.CompatHandler;
-import artifacts.config.ModConfig;
-import artifacts.init.Features;
-import artifacts.init.Items;
-import artifacts.init.LootTables;
-import artifacts.init.ModLootConditions;
-import artifacts.init.SoundEvents;
-import artifacts.init.ToolHandlers;
+import artifacts.common.compat.CompatHandler;
+import artifacts.common.config.ModConfig;
+import artifacts.common.init.ModFeatures;
+import artifacts.common.init.ModItems;
+import artifacts.common.init.ModLootConditions;
+import artifacts.common.init.ModLootTables;
+import artifacts.common.init.ModSoundEvents;
+import artifacts.common.init.ModToolHandlers;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -27,7 +27,7 @@ public class Artifacts implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 	public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.build(
 			id("item_group"),
-			() -> new ItemStack(Items.BUNNY_HOPPERS)
+			() -> new ItemStack(ModItems.BUNNY_HOPPERS)
 	);
 	public static ModConfig CONFIG;
 
@@ -41,18 +41,18 @@ public class Artifacts implements ModInitializer {
 		// Loot table setup
 		ModLootConditions.register();
 		LootTableLoadingCallback.EVENT.register((rm, lt, id, supplier, s) ->
-				LootTables.onLootTableLoad(id, supplier));
+				ModLootTables.onLootTableLoad(id, supplier));
 
 		// Force loading init classes
 		// Entities is loaded by items, loot tables can load lazily (no registration)
-		Items.ANTIDOTE_VESSEL.toString();
-		SoundEvents.MIMIC_CLOSE.toString();
-		Features.register();
+		ModItems.ANTIDOTE_VESSEL.toString();
+		ModSoundEvents.MIMIC_CLOSE.toString();
+		ModFeatures.register();
 
 		runCompatibilityHandlers();
 
 		// Tool Handlers
-		ToolHandlers.register();
+		ModToolHandlers.register();
 		LOGGER.info("[Artifacts] Finished initialization");
 	}
 

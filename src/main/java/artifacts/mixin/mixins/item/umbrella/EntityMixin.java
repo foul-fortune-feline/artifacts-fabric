@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.item.umbrella;
 
-import artifacts.item.UmbrellaItem;
+import artifacts.common.item.UmbrellaItem;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;

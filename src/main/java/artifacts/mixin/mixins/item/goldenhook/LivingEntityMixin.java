@@ -1,8 +1,8 @@
 package artifacts.mixin.mixins.item.goldenhook;
 
-import artifacts.init.Components;
-import artifacts.init.Items;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModComponents;
+import artifacts.common.init.ModItems;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -28,11 +28,11 @@ public abstract class LivingEntityMixin extends Entity {
 
 	@ModifyArg(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ExperienceOrb;award(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;I)V"))
 	private int modifyXp(int originalXp) {
-		if (!TrinketsHelper.isEquipped(Items.GOLDEN_HOOK, this.lastHurtByPlayer)) {
+		if (!TrinketsHelper.isEquipped(ModItems.GOLDEN_HOOK, this.lastHurtByPlayer)) {
 			return originalXp;
 		}
 
-		double killRatio = Components.ENTITY_KILL_TRACKER.maybeGet(this.lastHurtByPlayer)
+		double killRatio = ModComponents.ENTITY_KILL_TRACKER.maybeGet(this.lastHurtByPlayer)
 				.map(comp -> comp.getKillRatio(this.getType()))
 				.orElse(0D);
 
@@ -48,7 +48,7 @@ public abstract class LivingEntityMixin extends Entity {
 	@Inject(method = "die", at = @At("HEAD"))
 	private void addToKillTracker(DamageSource source, CallbackInfo info) {
 		if (source.getEntity() instanceof Player player) {
-			Components.ENTITY_KILL_TRACKER.maybeGet(player).ifPresent(comp -> comp.addKilledEntityType(this.getType()));
+			ModComponents.ENTITY_KILL_TRACKER.maybeGet(player).ifPresent(comp -> comp.addKilledEntityType(this.getType()));
 		}
 	}
 }

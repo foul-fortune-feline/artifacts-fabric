@@ -1,6 +1,6 @@
 package artifacts.client.render.entity.model;
 
-import artifacts.entity.MimicEntity;
+import artifacts.common.entity.MimicEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;

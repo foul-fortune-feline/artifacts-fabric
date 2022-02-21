@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.firegauntlet;
 
-import artifacts.init.Items;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,7 +17,7 @@ public abstract class EnchantmentHelperMixin {
 	 */
 	@Inject(method = "getFireAspect", at = @At("RETURN"), cancellable = true)
 	private static void giveFireAspect(LivingEntity entity, CallbackInfoReturnable<Integer> info) {
-		if (info.getReturnValueI() < 2 && TrinketsHelper.isEquipped(Items.FIRE_GAUNTLET, entity)) {
+		if (info.getReturnValueI() < 2 && TrinketsHelper.isEquipped(ModItems.FIRE_GAUNTLET, entity)) {
 			info.setReturnValue(2);
 		}
 	}

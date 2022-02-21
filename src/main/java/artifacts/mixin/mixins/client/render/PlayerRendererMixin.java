@@ -2,7 +2,7 @@ package artifacts.mixin.mixins.client.render;
 
 import artifacts.Artifacts;
 import artifacts.client.render.trinket.renderer.GloveCurioRenderer;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.trinkets.TrinketsHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.minecraft.client.player.AbstractClientPlayer;

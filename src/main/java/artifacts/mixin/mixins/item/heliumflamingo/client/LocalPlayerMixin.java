@@ -1,8 +1,8 @@
 package artifacts.mixin.mixins.item.heliumflamingo.client;
 
-import artifacts.init.Components;
-import artifacts.init.Items;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModComponents;
+import artifacts.common.init.ModItems;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Final;
@@ -26,13 +26,13 @@ public abstract class LocalPlayerMixin {
 		LocalPlayer self = (LocalPlayer) (Object) this;
 		boolean isSprintKeyDown = this.minecraft.options.keySprint.isDown();
 
-		Components.SWIM_ABILITIES.maybeGet(self).ifPresent(swimAbilities -> {
+		ModComponents.SWIM_ABILITIES.maybeGet(self).ifPresent(swimAbilities -> {
 			if (!swimAbilities.isSwimming()) {
 				if (self.isOnGround()) {
 					hasTouchedGround = true;
 				} else if (!swimAbilities.isSwimming()
 						&& swimAbilities.getSwimTime() >= 0
-						&& TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self)
+						&& TrinketsHelper.isEquipped(ModItems.HELIUM_FLAMINGO, self)
 						&& (self.isSwimming()
 						|| isSprintKeyDown
 						&& !wasSprintKeyDown

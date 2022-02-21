@@ -2,8 +2,8 @@ package artifacts.client.render.entity;
 
 import artifacts.Artifacts;
 import artifacts.client.render.entity.model.MimicModel;
-import artifacts.entity.MimicEntity;
-import artifacts.init.ModelLayers;
+import artifacts.common.entity.MimicEntity;
+import artifacts.common.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -15,7 +15,7 @@ public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel> {
     private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/mimic.png");
 
     public MimicRenderer(EntityRendererProvider.Context context) {
-        super(context, new MimicModel(context.bakeLayer(ModelLayers.MIMIC)), 0.45F);
+        super(context, new MimicModel(context.bakeLayer(ModModelLayers.MIMIC)), 0.45F);
         addLayer(new MimicChestLayer(this, context.getModelSet()));
     }
 

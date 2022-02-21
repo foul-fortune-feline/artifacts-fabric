@@ -2,9 +2,9 @@ package artifacts;
 
 import artifacts.client.render.entity.MimicRenderer;
 import artifacts.client.render.trinket.CurioRenderers;
-import artifacts.init.Entities;
-import artifacts.init.Items;
-import artifacts.init.LayerDefinitions;
+import artifacts.common.init.ModEntityTypes;
+import artifacts.common.init.ModItems;
+import artifacts.common.init.ModLayerDefinitions;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,17 +24,17 @@ public class ArtifactsClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		// Mimic EntityRenderer
-		EntityRendererRegistry.register(Entities.MIMIC, MimicRenderer::new);
+		EntityRendererRegistry.register(ModEntityTypes.MIMIC, MimicRenderer::new);
 
 		// Entity models
-		LayerDefinitions.registerAll();
+		ModLayerDefinitions.registerAll();
 		ResourceManagerHelper.get(PackType.CLIENT_RESOURCES).registerReloadListener(new CurioRenderers());
 
 		// Held Umbrella model
 		ModelLoadingRegistry.INSTANCE.registerModelProvider((manager, out) -> out.accept(UMBRELLA_HELD_MODEL));
 
 		// ModelPredicateProvider for rendering of umbrella blocking
-		FabricModelPredicateProviderRegistry.register(Items.UMBRELLA, new ResourceLocation("blocking"), (stack, level, entity, i)
+		FabricModelPredicateProviderRegistry.register(ModItems.UMBRELLA, new ResourceLocation("blocking"), (stack, level, entity, i)
 				-> entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1 : 0);
 	}
 }

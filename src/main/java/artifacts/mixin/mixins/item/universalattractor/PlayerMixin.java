@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.item.universalattractor;
 
-import artifacts.init.Components;
+import artifacts.common.init.ModComponents;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +14,6 @@ public abstract class PlayerMixin {
 
 	@Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At("TAIL"))
 	private void setDroppedFlag(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> info) {
-		Components.DROPPED_ITEM_ENTITY.maybeGet(info.getReturnValue()).ifPresent(component -> component.set(true));
+		ModComponents.DROPPED_ITEM_ENTITY.maybeGet(info.getReturnValue()).ifPresent(component -> component.set(true));
 	}
 }

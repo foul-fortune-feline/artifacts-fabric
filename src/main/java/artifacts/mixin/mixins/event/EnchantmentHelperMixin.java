@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.event;
 
-import artifacts.events.LivingEntityAttackedCallback;
+import artifacts.common.events.LivingEntityAttackedCallback;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;

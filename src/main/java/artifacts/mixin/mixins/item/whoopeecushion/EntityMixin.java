@@ -1,8 +1,8 @@
 package artifacts.mixin.mixins.item.whoopeecushion;
 
-import artifacts.init.Items;
-import artifacts.init.SoundEvents;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.init.ModSoundEvents;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,11 +22,11 @@ public abstract class EntityMixin {
 	private void playFartSound(boolean sneaking, CallbackInfo info) {
 		//noinspection ConstantConditions
 		if (sneaking && !this.level.isClientSide() && (Object) this instanceof LivingEntity entity
-				&& TrinketsHelper.isEquipped(Items.WHOOPEE_CUSHION, entity)
+				&& TrinketsHelper.isEquipped(ModItems.WHOOPEE_CUSHION, entity)
 				&& entity.getRandom().nextInt(8) == 0) {
 
 			entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(),
-					SoundEvents.FART, SoundSource.PLAYERS, 1,
+					ModSoundEvents.FART, SoundSource.PLAYERS, 1,
 					0.9F + entity.getRandom().nextFloat() * 0.2F);
 		}
 	}

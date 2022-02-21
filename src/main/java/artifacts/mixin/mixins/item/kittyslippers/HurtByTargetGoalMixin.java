@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.item.kittyslippers;
 
-import artifacts.init.Items;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -22,7 +22,7 @@ public abstract class HurtByTargetGoalMixin extends TargetGoal {
 	@Inject(method = "canUse", at = @At("HEAD"), cancellable = true)
 	private void cancelRevenge(CallbackInfoReturnable<Boolean> info) {
 		LivingEntity attacker = this.mob.getLastHurtByMob();
-		if (this.mob.getType() == EntityType.CREEPER && TrinketsHelper.isEquipped(Items.KITTY_SLIPPERS, attacker)) {
+		if (this.mob.getType() == EntityType.CREEPER && TrinketsHelper.isEquipped(ModItems.KITTY_SLIPPERS, attacker)) {
 			info.setReturnValue(false);
 		}
 	}

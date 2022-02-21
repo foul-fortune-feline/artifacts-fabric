@@ -2,8 +2,8 @@ package artifacts.client.render.entity;
 
 import artifacts.client.render.entity.model.MimicChestLayerModel;
 import artifacts.client.render.entity.model.MimicModel;
-import artifacts.entity.MimicEntity;
-import artifacts.init.ModelLayers;
+import artifacts.common.entity.MimicEntity;
+import artifacts.common.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -37,7 +37,7 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
         Calendar calendar = Calendar.getInstance();
         boolean isChristmas = calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 24 && calendar.get(Calendar.DATE) <= 26;
 
-        chestModel = new MimicChestLayerModel(modelSet.bakeLayer(ModelLayers.MIMIC_OVERLAY));
+        chestModel = new MimicChestLayerModel(modelSet.bakeLayer(ModModelLayers.MIMIC_OVERLAY));
         chestMaterials = new ArrayList<>();
         vanillaChestMaterial = Sheets.chooseMaterial(null, ChestType.SINGLE, isChristmas);
 

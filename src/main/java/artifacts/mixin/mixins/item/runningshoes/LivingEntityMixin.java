@@ -1,10 +1,10 @@
 package artifacts.mixin.mixins.item.runningshoes;
 
 import artifacts.Artifacts;
-import artifacts.init.Items;
-import artifacts.item.curio.TrinketArtifactItem;
-import artifacts.item.curio.feet.RunningShoesItem;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModItems;
+import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.feet.RunningShoesItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -21,7 +21,7 @@ public abstract class LivingEntityMixin {
 	private void onSetSprinting(boolean sprinting, CallbackInfo info) {
 		LivingEntity self = (LivingEntity) (Object) this;
 
-		if (!TrinketsHelper.isEquipped(Items.RUNNING_SHOES, self)) {
+		if (!TrinketsHelper.isEquipped(ModItems.RUNNING_SHOES, self)) {
 			return;
 		}
 

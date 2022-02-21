@@ -1,7 +1,7 @@
 package artifacts.mixin.mixins.event;
 
-import artifacts.events.LivingEntityDamagedCallback;
-import artifacts.events.LivingEntityHurtCallback;
+import artifacts.common.events.LivingEntityDamagedCallback;
+import artifacts.common.events.LivingEntityHurtCallback;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

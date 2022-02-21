@@ -1,10 +1,10 @@
 package artifacts.mixin.mixins.item.heliumflamingo;
 
-import artifacts.init.Components;
-import artifacts.init.Items;
-import artifacts.init.SoundEvents;
-import artifacts.item.curio.belt.HeliumFlamingoItem;
-import artifacts.trinkets.TrinketsHelper;
+import artifacts.common.init.ModComponents;
+import artifacts.common.init.ModItems;
+import artifacts.common.init.ModSoundEvents;
+import artifacts.common.item.curio.belt.HeliumFlamingoItem;
+import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,19 +21,19 @@ public abstract class PlayerMixin {
 		int maxFlightTime = HeliumFlamingoItem.MAX_FLIGHT_TIME;
 		int rechargeTime = HeliumFlamingoItem.RECHARGE_TIME;
 
-		Components.SWIM_ABILITIES.maybeGet(self).ifPresent(swimAbilities -> {
+		ModComponents.SWIM_ABILITIES.maybeGet(self).ifPresent(swimAbilities -> {
 			if (swimAbilities.isSwimming()) {
-				if (!TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self)
+				if (!TrinketsHelper.isEquipped(ModItems.HELIUM_FLAMINGO, self)
 						|| swimAbilities.getSwimTime() > maxFlightTime
 						|| self.isInWater() && !self.isSwimming() && !swimAbilities.isSinking()
 						|| (!self.isInWater() || swimAbilities.isSinking()) && self.isOnGround()) {
 					swimAbilities.setSwimming(false);
 					if (!self.isOnGround() && !self.isInWater()) {
-						self.playSound(SoundEvents.POP, 0.5F, 0.75F);
+						self.playSound(ModSoundEvents.POP, 0.5F, 0.75F);
 					}
 				}
 
-				if (TrinketsHelper.isEquipped(Items.HELIUM_FLAMINGO, self) && !self.isEyeInFluid(FluidTags.WATER)) {
+				if (TrinketsHelper.isEquipped(ModItems.HELIUM_FLAMINGO, self) && !self.isEyeInFluid(FluidTags.WATER)) {
 					// TODO: durability
 					/*if (self.age % 20 == 0) {
 						damageEquippedStacks(self);

@@ -1,7 +1,7 @@
 package artifacts.client.render.trinket.model;
 
 import artifacts.client.render.trinket.CurioRenderers;
-import artifacts.init.ModelLayers;
+import artifacts.common.init.ModModelLayers;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -45,15 +45,15 @@ public class ArmsModel extends HumanoidModel<LivingEntity> {
     }
 
     public static ArmsModel createClawsModel(boolean smallArms) {
-        return new ArmsModel(CurioRenderers.bakeLayer(ModelLayers.claws(smallArms)));
+        return new ArmsModel(CurioRenderers.bakeLayer(ModModelLayers.claws(smallArms)));
     }
 
     public static ArmsModel createGloveModel(boolean smallArms) {
-        return new ArmsModel(CurioRenderers.bakeLayer(ModelLayers.glove(smallArms)));
+        return new ArmsModel(CurioRenderers.bakeLayer(ModModelLayers.glove(smallArms)));
     }
 
     public static ArmsModel createGoldenHookModel(boolean smallArms) {
-        return new ArmsModel(CurioRenderers.bakeLayer(ModelLayers.goldenHook(smallArms)));
+        return new ArmsModel(CurioRenderers.bakeLayer(ModModelLayers.goldenHook(smallArms)));
     }
 
     public static MeshDefinition createEmptyArms(CubeListBuilder leftArm, CubeListBuilder rightArm, boolean smallArms) {
