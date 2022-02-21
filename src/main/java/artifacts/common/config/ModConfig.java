@@ -51,8 +51,8 @@ public final class ModConfig extends PartitioningSerializer.GlobalData {
 		public static final class Campsite {
 			@ConfigEntry.Gui.RequiresRestart
 			@ConfigEntry.Gui.Tooltip(count = 2)
-			@ConfigEntry.BoundedDiscrete(max = 100)
-			public int genChance = 8;
+			@ConfigEntry.BoundedDiscrete(max = 10_000, min = 1)
+			public int campsiteRarity = 5;
 
 			@ConfigEntry.Gui.Tooltip(count = 2)
 			@ConfigEntry.BoundedDiscrete(max = 100)

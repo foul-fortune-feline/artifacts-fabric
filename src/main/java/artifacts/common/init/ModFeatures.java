@@ -26,6 +26,8 @@ import net.minecraft.world.level.levelgen.placement.RarityFilter;
 
 import java.util.function.Predicate;
 
+import static artifacts.Artifacts.CONFIG;
+
 public class ModFeatures {
 
 	public static final Feature<NoneFeatureConfiguration> CAMPSITE = Registry.register(
@@ -37,9 +39,13 @@ public class ModFeatures {
 
 	public static void register() {
 		Predicate<BiomeSelectionContext> biomeSelector = BiomeSelectors.foundInOverworld();
-		BiomeModifications.addFeature(biomeSelector, GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
-				BuiltinRegistries.PLACED_FEATURE.getResourceKey(PLACED_CAMPSITE)
-						.orElseThrow(() -> new RuntimeException("Failed to get feature from registry")));
+
+
+		if (CONFIG.worldgen.campsite.campsiteRarity < 10_000) {
+			BiomeModifications.addFeature(biomeSelector, GenerationStep.Decoration.UNDERGROUND_STRUCTURES,
+					BuiltinRegistries.PLACED_FEATURE.getResourceKey(PLACED_CAMPSITE)
+							.orElseThrow(() -> new RuntimeException("Failed to get feature from registry")));
+		}
 	}
 
 	private ModFeatures() {
@@ -56,8 +62,7 @@ public class ModFeatures {
 				BuiltinRegistries.PLACED_FEATURE,
 				Artifacts.id("underground_campsite"),
 				configuredFeature.placed(
-						// TODO: genchance is different, we probably got it all wrong
-						RarityFilter.onAverageOnceEvery(Artifacts.CONFIG.worldgen.campsite.genChance),
+						RarityFilter.onAverageOnceEvery(CONFIG.worldgen.campsite.campsiteRarity),
 						InSquarePlacement.spread(),
 						HeightRangePlacement.uniform(
 								VerticalAnchor.aboveBottom(32),
