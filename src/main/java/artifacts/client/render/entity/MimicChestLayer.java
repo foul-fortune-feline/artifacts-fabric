@@ -39,7 +39,7 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
 
         chestModel = new MimicChestLayerModel(modelSet.bakeLayer(ModModelLayers.MIMIC_OVERLAY));
         chestMaterials = new ArrayList<>();
-        vanillaChestMaterial = Sheets.chooseMaterial(null, ChestType.SINGLE, isChristmas);
+        vanillaChestMaterial = isChristmas ? Sheets.CHEST_XMAS_LOCATION : Sheets.CHEST_LOCATION;
 
         // Note: neither lootr and quark are available on Fabric
         // The following Forge mod compatibility is kept just in case
