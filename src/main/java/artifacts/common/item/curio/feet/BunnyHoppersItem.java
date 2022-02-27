@@ -1,12 +1,12 @@
 package artifacts.common.item.curio.feet;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
-public class BunnyHoppersItem extends TrinketArtifactItem {
+public class BunnyHoppersItem extends CurioItem {
 
     @Override
 	public MobEffectInstance getPermanentEffect() {

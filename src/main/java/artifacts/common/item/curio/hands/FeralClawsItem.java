@@ -1,7 +1,7 @@
 package artifacts.common.item.curio.hands;
 
 import artifacts.Artifacts;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import com.google.common.collect.Multimap;
 import dev.emi.trinkets.api.SlotReference;
 import net.minecraft.sounds.SoundEvents;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
-public class FeralClawsItem extends TrinketArtifactItem {
+public class FeralClawsItem extends CurioItem {
 
     @Override
 	protected Multimap<Attribute, AttributeModifier> applyModifiers(ItemStack stack, SlotReference slot, LivingEntity entity, UUID uuid) {

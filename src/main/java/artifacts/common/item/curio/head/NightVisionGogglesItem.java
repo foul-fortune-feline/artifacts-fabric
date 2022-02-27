@@ -1,10 +1,10 @@
 package artifacts.common.item.curio.head;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 
-public class NightVisionGogglesItem extends TrinketArtifactItem {
+public class NightVisionGogglesItem extends CurioItem {
 
     @Override
 	public MobEffectInstance getPermanentEffect() {

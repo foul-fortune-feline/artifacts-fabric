@@ -1,7 +1,7 @@
 package artifacts.common.item.curio.belt;
 
 import artifacts.Artifacts;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.mixin.extensions.LivingEntityExtensions;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -13,7 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.sounds.SoundEvents;
 
-public class CloudInABottleItem extends TrinketArtifactItem {
+public class CloudInABottleItem extends CurioItem {
 
 	public static final ResourceLocation C2S_DOUBLE_JUMPED_ID = Artifacts.id("c2s_double_jumped");
 

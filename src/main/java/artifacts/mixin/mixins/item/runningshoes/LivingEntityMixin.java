@@ -2,7 +2,7 @@ package artifacts.mixin.mixins.item.runningshoes;
 
 import artifacts.Artifacts;
 import artifacts.common.init.ModItems;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.item.curio.feet.RunningShoesItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
@@ -34,11 +34,11 @@ public abstract class LivingEntityMixin {
 		}
 
 		if (sprinting) {
-			TrinketArtifactItem.addModifier(movementSpeed, RunningShoesItem.SPEED_BOOST_MODIFIER);
-			TrinketArtifactItem.addModifier(stepHeight, RunningShoesItem.STEP_HEIGHT_MODIFIER);
+			CurioItem.addModifier(movementSpeed, RunningShoesItem.SPEED_BOOST_MODIFIER);
+			CurioItem.addModifier(stepHeight, RunningShoesItem.STEP_HEIGHT_MODIFIER);
 		} else {
-			TrinketArtifactItem.removeModifier(movementSpeed, RunningShoesItem.SPEED_BOOST_MODIFIER);
-			TrinketArtifactItem.removeModifier(stepHeight, RunningShoesItem.STEP_HEIGHT_MODIFIER);
+			CurioItem.removeModifier(movementSpeed, RunningShoesItem.SPEED_BOOST_MODIFIER);
+			CurioItem.removeModifier(stepHeight, RunningShoesItem.STEP_HEIGHT_MODIFIER);
 		}
 	}
 }

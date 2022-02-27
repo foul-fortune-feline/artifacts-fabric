@@ -10,13 +10,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-public class ConfigurableRandomChance implements LootItemCondition {
-
-    private final float defaultProbability;
-
-    private ConfigurableRandomChance(float defaultProbability) {
-        this.defaultProbability = defaultProbability;
-    }
+public record ConfigurableRandomChance(float defaultProbability) implements LootItemCondition {
 
     public LootItemConditionType getType() {
         return ModLootConditions.CONFIGURABLE_ARTIFACT_CHANCE;

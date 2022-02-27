@@ -2,7 +2,7 @@ package artifacts.common.item.curio.feet;
 
 import artifacts.common.init.ModComponents;
 import artifacts.common.init.ModItems;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.LivingFluidCollisionCallback;
 import dev.emi.trinkets.api.SlotReference;
@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.material.FluidState;
 
-public class AquaDashersItem extends TrinketArtifactItem {
+public class AquaDashersItem extends CurioItem {
 
 	public AquaDashersItem() {
 		//noinspection UnstableApiUsage

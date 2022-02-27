@@ -3,9 +3,9 @@
   "values": [
     "artifacts:digging_claws",
     "artifacts:feral_claws",
-    "artifacts:power_glove",
     "artifacts:fire_gauntlet",
     "artifacts:pocket_piston",
+    "artifacts:power_glove",
     "artifacts:vampiric_glove",
     "artifacts:golden_hook"
   ]

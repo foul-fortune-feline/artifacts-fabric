@@ -12,7 +12,6 @@ import java.util.List;
 
 public class ModLootTables {
 
-	public static final ResourceLocation MIMIC = Artifacts.id("entities/mimic");
 	public static final ResourceLocation CAMPSITE_CHEST = Artifacts.id("chests/campsite_chest");
 
 	public static final List<ResourceLocation> INJECT_TABLE_IDS = Arrays.asList(

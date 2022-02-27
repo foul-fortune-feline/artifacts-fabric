@@ -1,7 +1,7 @@
 package artifacts.common.item.curio.feet;
 
 import artifacts.Artifacts;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import dev.emi.stepheightentityattribute.StepHeightEntityAttributeMain;
 import dev.emi.trinkets.api.SlotReference;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
-public class RunningShoesItem extends TrinketArtifactItem {
+public class RunningShoesItem extends CurioItem {
 
 	public static final AttributeModifier SPEED_BOOST_MODIFIER = new AttributeModifier(UUID.fromString("ac7ab816-2b08-46b6-879d-e5dea34ff305"),
 			"artifacts:running_shoes_movement_speed", 0.4, AttributeModifier.Operation.MULTIPLY_TOTAL);

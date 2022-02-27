@@ -47,9 +47,6 @@ public class ModFeatures {
 		}
 	}
 
-	private ModFeatures() {
-	}
-
 	static {
 		ConfiguredFeature<?, ?> configuredFeature = Registry.register(
 				BuiltinRegistries.CONFIGURED_FEATURE,

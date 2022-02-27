@@ -1,9 +1,9 @@
 package artifacts.client.render.entity;
 
 import artifacts.Artifacts;
+import artifacts.client.render.curio.CurioLayers;
 import artifacts.client.render.entity.model.MimicModel;
 import artifacts.common.entity.MimicEntity;
-import artifacts.common.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -12,10 +12,10 @@ import net.minecraft.resources.ResourceLocation;
 
 public class MimicRenderer extends MobRenderer<MimicEntity, MimicModel> {
 
-    private static final ResourceLocation TEXTURE = Artifacts.id("textures/entity/mimic.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(Artifacts.MODID, "textures/entity/mimic.png");
 
     public MimicRenderer(EntityRendererProvider.Context context) {
-        super(context, new MimicModel(context.bakeLayer(ModModelLayers.MIMIC)), 0.45F);
+        super(context, new MimicModel(context.bakeLayer(CurioLayers.MIMIC)), 0.45F);
         addLayer(new MimicChestLayer(this, context.getModelSet()));
     }
 

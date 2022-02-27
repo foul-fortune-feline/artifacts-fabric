@@ -3,7 +3,7 @@ package artifacts.common.item.curio.necklace;
 
 import artifacts.common.components.SwimAbilityComponent;
 import artifacts.common.init.ModComponents;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
 import dev.emi.trinkets.api.SlotReference;
@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class CharmOfSinkingItem extends TrinketArtifactItem {
+public class CharmOfSinkingItem extends CurioItem {
 
     public CharmOfSinkingItem() {
         PlayerSwimCallback.EVENT.register(CharmOfSinkingItem::onPlayerSwim);

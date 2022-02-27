@@ -2,7 +2,7 @@ package artifacts.common.item.curio.necklace;
 
 import artifacts.common.events.LivingEntityHurtCallback;
 import artifacts.common.init.ModItems;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -10,7 +10,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
-public class PanicNecklaceItem extends TrinketArtifactItem {
+public class PanicNecklaceItem extends CurioItem {
 
 	public PanicNecklaceItem() {
         LivingEntityHurtCallback.EVENT.register(PanicNecklaceItem::applyEffects);

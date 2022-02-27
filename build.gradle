@@ -48,6 +48,13 @@ sourceSets {
         compileClasspath += main.compileClasspath
         runtimeClasspath += main.runtimeClasspath
     }
+    // For easier copying from Forge version of the mod
+    // We don't generate these resources ourselves
+    main {
+        resources {
+            srcDirs += file("src/generated/resources")
+        }
+    }
 }
 
 dependencies {

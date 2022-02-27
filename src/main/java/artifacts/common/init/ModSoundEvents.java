@@ -16,10 +16,7 @@ public class ModSoundEvents {
 	public static final SoundEvent WATER_STEP = register("block.water.step");
 
 	private static SoundEvent register(String name) {
-		ResourceLocation id = Artifacts.id(name);
+		ResourceLocation id = new ResourceLocation(Artifacts.MODID, name);
 		return Registry.register(Registry.SOUND_EVENT, id, new SoundEvent(id));
-	}
-
-	private ModSoundEvents() {
 	}
 }

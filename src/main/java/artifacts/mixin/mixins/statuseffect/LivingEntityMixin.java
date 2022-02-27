@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.statuseffect;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -31,7 +31,7 @@ public abstract class LivingEntityMixin extends Entity {
 		if (!this.level.isClientSide && this.tickCount % 15 == 0) {
 
 			TrinketsHelper.getAllEquipped((LivingEntity) (Object) this).forEach(stack -> {
-				MobEffectInstance effect = ((TrinketArtifactItem) stack.getItem()).getPermanentEffect();
+				MobEffectInstance effect = ((CurioItem) stack.getItem()).getPermanentEffect();
 
 				if (effect != null) {
 					this.addEffect(effect);

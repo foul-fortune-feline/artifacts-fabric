@@ -2,7 +2,7 @@ package artifacts.common.item.curio.head;
 
 import artifacts.Artifacts;
 import artifacts.common.init.ModItems;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class DrinkingHatItem extends TrinketArtifactItem {
+public class DrinkingHatItem extends CurioItem {
 
     @Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {

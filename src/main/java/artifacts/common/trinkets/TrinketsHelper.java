@@ -1,6 +1,6 @@
 package artifacts.common.trinkets;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.util.Tuple;
@@ -48,19 +48,19 @@ public final class TrinketsHelper {
 		return TrinketsApi.getTrinketComponent(entity).stream()
 				.flatMap(comp -> comp.getAllEquipped().stream())
 				.map(Tuple::getB)
-				.filter(stack -> !stack.isEmpty() && stack.getItem() instanceof TrinketArtifactItem && (areEffectsEnabled(stack) || ignoreEffectsDisabled))
+				.filter(stack -> !stack.isEmpty() && stack.getItem() instanceof CurioItem && (areEffectsEnabled(stack) || ignoreEffectsDisabled))
 				.collect(Collectors.toList());
 	}
 
 	public static boolean areEffectsEnabled(ItemStack stack) {
-		return TrinketArtifactItem.getArtifactStatus(stack)
-				.map(TrinketArtifactItem.ArtifactStatus::hasEffects)
+		return CurioItem.getArtifactStatus(stack)
+				.map(CurioItem.ArtifactStatus::hasEffects)
 				.orElse(false);
 	}
 
 	public static boolean areCosmetisEnabled(ItemStack stack) {
-		return TrinketArtifactItem.getArtifactStatus(stack)
-				.map(TrinketArtifactItem.ArtifactStatus::hasCosmetics)
+		return CurioItem.getArtifactStatus(stack)
+				.map(CurioItem.ArtifactStatus::hasCosmetics)
 				.orElse(false);
 	}
 
@@ -75,7 +75,7 @@ public final class TrinketsHelper {
 				.flatMap(invBySlot -> Optional.ofNullable(invBySlot.get(slotId)))
 				.stream()
 				.flatMap(inv -> IntStream.range(0, inv.getContainerSize()).mapToObj(inv::getItem))
-				.filter(stack -> stack.getItem() instanceof TrinketArtifactItem && (areEffectsEnabled(stack) || ignoreEffectsDisabled))
+				.filter(stack -> stack.getItem() instanceof CurioItem && (areEffectsEnabled(stack) || ignoreEffectsDisabled))
 				.collect(Collectors.toList());
 	}
 }

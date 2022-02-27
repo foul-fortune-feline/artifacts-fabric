@@ -1,9 +1,9 @@
 package artifacts.client.render.entity;
 
+import artifacts.client.render.curio.CurioLayers;
 import artifacts.client.render.entity.model.MimicChestLayerModel;
 import artifacts.client.render.entity.model.MimicModel;
 import artifacts.common.entity.MimicEntity;
-import artifacts.common.init.ModModelLayers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.state.properties.ChestType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,21 +30,20 @@ public class MimicChestLayer extends RenderLayer<MimicEntity, MimicModel> {
     public final Material vanillaChestMaterial;
     public final List<Material> chestMaterials;
 
+    @SuppressWarnings("deprecation")
     public MimicChestLayer(RenderLayerParent<MimicEntity, MimicModel> entityRenderer, EntityModelSet modelSet) {
         super(entityRenderer);
 
         Calendar calendar = Calendar.getInstance();
-        boolean isChristmas = calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 24 && calendar.get(Calendar.DATE) <= 26;
+        boolean isChristmas = calendar.get(Calendar.MONTH) + 1 == 12 && calendar.get(Calendar.DATE) >= 24 && calendar.get(Calendar.DATE) <= 26
+                || calendar.get(Calendar.MONTH) + 1 == 4 && calendar.get(Calendar.DATE) == 1;
 
-        chestModel = new MimicChestLayerModel(modelSet.bakeLayer(ModModelLayers.MIMIC_OVERLAY));
+        chestModel = new MimicChestLayerModel(modelSet.bakeLayer(CurioLayers.MIMIC_OVERLAY));
         chestMaterials = new ArrayList<>();
         vanillaChestMaterial = isChristmas ? Sheets.CHEST_XMAS_LOCATION : Sheets.CHEST_LOCATION;
 
-        // Note: neither lootr and quark are available on Fabric
-        // The following Forge mod compatibility is kept just in case
-        if (FabricLoader.getInstance().isModLoaded("lootr")) {
+        if (!isChristmas && FabricLoader.getInstance().isModLoaded("lootr")) {
             ResourceLocation chestLocation = new ResourceLocation("lootr", "chest");
-            //noinspection deprecation
             chestMaterials.add(new Material(TextureAtlas.LOCATION_BLOCKS, chestLocation));
         } else {
             if (!isChristmas && FabricLoader.getInstance().isModLoaded("quark")) {

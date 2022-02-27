@@ -1,6 +1,6 @@
 package artifacts.common.item.curio.belt;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import dev.emi.trinkets.api.SlotReference;
 import net.minecraft.sounds.SoundEvents;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
-public class CrystalHeartItem extends TrinketArtifactItem {
+public class CrystalHeartItem extends CurioItem {
 
 	private static final AttributeModifier HEALTH_BONUS = new AttributeModifier(UUID.fromString("99fa0537-90b9-481a-bc76-4650987faba3"),
 			"artifacts:crystal_heart_health_bonus", 10, AttributeModifier.Operation.ADDITION);

@@ -2,13 +2,13 @@ package artifacts.common.item.curio.hands;
 
 import artifacts.common.events.LivingEntityDamagedCallback;
 import artifacts.common.init.ModItems;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
-public class VampiricGloveItem extends TrinketArtifactItem {
+public class VampiricGloveItem extends CurioItem {
 
 	public VampiricGloveItem() {
         LivingEntityDamagedCallback.EVENT.register(VampiricGloveItem::onLivingDamage);

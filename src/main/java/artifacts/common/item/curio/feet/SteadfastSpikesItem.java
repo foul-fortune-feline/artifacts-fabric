@@ -1,7 +1,7 @@
 package artifacts.common.item.curio.feet;
 
 import artifacts.Artifacts;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import com.google.common.collect.Multimap;
 import dev.emi.trinkets.api.SlotReference;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
 
-public class SteadfastSpikesItem extends TrinketArtifactItem {
+public class SteadfastSpikesItem extends CurioItem {
 
     @Override
 	protected Multimap<Attribute, AttributeModifier> applyModifiers(ItemStack stack, SlotReference slot, LivingEntity entity, UUID uuid) {

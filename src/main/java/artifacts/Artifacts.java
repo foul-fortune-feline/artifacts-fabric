@@ -22,9 +22,9 @@ import org.apache.logging.log4j.Logger;
 
 public class Artifacts implements ModInitializer {
 
-	public static final String MOD_ID = "artifacts";
-	public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-	public static final CreativeModeTab ITEM_GROUP = FabricItemGroupBuilder.build(
+	public static final String MODID = "artifacts";
+	public static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final CreativeModeTab CREATIVE_TAB = FabricItemGroupBuilder.build(
 			id("item_group"),
 			() -> new ItemStack(ModItems.BUNNY_HOPPERS)
 	);
@@ -66,6 +66,6 @@ public class Artifacts implements ModInitializer {
 	}
 
 	public static ResourceLocation id(String path) {
-		return new ResourceLocation(MOD_ID, path);
+		return new ResourceLocation(MODID, path);
 	}
 }

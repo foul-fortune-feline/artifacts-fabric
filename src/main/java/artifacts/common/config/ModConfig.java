@@ -6,7 +6,7 @@ import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 
-@Config(name = Artifacts.MOD_ID)
+@Config(name = Artifacts.MODID)
 @Config.Gui.Background("minecraft:textures/block/mossy_cobblestone.png")
 public final class ModConfig extends PartitioningSerializer.GlobalData {
 	@ConfigEntry.Category("general")
@@ -55,12 +55,7 @@ public final class ModConfig extends PartitioningSerializer.GlobalData {
 			public int campsiteRarity = 5;
 
 			@ConfigEntry.Gui.Tooltip(count = 2)
-			@ConfigEntry.BoundedDiscrete(max = 100)
-			public int mimicChance = 30;
-
-			@ConfigEntry.Gui.Tooltip(count = 2)
-			@ConfigEntry.BoundedDiscrete(max = 100)
-			public int oreChance = 25;
+			public double mimicChance = 0.3;
 
 			private Campsite() {
 			}

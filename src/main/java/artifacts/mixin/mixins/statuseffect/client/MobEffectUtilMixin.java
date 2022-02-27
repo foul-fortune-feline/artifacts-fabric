@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.statuseffect.client;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -20,7 +20,7 @@ public abstract class MobEffectUtilMixin {
 
 		if (player != null && effect.isNoCounter()) {
 			TrinketsHelper.getAllEquipped(player).forEach(stack -> {
-				MobEffectInstance trinketEffect = ((TrinketArtifactItem) stack.getItem()).getPermanentEffect();
+				MobEffectInstance trinketEffect = ((CurioItem) stack.getItem()).getPermanentEffect();
 
 				if (trinketEffect != null && trinketEffect.getEffect() == effect.getEffect()) {
 					info.setReturnValue(stack.getHoverName().getString());

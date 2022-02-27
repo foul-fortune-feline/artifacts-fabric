@@ -29,11 +29,9 @@ import java.util.Random;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-    @Shadow
-    public Level level;
+    @Shadow public Level level;
 
-    @Shadow @Final
-    protected Random random;
+    @Shadow @Final protected Random random;
 
     @Shadow private EntityDimensions dimensions;
 

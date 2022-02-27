@@ -1,7 +1,7 @@
 package artifacts;
 
+import artifacts.client.render.curio.CurioRenderers;
 import artifacts.client.render.entity.MimicRenderer;
-import artifacts.client.render.trinket.CurioRenderers;
 import artifacts.common.init.ModEntityTypes;
 import artifacts.common.init.ModItems;
 import artifacts.common.init.ModLayerDefinitions;

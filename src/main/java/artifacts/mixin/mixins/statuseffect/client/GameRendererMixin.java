@@ -1,6 +1,6 @@
 package artifacts.mixin.mixins.statuseffect.client;
 
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.effect.MobEffects;
@@ -22,7 +22,7 @@ public abstract class GameRendererMixin {
 	private static void cancelNightVisionFadeEffect(LivingEntity entity, float tickDelta, CallbackInfoReturnable<Float> info) {
 		if (info.getReturnValueF() != 1f) {
 			TrinketsHelper.getAllEquipped(entity).stream()
-					.map(stack -> Optional.ofNullable(((TrinketArtifactItem) stack.getItem()).getPermanentEffect()))
+					.map(stack -> Optional.ofNullable(((CurioItem) stack.getItem()).getPermanentEffect()))
 					.filter(effect -> effect.isPresent() && effect.get().getEffect() == MobEffects.NIGHT_VISION)
 					.findAny()
 					.ifPresent(effect -> info.setReturnValue(1.0f));

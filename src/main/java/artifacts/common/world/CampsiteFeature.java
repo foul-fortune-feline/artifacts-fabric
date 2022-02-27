@@ -3,24 +3,25 @@ package artifacts.common.world;
 import artifacts.Artifacts;
 import artifacts.common.entity.MimicEntity;
 import artifacts.common.init.ModEntityTypes;
-import artifacts.common.init.ModLootTables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.BarrelBlock;
+import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.BlastFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.ChestBlock;
-import net.minecraft.world.level.block.EndRodBlock;
 import net.minecraft.world.level.block.FurnaceBlock;
-import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.SmokerBlock;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BedPart;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -31,160 +32,209 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class CampsiteFeature extends Feature<NoneFeatureConfiguration> {
 
-	public static final BlockStateProvider CRAFTING_STATION_PROVIDER = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-			.add(Blocks.CRAFTING_TABLE.defaultBlockState(), 5)
-			.add(Blocks.FURNACE.defaultBlockState().setValue(FurnaceBlock.LIT, false), 5)
-			.add(Blocks.BLAST_FURNACE.defaultBlockState().setValue(BlastFurnaceBlock.LIT, false), 5)
-			.add(Blocks.SMOKER.defaultBlockState().setValue(SmokerBlock.LIT, false), 5)
-			.add(Blocks.SMITHING_TABLE.defaultBlockState(), 5)
-			.add(Blocks.FLETCHING_TABLE.defaultBlockState(), 5)
-			.add(Blocks.CARTOGRAPHY_TABLE.defaultBlockState(), 5)
-			.add(Blocks.ANVIL.defaultBlockState(), 2)
-			.add(Blocks.CHIPPED_ANVIL.defaultBlockState(), 2)
-			.add(Blocks.DAMAGED_ANVIL.defaultBlockState(), 1));
+    private static final BlockStateProvider CAMPFIRES = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true), 5)
+            .add(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false), 4)
+            .add(Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true), 1)
+    );
 
-	public static final BlockStateProvider DECORATION_PROVIDER = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-			.add(Blocks.LANTERN.defaultBlockState(), 5)
-			.add(Blocks.TORCH.defaultBlockState(), 3)
-			.add(Blocks.REDSTONE_TORCH.defaultBlockState(), 3)
-			.add(Blocks.CAKE.defaultBlockState(), 1)
-			.add(Blocks.BREWING_STAND.defaultBlockState(), 4));
+    private static final BlockStateProvider DECORATIONS = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.POTTED_DEAD_BUSH.defaultBlockState(), 2)
+            .add(Blocks.POTTED_BAMBOO.defaultBlockState(), 2)
+            .add(Blocks.POTTED_RED_TULIP.defaultBlockState(), 2)
+            .add(Blocks.BREWING_STAND.defaultBlockState(), 1)
+            .add(Blocks.CANDLE_CAKE.defaultBlockState().setValue(CandleCakeBlock.LIT, true), 1)
+    );
 
-	public static final BlockStateProvider ORE_PROVIDER = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-			.add(Blocks.IRON_ORE.defaultBlockState(), 6)
-			.add(Blocks.REDSTONE_ORE.defaultBlockState(), 6)
-			.add(Blocks.LAPIS_ORE.defaultBlockState(), 6)
-			.add(Blocks.GOLD_ORE.defaultBlockState(), 4)
-			.add(Blocks.DIAMOND_ORE.defaultBlockState(), 2)
-			.add(Blocks.EMERALD_ORE.defaultBlockState(), 1));
+    private static final BlockStateProvider CRAFTING_STATIONS = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.CRAFTING_TABLE.defaultBlockState(), 5)
+            .add(Blocks.SMITHING_TABLE.defaultBlockState(), 5)
+            .add(Blocks.FLETCHING_TABLE.defaultBlockState(), 5)
+            .add(Blocks.CARTOGRAPHY_TABLE.defaultBlockState(), 5)
+            .add(Blocks.ANVIL.defaultBlockState(), 2)
+            .add(Blocks.CHIPPED_ANVIL.defaultBlockState(), 2)
+            .add(Blocks.DAMAGED_ANVIL.defaultBlockState(), 1)
+    );
 
-	public static final BlockStateProvider CAMPFIRE_PROVIDER = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-			.add(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, false), 12)
-			.add(Blocks.CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true), 3)
-			.add(Blocks.SOUL_CAMPFIRE.defaultBlockState().setValue(CampfireBlock.LIT, true), 1));
+    private static final BlockStateProvider FURNACES = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.FURNACE.defaultBlockState().setValue(FurnaceBlock.LIT, false), 2)
+            .add(Blocks.BLAST_FURNACE.defaultBlockState().setValue(BlastFurnaceBlock.LIT, false), 1)
+            .add(Blocks.SMOKER.defaultBlockState().setValue(SmokerBlock.LIT, false), 1)
+    );
 
-	public static final BlockStateProvider LANTERN_PROVIDER = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
-			.add(Blocks.LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true), 6)
-			.add(Blocks.SOUL_LANTERN.defaultBlockState().setValue(LanternBlock.HANGING, true), 2)
-			.add(Blocks.END_ROD.defaultBlockState().setValue(EndRodBlock.FACING, Direction.DOWN), 1)
-			.add(Blocks.SHROOMLIGHT.defaultBlockState(), 1)
-			.add(Blocks.GLOWSTONE.defaultBlockState(), 1));
+    private static final BlockStateProvider FURNACE_CHIMNEYS = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.COBBLESTONE_WALL.defaultBlockState(), 2)
+            .add(Blocks.COBBLED_DEEPSLATE_WALL.defaultBlockState(), 2)
+            .add(Blocks.STONE_BRICK_WALL.defaultBlockState(), 1)
+            .add(Blocks.DEEPSLATE_BRICK_WALL.defaultBlockState(), 1)
+    );
 
-	public CampsiteFeature() {
-		super(NoneFeatureConfiguration.CODEC);
-	}
+    private static final BlockStateProvider BEDS = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.RED_BED.defaultBlockState(), 1)
+            .add(Blocks.YELLOW_BED.defaultBlockState(), 1)
+            .add(Blocks.CYAN_BED.defaultBlockState(), 1)
+            .add(Blocks.GRAY_BED.defaultBlockState(), 1)
+            .add(Blocks.MAGENTA_BED.defaultBlockState(), 1)
+            .add(Blocks.GREEN_BED.defaultBlockState(), 1)
+    );
 
-	@Override
-	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-		BlockPos origin = context.origin();
-		WorldGenLevel level = context.level();
-		Random random = context.random();
+    private static final BlockStateProvider LIGHTS = new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder()
+            .add(Blocks.LANTERN.defaultBlockState(), 3)
+            .add(Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, true), 1)
+            .add(Blocks.CANDLE.defaultBlockState().setValue(CandleBlock.LIT, false), 1)
+            .add(Blocks.SOUL_LANTERN.defaultBlockState(), 1)
+    );
 
-		List<BlockPos> positions = new ArrayList<>();
-		BlockPos.betweenClosedStream(origin.offset(-3, 0, -3), origin.offset(3, 0, 3)).forEach((pos -> positions.add(pos.immutable())));
-		positions.remove(origin);
-		positions.removeIf(currentPos -> !level.isEmptyBlock(currentPos));
-		positions.removeIf(currentPos -> !level.getBlockState(currentPos.below()).getMaterial().blocksMotion());
-		if (positions.size() < 12) {
-			return false;
-		}
-		Collections.shuffle(positions);
+    private static final ResourceLocation CHEST_LOOT = new ResourceLocation(Artifacts.MODID, "chests/campsite_chest");
+    private static final ResourceLocation BARREL_LOOT = new ResourceLocation(Artifacts.MODID, "chests/campsite_barrel");
 
-		if (random.nextInt(100) < Artifacts.CONFIG.worldgen.campsite.oreChance) {
-			generateOreVein(level, origin.below(), random);
-		}
+    public CampsiteFeature() {
+        super(NoneFeatureConfiguration.CODEC);
+    }
 
-		generateLightSource(level, origin, random);
+    @Override
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel level = context.level();
+        BlockPos origin = context.origin();
+        Random random = context.random();
 
-		generateContainer(level, positions.remove(0), random);
-		if (random.nextBoolean()) {
-			generateContainer(level, positions.remove(0), random);
-		}
+        if (!isSufficientlyFlat(level, origin)) {
+            return false;
+        }
 
-		generateCraftingStation(level, positions.remove(0), random);
-		if (random.nextBoolean()) {
-			generateCraftingStation(level, positions.remove(0), random);
-		}
+        BlockPos.betweenClosedStream(origin.offset(-2, 0, -2), origin.offset(2, 2, 2))
+                .filter(pos -> Math.abs(pos.getX() - origin.getX()) < 2 ||  Math.abs(pos.getZ() - origin.getZ()) < 2)
+                .filter(pos -> !level.getBlockState(pos).isAir())
+                .forEach(pos -> setBlock(level, pos, Blocks.CAVE_AIR.defaultBlockState()));
 
-		return true;
-	}
+        placeFloor(level, origin, random);
 
-	public void generateLightSource(WorldGenLevel world, BlockPos pos, Random random) {
-		if (random.nextInt(4) != 0) {
-			BlockPos currentPos = pos;
-			while (currentPos.getY() - pos.getY() < 8 && world.isEmptyBlock(currentPos.above())) {
-				currentPos = currentPos.above();
-			}
-			if (currentPos.getY() - pos.getY() > 2 && !world.isEmptyBlock(currentPos.above())) {
-				this.setBlock(world, currentPos, LANTERN_PROVIDER.getState(random, currentPos));
-				return;
-			}
-		}
-		this.setBlock(world, pos, CAMPFIRE_PROVIDER.getState(random, pos));
-	}
+        setBlock(level, origin, CAMPFIRES.getState(random, origin));
 
-	public void generateContainer(WorldGenLevel world, BlockPos pos, Random random) {
-		if (random.nextInt(100) < Artifacts.CONFIG.worldgen.campsite.mimicChance) {
-			MimicEntity mimic = ModEntityTypes.MIMIC.create(world.getLevel());
-			if (mimic != null) {
-				mimic.setDormant();
-				mimic.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-				world.addFreshEntity(mimic);
-			}
-		} else {
-			if (random.nextBoolean()) {
-				if (random.nextInt(5) == 0) {
-					this.setBlock(world, pos, Blocks.TRAPPED_CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random)));
-					this.setBlock(world, pos.below(), Blocks.TNT.defaultBlockState());
-				} else {
-					// TODO: random wooden chest with tag
-					this.setBlock(world, pos, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random)));
-				}
-			} else {
-				this.setBlock(world, pos, Blocks.BARREL.defaultBlockState().setValue(BarrelBlock.FACING, Direction.getRandom(random)));
-			}
-			RandomizableContainerBlockEntity.setLootTable(world, random, pos, ModLootTables.CAMPSITE_CHEST);
-		}
-	}
+        Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+        BlockPos pos = origin.relative(direction, 2);
 
-	public void generateCraftingStation(WorldGenLevel world, BlockPos pos, Random random) {
-		BlockState state = CRAFTING_STATION_PROVIDER.getState(random, pos);
-		this.setBlock(world, pos, state);
-		if (random.nextBoolean() && world.isEmptyBlock(pos.above())) {
-			generateDecoration(world, pos.above(), random);
-		}
+        if (random.nextInt(3) == 0) {
+            BlockPos.betweenClosedStream(
+                    pos.relative(direction.getClockWise()),
+                    pos.relative(direction.getCounterClockWise())
+            ).forEach(barrelPos -> {
+                placeBarrel(level, barrelPos, random);
+                if (random.nextInt(3) == 0) {
+                    placeBarrel(level, barrelPos.above(), random);
+                }
+            });
+        } else {
+            Direction bedDirection = random.nextBoolean() ? direction.getClockWise() : direction.getCounterClockWise();
+            BlockState bedBlock = BEDS.getState(random, pos).setValue(BedBlock.FACING, bedDirection);
+            setBlock(level, pos, bedBlock.setValue(BedBlock.PART, BedPart.HEAD));
+            setBlock(level, pos.relative(bedDirection.getOpposite()), bedBlock.setValue(BedBlock.PART, BedPart.FOOT));
+            placeBarrel(level, pos.relative(bedDirection), random);
+            if (random.nextBoolean()) {
+                setBlock(level, pos.relative(bedDirection).above(), LIGHTS.getState(random, pos));
+            }
+        }
 
-	}
+        direction = random.nextBoolean() ? direction.getClockWise() : direction.getCounterClockWise();
+        pos = origin.relative(direction, 2);
 
-	public void generateDecoration(WorldGenLevel world, BlockPos pos, Random random) {
-		if (random.nextInt(3) == 0) {
-			this.setBlock(world, pos, DECORATION_PROVIDER.getState(random, pos));
-		} else {
-			Registry.BLOCK.getTag(BlockTags.FLOWER_POTS)
-					.flatMap(tag -> tag.getRandomElement(random))
-					.map(blockHolder -> blockHolder.value().defaultBlockState())
-					.ifPresent(state -> this.setBlock(world, pos, state));
-		}
-	}
+        List<BlockPos> positions = BlockPos.betweenClosedStream(
+                pos.relative(direction.getClockWise()),
+                pos.relative(direction.getCounterClockWise())
+        ).map(BlockPos::immutable).collect(Collectors.toCollection(ArrayList::new));
 
-	public void generateOreVein(WorldGenLevel world, BlockPos pos, Random random) {
-		BlockState ore = ORE_PROVIDER.getState(random, pos);
-		List<BlockPos> positions = new ArrayList<>();
-		positions.add(pos);
-		for (int i = 4 + random.nextInt(12); i > 0; i--) {
-			pos = positions.remove(0);
-			this.setBlock(world, pos, ore);
-			for (Direction direction : Direction.Plane.HORIZONTAL) {
-				if (world.getBlockState(pos.relative(direction)).getMaterial().blocksMotion() && !world.getBlockState(pos.relative(direction).above()).getMaterial().blocksMotion()) {
-					positions.add(pos.relative(direction));
-				}
-			}
-			if (positions.size() == 0) {
-				return;
-			}
-		}
-	}
+        Collections.shuffle(positions);
+
+        placeCraftingStation(level, positions.remove(0), random, direction.getOpposite());
+        placeFurnace(level, positions.remove(0), random, direction.getOpposite());
+        placeChest(level, positions.remove(0), random, direction.getOpposite());
+
+        return true;
+    }
+
+    private boolean isSufficientlyFlat(WorldGenLevel level, BlockPos origin) {
+        return BlockPos.betweenClosedStream(origin.offset(-2, 0, -2), origin.offset(2, 0, 2))
+                .filter(pos -> level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP))
+                .filter(pos -> level.getBlockState(pos).isAir())
+                .count() >= 6;
+    }
+
+    private void placeFloor(WorldGenLevel level, BlockPos origin, Random random) {
+        BlockPos.betweenClosedStream(origin.offset(-2, -1, -2), origin.offset(2, -1, 2))
+                .filter(pos -> Math.abs(pos.getX() - origin.getX()) < 2 ||  Math.abs(pos.getZ() - origin.getZ()) < 2)
+                .forEach(pos -> {
+                    if (!level.getBlockState(pos).isFaceSturdy(level, pos, Direction.UP)) {
+                        setBlock(level, pos, Blocks.OAK_PLANKS.defaultBlockState());
+                    } else if (random.nextBoolean()) {
+                        if (level.getBlockState(pos).is(Blocks.DEEPSLATE)) {
+                            setBlock(level, pos, Blocks.COBBLED_DEEPSLATE.defaultBlockState());
+                        } else if (level.getBlockState(pos).is(Blocks.STONE)) {
+                            setBlock(level, pos, Blocks.COBBLESTONE.defaultBlockState());
+                        }
+                    }
+                });
+    }
+
+    private void placeCraftingStation(WorldGenLevel level, BlockPos pos, Random random, Direction facing) {
+        BlockState craftingStation = CRAFTING_STATIONS.getState(random, pos);
+        if (craftingStation.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+            craftingStation = craftingStation.setValue(BlockStateProperties.HORIZONTAL_FACING, facing);
+        }
+        setBlock(level, pos, craftingStation);
+        if (random.nextInt(3) == 0) {
+            setBlock(level, pos.above(), DECORATIONS.getState(random, pos));
+        }
+    }
+
+    private void placeFurnace(WorldGenLevel level, BlockPos pos, Random random, Direction facing) {
+        BlockState furnace = FURNACES.getState(random, pos);
+        furnace = furnace.setValue(FurnaceBlock.FACING, facing);
+        setBlock(level, pos, furnace);
+        if (random.nextBoolean()) {
+            setBlock(level, pos.above(), FURNACE_CHIMNEYS.getState(random, pos));
+        }
+    }
+
+    private void placeBarrel(WorldGenLevel level, BlockPos pos, Random random) {
+        BlockState barrel = Blocks.BARREL.defaultBlockState();
+        if (random.nextBoolean()) {
+            barrel = barrel.setValue(BarrelBlock.FACING, Direction.UP);
+        } else {
+            barrel = barrel.setValue(BarrelBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random));
+        }
+        setBlock(level, pos, barrel);
+        RandomizableContainerBlockEntity.setLootTable(level, random, pos, BARREL_LOOT);
+    }
+
+    public void placeChest(WorldGenLevel level, BlockPos pos, Random random, Direction facing) {
+        if (random.nextFloat() < Artifacts.CONFIG.worldgen.campsite.mimicChance) {
+            MimicEntity mimic = ModEntityTypes.MIMIC.create(level.getLevel());
+            if (mimic != null) {
+                mimic.setDormant(true);
+                mimic.setFacing(facing);
+                mimic.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                level.addFreshEntity(mimic);
+            }
+        } else {
+            BlockState chest;
+            if (random.nextInt(8) == 0) {
+                setBlock(level, pos.below(), Blocks.TNT.defaultBlockState());
+                chest = Blocks.TRAPPED_CHEST.defaultBlockState();
+                setBlock(level, pos, Blocks.TRAPPED_CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random)));
+            } else {
+                chest = /*TODO: ModConfig.common.useModdedChests.get() ? Tags.Blocks.CHESTS_WOODEN.getRandomElement(random).defaultBlockState() :*/ Blocks.CHEST.defaultBlockState();
+            }
+
+            if (chest.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+                chest = chest.setValue(BlockStateProperties.HORIZONTAL_FACING, facing);
+            }
+            setBlock(level, pos, chest);
+
+            RandomizableContainerBlockEntity.setLootTable(level, random, pos, CHEST_LOOT);
+        }
+    }
 }

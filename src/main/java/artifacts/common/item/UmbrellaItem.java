@@ -17,12 +17,6 @@ public class UmbrellaItem extends ArtifactItem {
 		DispenserBlock.registerBehavior(this, ArmorItem.DISPENSE_ITEM_BEHAVIOR);
 	}
 
-    /* TODO: wait for fapi/lib
-    @Override
-    public boolean isShield(ItemStack stack, LivingEntity entity) {
-        return true;
-    }*/
-
 	public static HeldStatus getHeldStatusForHand(LivingEntity entity, InteractionHand hand) {
 		if (entity.getItemInHand(hand).getItem() != ModItems.UMBRELLA) {
 			return HeldStatus.NONE;

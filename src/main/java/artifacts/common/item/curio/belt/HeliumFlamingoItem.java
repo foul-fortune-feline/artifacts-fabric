@@ -4,7 +4,7 @@ import artifacts.Artifacts;
 import artifacts.common.components.SwimAbilityComponent;
 import artifacts.common.init.ModComponents;
 import artifacts.common.init.ModSoundEvents;
-import artifacts.common.item.curio.TrinketArtifactItem;
+import artifacts.common.item.curio.CurioItem;
 import be.florens.expandability.api.fabric.PlayerSwimCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class HeliumFlamingoItem extends TrinketArtifactItem {
+public class HeliumFlamingoItem extends CurioItem {
 
 	public static final ResourceLocation C2S_AIR_SWIMMING_ID = Artifacts.id("c2s_air_swimming");
 
