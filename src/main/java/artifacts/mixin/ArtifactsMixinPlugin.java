@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class ArtifactsMixinPlugin implements IMixinConfigPlugin {
 
-	// Base package for mixins as defined in artifacts.mixins.json
+	// Base package for mixins as defined in mixins.artifacts.json
 	private static final String BASE_PACKAGE = "artifacts.mixin.mixins";
 
 	@Override
@@ -24,9 +24,7 @@ public class ArtifactsMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.startsWith(BASE_PACKAGE + ".dev") && !FabricLoader.getInstance().isDevelopmentEnvironment()) {
-			return false;
-		} else if (mixinClassName.startsWith(BASE_PACKAGE + ".compat.")) {
+		if (mixinClassName.startsWith(BASE_PACKAGE + ".compat.")) {
 			String subPackageAndClassName = mixinClassName.split(BASE_PACKAGE + "\\.compat\\.")[1];
 			String modid = subPackageAndClassName.split("\\.")[0];
 			return FabricLoader.getInstance().isModLoaded(modid);

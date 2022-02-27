@@ -12,11 +12,14 @@
       "artifacts.ArtifactsTest"
     ]
   },
+  "mixins": [
+    "mixins.artifacts-testmod.json"
+  ],
 
   "depends": {
-    "fabricloader": ">=0.7.4",
+    "fabricloader": "*",
     "fabric": "*",
-    "minecraft": "1.16.x",
+    "minecraft": "*",
     "artifacts": "*"
   }
 }

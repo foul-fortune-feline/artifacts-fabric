@@ -10,8 +10,6 @@
     "accessors.ItemStackAccessor",
     "accessors.MobEffectAccessor",
     "compat.origins.ConditionFactoryAccessor",
-    "dev.AbstractMinecartContainerMixin",
-    "dev.RandomizableContainerBlockEntityMixin",
     "event.EnchantmentHelperMixin",
     "event.LivingEntitiesMixin",
     "event.LivingEntityMixin",

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "artifacts.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractMinecartContainerMixin",
+    "RandomizableContainerBlockEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

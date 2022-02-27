@@ -1,4 +1,4 @@
-package artifacts.mixin.mixins.dev;
+package artifacts.mixin;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer;

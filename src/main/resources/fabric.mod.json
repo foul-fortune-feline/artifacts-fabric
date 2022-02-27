@@ -40,7 +40,7 @@
     ]
   },
   "mixins": [
-    "artifacts.mixins.json"
+    "mixins.artifacts.json"
   ],
   "accessWidener": "artifacts.accesswidener",
 
