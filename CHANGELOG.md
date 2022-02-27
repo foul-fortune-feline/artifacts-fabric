@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated for 1.18.2 and Fabric 0.47.0
 - Toggling cosmetic/effects only mode is now done by right clicking the Artifact in the inventory
+- Simplified how the expierence bonus for the Golden Hook is calculated
 
 ### Fixed
 - Fix potential NPE in MimicChestLayer

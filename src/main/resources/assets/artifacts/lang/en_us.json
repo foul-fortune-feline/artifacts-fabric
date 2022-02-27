@@ -83,7 +83,7 @@
   "item.artifacts.cloud_in_a_bottle.tooltip": "Allows the wearer to double jump",
   "item.artifacts.whoopee_cushion.tooltip": "Increases the wearer's flatulence",
   "item.artifacts.vampiric_glove.tooltip": "Causes the wearer's melee\nattacks to absorb health",
-  "item.artifacts.golden_hook.tooltip": "Increases experience dropped by creatures,\nespecially those you have not recently killed",
+  "item.artifacts.golden_hook.tooltip": "Increases experience dropped by creatures",
   "item.artifacts.helium_flamingo.tooltip": "Allows the wearer to swim in the\nair for a limited period of time\nPress %s while in the air to start swimming",
   "item.artifacts.aqua_dashers.tooltip": "Allows the wearer to walk\n on fluids while sprinting",
   "item.artifacts.charm_of_sinking.tooltip": "The wearer can move freely in water",
