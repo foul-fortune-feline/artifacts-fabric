@@ -6,6 +6,7 @@ import artifacts.common.init.ModEntityTypes;
 import artifacts.common.init.ModLootTables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.level.WorldGenLevel;
@@ -162,7 +163,10 @@ public class CampsiteFeature extends Feature<NoneFeatureConfiguration> {
 		if (random.nextInt(3) == 0) {
 			this.setBlock(world, pos, DECORATION_PROVIDER.getState(random, pos));
 		} else {
-			this.setBlock(world, pos, BlockTags.FLOWER_POTS.getRandomElement(random).defaultBlockState());
+			Registry.BLOCK.getTag(BlockTags.FLOWER_POTS)
+					.flatMap(tag -> tag.getRandomElement(random))
+					.map(blockHolder -> blockHolder.value().defaultBlockState())
+					.ifPresent(state -> this.setBlock(world, pos, state));
 		}
 	}
 
