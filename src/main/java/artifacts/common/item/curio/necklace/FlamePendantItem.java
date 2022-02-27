@@ -2,7 +2,7 @@ package artifacts.common.item.curio.necklace;
 
 import artifacts.common.init.ModItems;
 import artifacts.common.trinkets.TrinketsHelper;
-import artifacts.mixin.mixins.accessors.DamageSourceAccessor;
+import artifacts.mixin.accessors.DamageSourceAccessor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;

@@ -1,7 +1,7 @@
 package artifacts.common.compat;
 
 import artifacts.common.item.UmbrellaItem;
-import artifacts.mixin.mixins.compat.origins.ConditionFactoryAccessor;
+import artifacts.mixin.compat.origins.ConditionFactoryAccessor;
 import io.github.apace100.apoli.registry.ApoliRegistries;
 import io.github.apace100.origins.Origins;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;

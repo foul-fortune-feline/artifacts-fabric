@@ -1,8 +1,8 @@
 package artifacts.common.item.curio.belt;
 
 import artifacts.common.item.curio.CurioItem;
-import artifacts.mixin.extensions.MobEffectInstanceExtensions;
-import artifacts.mixin.mixins.accessors.MobEffectAccessor;
+import artifacts.extensions.MobEffectInstanceExtensions;
+import artifacts.mixin.accessors.MobEffectAccessor;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;

@@ -2,7 +2,7 @@ package artifacts.common.item.curio.belt;
 
 import artifacts.Artifacts;
 import artifacts.common.item.curio.CurioItem;
-import artifacts.mixin.extensions.LivingEntityExtensions;
+import artifacts.extensions.LivingEntityExtensions;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.particles.ParticleTypes;

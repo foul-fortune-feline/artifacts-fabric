@@ -2,7 +2,7 @@ package artifacts.common.item.curio.belt;
 
 import artifacts.common.init.ModComponents;
 import artifacts.common.item.curio.CurioItem;
-import artifacts.mixin.mixins.accessors.ItemEntityAccessor;
+import artifacts.mixin.accessors.ItemEntityAccessor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
