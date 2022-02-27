@@ -7,7 +7,6 @@ import artifacts.common.init.ModItems;
 import artifacts.common.init.ModLootConditions;
 import artifacts.common.init.ModLootTables;
 import artifacts.common.init.ModSoundEvents;
-import artifacts.common.init.ModToolHandlers;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
@@ -50,9 +49,6 @@ public class Artifacts implements ModInitializer {
 		ModFeatures.register();
 
 		runCompatibilityHandlers();
-
-		// Tool Handlers
-		ModToolHandlers.register();
 		LOGGER.info("[Artifacts] Finished initialization");
 	}
 

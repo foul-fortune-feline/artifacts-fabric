@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvents;
 
 public class DiggingClawsItem extends TrinketArtifactItem {
 
+	public static final int NEW_BASE_MINING_LEVEL = 1;
 	public static final float MINING_SPEED_INCREASE = 3.2f;
 
     @Override

@@ -3,15 +3,13 @@ package artifacts.mixin.mixins.item.diggingclaws;
 import artifacts.common.init.ModItems;
 import artifacts.common.item.curio.hands.DiggingClawsItem;
 import artifacts.common.trinkets.TrinketsHelper;
+import net.fabricmc.fabric.api.mininglevel.v1.MiningLevelManager;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -19,20 +17,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Player.class)
 public abstract class PlayerMixin extends LivingEntity {
 
-	@Shadow
-	@Final
-	public Inventory inventory;
-
 	protected PlayerMixin(EntityType<? extends LivingEntity> entityType, Level world) {
 		super(entityType, world);
 	}
 
-	/**
-	 * Sets the holder on the itemstack to check
-	 */
-	@Inject(method = "hasCorrectToolForDrops", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isCorrectToolForDrops(Lnet/minecraft/world/level/block/state/BlockState;)Z"))
-	private void setItemStackHolder(BlockState block, CallbackInfoReturnable<Boolean> info) {
-		this.inventory.getSelected().setEntityRepresentation(this);
+	@Inject(method = "hasCorrectToolForDrops", at = @At("HEAD"), cancellable = true)
+	private void increaseBaseMiningLevel(BlockState block, CallbackInfoReturnable<Boolean> info) {
+		if (TrinketsHelper.isEquipped(ModItems.DIGGING_CLAWS, this)
+				&& DiggingClawsItem.NEW_BASE_MINING_LEVEL >= MiningLevelManager.getRequiredMiningLevel(block)) {
+			info.setReturnValue(true);
+		}
 	}
 
 	/**
