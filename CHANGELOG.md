@@ -5,8 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- You can now toggle an Artifact to effects-only, which will hide it on the player model
+
 ### Changed
 - Updated for 1.18.2 and Fabric 0.47.0
+- Toggling cosmetic/effects only mode is now done by right clicking the Artifact in the inventory
 
 ### Fixed
 - Fix potential NPE in MimicChestLayer

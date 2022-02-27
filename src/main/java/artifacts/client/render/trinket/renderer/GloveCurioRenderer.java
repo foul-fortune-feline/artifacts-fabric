@@ -2,6 +2,7 @@ package artifacts.client.render.trinket.renderer;
 
 import artifacts.Artifacts;
 import artifacts.client.render.trinket.model.ArmsModel;
+import artifacts.common.trinkets.TrinketsHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.emi.trinkets.api.SlotReference;
@@ -51,7 +52,11 @@ public class GloveCurioRenderer implements TrinketRenderer {
     }
 
     @Override
-    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public final void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> contextModel, PoseStack poseStack, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (!TrinketsHelper.areCosmetisEnabled(stack)) {
+            return;
+        }
+
         boolean hasSlimArms = hasSlimArms(entity);
         ArmsModel model = getModel(hasSlimArms);
 

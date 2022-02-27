@@ -11,7 +11,6 @@ import dev.emi.trinkets.api.Trinket;
 import dev.emi.trinkets.api.TrinketItem;
 import dev.emi.trinkets.api.TrinketsApi;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -22,15 +21,19 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class TrinketArtifactItem extends ArtifactItem implements Trinket {
@@ -42,24 +45,20 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	}
 
 	@Override
-	public InteractionResultHolder<ItemStack> use(Level level, Player user, InteractionHand hand) {
-		// Cycle artifact status when sneak right-clicking
-		if (user.isShiftKeyDown()) {
-			ItemStack stack = user.getItemInHand(hand);
-			CompoundTag tag = stack.getOrCreateTagElement("Artifacts");
+	public boolean overrideOtherStackedOnMe(ItemStack slotStack, ItemStack holdingStack, Slot slot, ClickAction clickAction, Player player, SlotAccess slotAccess) {
+		// Toggle artifact status when right clicked in inventory without a stack
+		if (clickAction == ClickAction.SECONDARY && holdingStack.isEmpty()) {
+			CompoundTag tag = slotStack.getOrCreateTagElement("Artifacts");
 			tag.putByte("Status", (byte) ArtifactStatus.nextIndex(tag.getByte("Status")));
-			stack.addTagElement("Artifacts", tag);
-
-			if (level.isClientSide()) {
-				// Show enabled/disabled message above hotbar
-				ChatFormatting enabledColor = TrinketsHelper.areEffectsEnabled(stack) ? ChatFormatting.GREEN : ChatFormatting.RED;
-				Component enabledText = new TranslatableComponent(getEffectsEnabledLanguageKey(stack)).withStyle(enabledColor);
-				Minecraft.getInstance().gui.setOverlayMessage(enabledText, false);
-			}
-
-			return InteractionResultHolder.success(stack);
+			slotStack.addTagElement("Artifacts", tag);
+			return true;
 		}
 
+		return false;
+	}
+
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player user, InteractionHand hand) {
 		ItemStack stack = user.getItemInHand(hand);
 		if (TrinketItem.equipItem(user, stack)) {
 			// Play right click equip sound
@@ -97,9 +96,11 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 	@Override
 	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flags) {
 		super.appendHoverText(stack, world, tooltip, flags);
-		MutableComponent enabled = new TranslatableComponent(getEffectsEnabledLanguageKey(stack)).withStyle(ChatFormatting.GOLD);
-		Component togglekeybind = new TranslatableComponent("artifacts.trinket.togglekeybind").withStyle(ChatFormatting.GRAY);
-		tooltip.add(enabled.append(" ").append(togglekeybind));
+		getEffectsEnabledLanguageKey(stack).ifPresent(key -> {
+			MutableComponent enabled = new TranslatableComponent(key).withStyle(ChatFormatting.GOLD);
+			Component toggletooltip = new TranslatableComponent("artifacts.status.toggletooltip").withStyle(ChatFormatting.GRAY);
+			tooltip.add(enabled.append(" ").append(toggletooltip));
+		});
 	}
 
 	/**
@@ -148,14 +149,31 @@ public class TrinketArtifactItem extends ArtifactItem implements Trinket {
 		}
 	}
 
-	private static String getEffectsEnabledLanguageKey(ItemStack stack) {
-		return TrinketsHelper.areEffectsEnabled(stack) ? "artifacts.trinket.effectsenabled" : "artifacts.trinket.effectsdisabled";
+	private static Optional<String> getEffectsEnabledLanguageKey(ItemStack stack) {
+		return getArtifactStatus(stack).map(status -> switch (status) {
+			case ALL_ENABLED -> "artifacts.status.allenabled";
+			case COSMETIC_ONLY -> "artifacts.status.cosmeticonly";
+			case EFFECTS_ONLY -> "artifacts.status.effectsonly";
+		});
+	}
+
+	public static Optional<ArtifactStatus> getArtifactStatus(ItemStack stack) {
+		if (!(stack.getItem() instanceof TrinketArtifactItem)) {
+			return Optional.empty();
+		}
+
+		CompoundTag tag = stack.getTagElement("Artifacts");
+		if (tag == null || !tag.contains("Status", 1)) {
+			return Optional.of(ArtifactStatus.ALL_ENABLED);
+		}
+
+		return Optional.ofNullable(ArtifactStatus.values()[tag.getByte("Status")]);
 	}
 
 	public enum ArtifactStatus {
 		ALL_ENABLED(true, true),
-		COSMETIC_ONLY(false, true);
-		// EFFECTS_ONLY(true, false);
+		COSMETIC_ONLY(false, true),
+		EFFECTS_ONLY(true, false);
 
 		private final boolean hasEffects;
 		private final boolean hasCosmetics;

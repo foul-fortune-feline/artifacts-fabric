@@ -3,7 +3,6 @@ package artifacts.common.trinkets;
 import artifacts.common.item.curio.TrinketArtifactItem;
 import dev.emi.trinkets.api.TrinketComponent;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -54,16 +53,15 @@ public final class TrinketsHelper {
 	}
 
 	public static boolean areEffectsEnabled(ItemStack stack) {
-		if (!(stack.getItem() instanceof TrinketArtifactItem)) {
-			return false;
-		}
+		return TrinketArtifactItem.getArtifactStatus(stack)
+				.map(TrinketArtifactItem.ArtifactStatus::hasEffects)
+				.orElse(false);
+	}
 
-		CompoundTag tag = stack.getTagElement("Artifacts");
-		if (tag == null || !tag.contains("Status", 1)) {
-			return true;
-		}
-
-		return TrinketArtifactItem.ArtifactStatus.values()[tag.getByte("Status")].hasEffects();
+	public static boolean areCosmetisEnabled(ItemStack stack) {
+		return TrinketArtifactItem.getArtifactStatus(stack)
+				.map(TrinketArtifactItem.ArtifactStatus::hasCosmetics)
+				.orElse(false);
 	}
 
 	public static List<ItemStack> getAllEquippedForSlot(LivingEntity entity, String groupId, String slotId) {
