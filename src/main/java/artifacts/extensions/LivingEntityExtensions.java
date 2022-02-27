@@ -1,5 +1,6 @@
 package artifacts.extensions;
 
+// Interface not injected with loom because it causes a mixin error
 public interface LivingEntityExtensions {
 
 	/**

@@ -2,7 +2,6 @@ package artifacts.common.item.curio.belt;
 
 import artifacts.common.init.ModComponents;
 import artifacts.common.item.curio.CurioItem;
-import artifacts.mixin.accessors.ItemEntityAccessor;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,7 +22,7 @@ public class UniversalAttractorItem extends CurioItem {
 		int pulled = 0;
 		for (ItemEntity item : items) {
 			boolean attractable = ModComponents.DROPPED_ITEM_ENTITY.maybeGet(item)
-					.map(dropped -> !dropped.get() || ((ItemEntityAccessor) item).getAge() > 100)
+					.map(dropped -> !dropped.get() || item.getAge() > 100)
 					.orElse(false);
 			if (attractable && item.isAlive() && !item.hasPickUpDelay()) {
 				if (pulled++ > 200) {

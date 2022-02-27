@@ -12,11 +12,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Wolf.class)
-public abstract class WolfMixin {
+public abstract class WolfMixin implements AnimalExtensions {
 
 	@Redirect(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Wolf;isFood(Lnet/minecraft/world/item/ItemStack;)Z"))
 	private boolean cooldownBreedingItem(Wolf wolfEntity, ItemStack stack, Player player) {
-		return ((AnimalExtensions) this).artifacts$isBreedingItemWithCooldown(stack, player);
+		return this.artifacts$isBreedingItemWithCooldown(stack, player);
 	}
 
 	@Redirect(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"),

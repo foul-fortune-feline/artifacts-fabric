@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tweaked loot tables
 - Tweaked the order of items in the creative tab
 - Slight changes to Mimic behaviour
-- Simplified how the expierence bonus for the Golden Hook is calculated
+- Simplified how the experience bonus for the Golden Hook is calculated
 - Mimic now uses Christmas chest texture on April Fools too
 - Some changes to logging
 

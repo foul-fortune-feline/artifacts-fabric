@@ -2,7 +2,6 @@ package artifacts.mixin.item.luckyscarf;
 
 import artifacts.common.init.ModItems;
 import artifacts.common.trinkets.TrinketsHelper;
-import artifacts.mixin.accessors.ItemStackAccessor;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +18,9 @@ public abstract class EnchantmentHelperMixin {
 
 	@Inject(method = "getItemEnchantmentLevel", at = @At("RETURN"), cancellable = true)
 	private static void increaseFortune(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> info) {
-		//noinspection ConstantConditions
-		Entity holder = ((ItemStackAccessor) (Object) stack).getEntityRepresentation();
+		//FIXME
+		//Entity holder = ((ItemStackAccessor) (Object) stack).getEntityRepresentation();
+		Entity holder = null;
 		if (holder instanceof LivingEntity livingEntity && enchantment == Enchantments.BLOCK_FORTUNE && TrinketsHelper.isEquipped(ModItems.LUCKY_SCARF, livingEntity)) {
 			info.setReturnValue(info.getReturnValueI() + 1);
 		}

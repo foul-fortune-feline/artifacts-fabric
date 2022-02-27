@@ -6,9 +6,6 @@
   "plugin": "artifacts.ArtifactsMixinPlugin",
   "mixins": [
     "accessors.DamageSourceAccessor",
-    "accessors.ItemEntityAccessor",
-    "accessors.ItemStackAccessor",
-    "accessors.MobEffectAccessor",
     "compat.origins.ConditionFactoryAccessor",
     "event.EnchantmentHelperMixin",
     "event.LivingEntitiesMixin",
