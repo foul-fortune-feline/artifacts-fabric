@@ -8,6 +8,7 @@ import artifacts.common.init.ModLootConditions;
 import artifacts.common.init.ModLootTables;
 import artifacts.common.init.ModSoundEvents;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -17,13 +18,13 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Artifacts implements ModInitializer {
 
 	public static final String MODID = "artifacts";
-	public static final Logger LOGGER = LogManager.getLogger(MODID);
+	public static final Logger LOGGER = LoggerFactory.getLogger(Artifacts.class);
 	public static final CreativeModeTab CREATIVE_TAB = FabricItemGroupBuilder.build(
 			id("item_group"),
 			() -> new ItemStack(ModItems.BUNNY_HOPPERS)
@@ -34,8 +35,7 @@ public class Artifacts implements ModInitializer {
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void onInitialize() {
 		// Config
-		Artifacts.CONFIG = AutoConfig.register(ModConfig.class,
-				PartitioningSerializer.wrap(Toml4jConfigSerializer::new)).getConfig();
+		CONFIG = getConfigAndInvalidateOldVersions();
 
 		// Loot table setup
 		ModLootConditions.register();
@@ -49,7 +49,24 @@ public class Artifacts implements ModInitializer {
 		ModFeatures.register();
 
 		runCompatibilityHandlers();
-		LOGGER.info("[Artifacts] Finished initialization");
+		LOGGER.info("Finished initialization");
+	}
+
+	/**
+	 * Gets the config and if the config version is incompatible, reset to the default config.
+	 * Note: this does not reset files for removed categories.
+	 */
+	private ModConfig getConfigAndInvalidateOldVersions() {
+		ConfigHolder<ModConfig> configHolder = AutoConfig.register(ModConfig.class,
+				PartitioningSerializer.wrap(Toml4jConfigSerializer::new));
+		int currentVersion = configHolder.getConfig().general.configVersion;
+		int requiredVersion = ModConfig.General.CONFIG_VERSION;
+		if (currentVersion != requiredVersion) {
+			LOGGER.warn("Resetting incompatible config with version {} to version {}", currentVersion, requiredVersion);
+			configHolder.resetToDefault();
+			configHolder.save();
+		}
+		return configHolder.getConfig();
 	}
 
 	private void runCompatibilityHandlers() {
@@ -59,7 +76,7 @@ public class Artifacts implements ModInitializer {
 					String modName = FabricLoader.getInstance().getModContainer(ch.getModId())
 							.map(c -> c.getMetadata().getName())
 							.orElse(ch.getModId());
-					LOGGER.info("[Artifacts] Running compat handler for " + modName);
+					LOGGER.info("Running compat handler for " + modName);
 
 					ch.run();
 				});
