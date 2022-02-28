@@ -5,5 +5,7 @@ import net.minecraft.world.item.ItemStack;
 
 public interface AnimalExtensions {
 
-	boolean artifacts$isBreedingItemWithCooldown(ItemStack stack, Player player);
+	default boolean artifacts$isBreedingItemWithCooldown(ItemStack stack, Player player) {
+		throw new IllegalStateException();
+	}
 }

@@ -7,5 +7,7 @@ public interface MobEffectInstanceExtensions {
 	 *
 	 * @param duration the duration to set
 	 */
-	void artifacts$setDuration(int duration);
+	default void artifacts$setDuration(int duration) {
+		throw new IllegalStateException();
+	}
 }
