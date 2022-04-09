@@ -136,8 +136,7 @@ curseforge {
             changelogType = "markdown"
             changelog = System.getenv("CHANGELOG") ?: "https://github.com/florensie/artifacts-fabric/blob/master/CHANGELOG.md"
 
-            addGameVersion "1.18"
-            addGameVersion "1.18.1"
+            addGameVersion "1.18.2"
             addGameVersion "Fabric"
             relations {
                 requiredDependency "fabric-api"
@@ -149,7 +148,7 @@ curseforge {
             }
 
             mainArtifact(remapJar.archiveFile) {
-                displayName = "${project.mod_version} for Minecraft 1.18-18.2"
+                displayName = "${project.mod_version} for Minecraft 18.2"
             }
 
             afterEvaluate {

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [7.0.0] - 2022-04-09
 ### Added
 - You can now toggle an Artifact to effects-only, which will hide it on the player model
 
@@ -241,7 +241,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/florensie/artifacts-fabric/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/florensie/artifacts-fabric/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/florensie/artifacts-fabric/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/florensie/artifacts-fabric/compare/v5.0.1...v6.0.0
 [5.0.2]: https://github.com/florensie/artifacts-fabric/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/florensie/artifacts-fabric/compare/v5.0.0...v5.0.1
