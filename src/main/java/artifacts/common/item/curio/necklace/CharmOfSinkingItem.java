@@ -1,7 +1,6 @@
 package artifacts.common.item.curio.necklace;
 
 
-import artifacts.common.components.SwimAbilityComponent;
 import artifacts.common.init.ModComponents;
 import artifacts.common.item.curio.CurioItem;
 import artifacts.common.trinkets.TrinketsHelper;
@@ -21,7 +20,7 @@ public class CharmOfSinkingItem extends CurioItem {
 
     private static TriState onPlayerSwim(Player player) {
         return ModComponents.SWIM_ABILITIES.maybeGet(player)
-                .filter(SwimAbilityComponent::isSinking)
+                .filter(swimAbilityComponent -> swimAbilityComponent.isSinking() && !swimAbilityComponent.isSwimming())
                 .map(swimAbilities -> TriState.FALSE)
                 .orElse(TriState.DEFAULT);
     }
