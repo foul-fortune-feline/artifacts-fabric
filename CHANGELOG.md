@@ -14,13 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Incompatible changes were made to the config format, all configs will be automatically reset to defaults
 - Toggling cosmetic/effects only mode is now done by right clicking the Artifact in the inventory
 - Tweaked loot tables
-- Tweaked the order of items in the creative tab
-- Slight changes to Mimic behaviour
+- Mimic
+  - Slight changes to Mimic behaviour
+  - Mimic now uses Christmas chest texture on April Fools
 - Simplified how the experience bonus for the Golden Hook is calculated
-- Mimic now uses Christmas chest texture on April Fools too
+- Tweaked the order of items in the creative tab
 - Some changes to logging
+- General code optimizations/cleanup
 
 ### Fixed
+- Helium Flamingo now works properly when used together with the Charm of Sinking
 - Fix potential NPE in MimicChestLayer
 
 ## [6.0.0] - 2020-02-21

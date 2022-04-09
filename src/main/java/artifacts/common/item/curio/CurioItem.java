@@ -29,6 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
@@ -42,6 +43,11 @@ public class CurioItem extends ArtifactItem implements Trinket {
 		// DispenserBlock.registerBehavior(this, TrinketItem.TRINKET_DISPENSER_BEHAVIOR); TODO: bug, missing in trinkets rewrite
 		PlayHurtSoundCallback.EVENT.register(this::playExtraHurtSound);
 		TrinketsApi.registerTrinket(this, this);
+	}
+
+	@Override
+	public Rarity getRarity(ItemStack itemStack) {
+		return Rarity.RARE;
 	}
 
 	@Override
