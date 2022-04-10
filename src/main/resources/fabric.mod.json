@@ -66,10 +66,6 @@
   },
 
   "custom": {
-    "loom:injected_interfaces": {
-      "net/minecraft/class_1429": ["artifacts/extensions/AnimalExtensions"],
-      "net/minecraft/class_1293": ["artifacts/extensions/MobEffectInstanceExtensions"]
-    },
     "cardinal-components": [
       "artifacts:dropped_item_entity",
       "artifacts:entity_kill_tracker",

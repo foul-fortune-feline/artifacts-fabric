@@ -19,7 +19,7 @@ public abstract class MobEffectInstanceMixin implements MobEffectInstanceExtensi
 	public void artifacts$setDuration(int duration) {
 		// Recursively set duration for hidden effects
 		if (this.hiddenEffect != null) {
-			this.hiddenEffect.artifacts$setDuration(duration);
+			((MobEffectInstanceExtensions) this.hiddenEffect).artifacts$setDuration(duration);
 		}
 
 		this.duration = duration;

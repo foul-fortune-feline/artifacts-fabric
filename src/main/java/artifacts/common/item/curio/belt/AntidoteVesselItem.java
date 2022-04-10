@@ -1,6 +1,7 @@
 package artifacts.common.item.curio.belt;
 
 import artifacts.common.item.curio.CurioItem;
+import artifacts.extensions.MobEffectInstanceExtensions;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,7 +14,7 @@ public class AntidoteVesselItem extends CurioItem {
 		// Reduce duration of all negative status effects to 80
 		livingEntity.getActiveEffectsMap().forEach((effect, instance) -> {
 			if (!effect.isInstantenous() && effect.getCategory() != MobEffectCategory.BENEFICIAL && instance.getDuration() > 80) {
-				instance.artifacts$setDuration(80);
+				((MobEffectInstanceExtensions) instance).artifacts$setDuration(80);
 			}
 		});
 	}
