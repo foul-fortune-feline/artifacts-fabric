@@ -22,14 +22,9 @@ public final class ModConfig extends PartitioningSerializer.GlobalData {
 
 	@Config(name = "general")
 	public static final class General implements ConfigData {
-		// The current/required version of the config file format
-		// Increase this if the config format has changed in an incompatible way
-		// When the game is loaded with an older config version, it will reset all values to their defaults
-		public static final int CONFIG_VERSION = 1;
-
 		@SuppressWarnings("unused")
 		@ConfigEntry.Gui.Excluded
-		public int configVersion = CONFIG_VERSION;
+		public int configVersion = Artifacts.CONFIG_VERSION;
 		@ConfigEntry.Gui.Tooltip(count = 2)
 		public int everlastingFoodCooldown = 300;
 		@ConfigEntry.Gui.Tooltip(count = 2)

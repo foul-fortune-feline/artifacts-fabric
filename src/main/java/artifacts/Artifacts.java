@@ -31,6 +31,11 @@ public class Artifacts implements ModInitializer {
 	);
 	public static ModConfig CONFIG;
 
+	// The current/required version of the config file format
+	// Increase this if the config format has changed in an incompatible way
+	// When the game is loaded with an older config version, it will reset all values to their defaults
+	public static final int CONFIG_VERSION = 1;
+
 	@Override
 	@SuppressWarnings("ResultOfMethodCallIgnored")
 	public void onInitialize() {
@@ -60,7 +65,7 @@ public class Artifacts implements ModInitializer {
 		ConfigHolder<ModConfig> configHolder = AutoConfig.register(ModConfig.class,
 				PartitioningSerializer.wrap(Toml4jConfigSerializer::new));
 		int currentVersion = configHolder.getConfig().general.configVersion;
-		int requiredVersion = ModConfig.General.CONFIG_VERSION;
+		int requiredVersion = Artifacts.CONFIG_VERSION;
 		if (currentVersion != requiredVersion) {
 			LOGGER.warn("Resetting incompatible config with version {} to version {}", currentVersion, requiredVersion);
 			configHolder.resetToDefault();
