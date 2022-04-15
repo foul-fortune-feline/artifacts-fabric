@@ -148,7 +148,7 @@ curseforge {
             }
 
             mainArtifact(remapJar.archiveFile) {
-                displayName = "${project.mod_version} for Minecraft 18.2"
+                displayName = "${project.mod_version} for Minecraft 1.18.2"
             }
 
             afterEvaluate {
