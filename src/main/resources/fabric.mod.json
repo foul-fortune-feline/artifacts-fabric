@@ -26,7 +26,7 @@
       "artifacts.ArtifactsClient"
     ],
     "preLaunch": [
-      "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
+      "artifacts.ArtifactsPreLaunch"
     ],
     "artifacts-compathandlers": [
       "artifacts.common.compat.HaemaCompat",

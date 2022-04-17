@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.3] - 2022-04-17
+### Fixed
+- Fix crash on startup when another mod also defines MixinExtras' init method as entrypoint (#61)
+
 ## [7.0.2] - 2022-04-15
 ### Fixed
 - Fix the default config version being attempted to be serialized
@@ -249,7 +253,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/florensie/artifacts-fabric/compare/v7.0.2...HEAD
+[Unreleased]: https://github.com/florensie/artifacts-fabric/compare/v7.0.3...HEAD
+[7.0.3]: https://github.com/florensie/artifacts-fabric/compare/v7.0.2...v7.0.3
 [7.0.2]: https://github.com/florensie/artifacts-fabric/compare/v7.0.1...v7.0.2
 [7.0.1]: https://github.com/florensie/artifacts-fabric/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/florensie/artifacts-fabric/compare/v6.0.0...v7.0.0
